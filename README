@@ -1,0 +1,30 @@
+========================
+Compilation Instructions
+========================
+  The simplest way to compile this package is:
+
+  1.  Download LLib tarball
+
+  2.  Type `cd ${LLib}' to the directory containing the source code.
+
+  3.  If there are no `configure' shell script in the directory, type
+      `./autogen.sh' to generate `configure' script.
+
+  4.  Type `./configure` to configure the package for your system. See INSTALL
+      for more details.
+      ./configure --prefix=${MCLINKER_INSTALL}
+
+  5.  Type `make` to compile the package
+
+  6.  Type `make install` to install the package into your system.
+
+===================
+Directory Structure
+===================
+README               - this document
+Makefile.am          - input of automake
+configure.ac         - input of autoconf
+include/             - include file, exported interface
+lib/                 - source code of exported interface
+debug/               - placeholder of object files which are compiled for debugging
+tools/               - placeholder of the sources of executable program
