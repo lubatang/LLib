@@ -116,8 +116,6 @@ private:
   inline bool isValidCoord(unsigned int x, unsigned int y)  {  return (x<_w && y<_h);}
 };
 
-
-
 int initAndRunLViewer( const int winW, const int winH, void (*render)(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER_MODE mode), void (*initFun)());
 
 #endif
