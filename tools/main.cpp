@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <Triangle/Model.h>
+#include <Triangle/Painter.h>
 #include <Triangle/FrameBuffer.h>
 
 using namespace luba;
@@ -45,7 +46,12 @@ void render(const LCamera cam, const LLight lit, FrameBuffer* pFB, RENDER_MODE p
   vec3 lightS;
   lightS = lit.getPos();
 
-  if (!Model::self().draw(*pFB)) {
+  // Connects MVC
+  //   Model   : Model
+  //   View    : FrameBuffer
+  //   Control : Painter
+  Painter painter;
+  if (!painter.draw(*pFB, Model::self())) {
     error("cannot draw the model");
   }
 }
