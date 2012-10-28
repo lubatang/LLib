@@ -9,11 +9,8 @@
       preservation of edges, welding redundant vertices & texture
       coordinate generation (spheremap and planar projections) + more.
   
-      Improved version of GLM - 08.05.2008 Tudor Carean
-    Added support for textures and loading callbacks
 */
 
-#include <stdafx.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,13 +18,8 @@
 #include <assert.h>
 #include <GLM/glm.h>
 
-
-//#define DebugVisibleSurfaces
-
-#define total_textures 5
-
 #define T(x) (model->triangles[(x)])
-GLuint glmLoadTexture(char *filename, GLboolean alpha, GLboolean repeat, GLboolean filtering, GLboolean mipmaps, GLfloat *texcoordwidth, GLfloat *texcoordheight);
+
 
 /* _GLMnode: general purpose node */
 typedef struct _GLMnode {
@@ -60,7 +52,8 @@ glmAbs(GLfloat f)
  * u - array of 3 GLfloats (GLfloat u[3])
  * v - array of 3 GLfloats (GLfloat v[3])
  */
-GLfloat glmDot(GLfloat* u, GLfloat* v)
+static GLfloat
+glmDot(GLfloat* u, GLfloat* v)
 {
     assert(u); assert(v);
     
@@ -172,7 +165,7 @@ glmFindGroup(GLMmodel* model, const char* name)
     
     group = model->groups;
     while(group) {
-        if (!strcmp(name, group->name))      
+        if (!strcmp(name, group->name))
             break;
         group = group->next;
     }
@@ -207,8 +200,7 @@ glmFindMaterial(GLMmodel* model, char* name)
 {
     GLuint i;
     
-    /* XXX doing a linear search on a string key'd list is pretty lame,
-    but it works and is fast enough for now. */
+    /* This search is not efficient enough*/
     for (i = 0; i < model->nummaterials; i++) {
         if (!strcmp(model->materials[i].name, name))
             goto found;
@@ -222,6 +214,7 @@ glmFindMaterial(GLMmodel* model, char* name)
 found:
     return i;
 }
+
 /* glmDirName: return the directory given a path
  *
  * path - filesystem path
@@ -229,7 +222,7 @@ found:
  * NOTE: the return value should be free'd.
  */
 static char*
-glmDirName(char* path)
+glmDirName(const char* path)
 {
     char* dir;
     char* s;
@@ -245,57 +238,6 @@ glmDirName(char* path)
     return dir;
 }
 
-int glmFindOrAddTexture(GLMmodel* model, char* name,mycallback *call)
-{
-    GLuint i;
-    char *dir, *filename;
-    float width, height;
-
-    char *numefis = name;
-    while (*numefis==' ') numefis++;
-
-    for (i = 0; i < model->numtextures; i++) {
-        if (!strcmp(model->textures[i].name, numefis))
-            return i;
-    }
-  char afis[80];
-  sprintf(afis,"Loading Textures (%s )...",name);
-  int procent = ((float)((float)model->numtextures*30/total_textures)/100)*(call->end-call->start)+call->start;
-  if (call) call->loadcallback(procent,afis); // textures represent 30% from the model (just saying :))
-  if (strstr(name,":\\"))
-  {
-    filename = (char*)malloc(sizeof(char) * (strlen(name) + 1));
-    strcpy(filename,name);    
-  }
-  else
-  {
-    dir = glmDirName(model->pathname);
-    filename = (char*)malloc(sizeof(char) * (strlen(dir) + strlen(numefis) + 1));
-  
-    strcpy(filename, dir);
-    //strcpy(filename, numefis);
-    strcat(filename, numefis);
-    free(dir);
-  }
-  int lung = strlen(filename);
-  if (filename[lung-1]<32) filename[lung-1]=0;
-  if (filename[lung-2]<32) filename[lung-2]=0;    
-
-    model->numtextures++;
-    model->textures = (GLMtexture*)realloc(model->textures, sizeof(GLMtexture)*model->numtextures);
-    model->textures[model->numtextures-1].name = strdup(numefis);
-    model->textures[model->numtextures-1].id = glmLoadTexture(filename, GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE, &width, &height);  
-    model->textures[model->numtextures-1].width = width;
-    model->textures[model->numtextures-1].height = height;
-    
-
-    free(filename);
-
-    return model->numtextures-1;
-}
-
-
-
 
 /* glmReadMTL: read a wavefront material library file
  *
@@ -303,15 +245,14 @@ int glmFindOrAddTexture(GLMmodel* model, char* name,mycallback *call)
  * name  - name of the material library
  */
 static GLvoid
-glmReadMTL(GLMmodel* model, char* name, mycallback *call)
+glmReadMTL(GLMmodel* model, const char* name)
 {
     FILE* file;
     char* dir;
     char* filename;
-  char* textura;
     char    buf[128];
     GLuint nummaterials, i;
-  
+
     dir = glmDirName(model->pathname);
     filename = (char*)malloc(sizeof(char) * (strlen(dir) + strlen(name) + 1));
     strcpy(filename, dir);
@@ -325,7 +266,7 @@ glmReadMTL(GLMmodel* model, char* name, mycallback *call)
         exit(1);
     }
     free(filename);
-    
+
     /* count the number of materials in the file */
     nummaterials = 1;
     while(fscanf(file, "%s", buf) != EOF) {
@@ -345,9 +286,9 @@ glmReadMTL(GLMmodel* model, char* name, mycallback *call)
             break;
         }
     }
-    
+
     rewind(file);
-    
+
     model->materials = (GLMmaterial*)malloc(sizeof(GLMmaterial) * nummaterials);
     model->nummaterials = nummaterials;
     
@@ -367,10 +308,9 @@ glmReadMTL(GLMmodel* model, char* name, mycallback *call)
         model->materials[i].specular[1] = 0.0;
         model->materials[i].specular[2] = 0.0;
         model->materials[i].specular[3] = 1.0;
-    model->materials[i].IDTextura = -1;
     }
     model->materials[0].name = strdup("default");
-    
+
     /* now, read in the data */
     nummaterials = 0;
     while(fscanf(file, "%s", buf) != EOF) {
@@ -386,7 +326,6 @@ glmReadMTL(GLMmodel* model, char* name, mycallback *call)
             model->materials[nummaterials].name = strdup(buf);
             break;
         case 'N':
-            if (buf[1]!='s') break; // 3DS pune 'i' aici pentru indici de refractie si se incurca
             fscanf(file, "%f", &model->materials[nummaterials].shininess);
             /* wavefront shininess is from [0, 1000], so scale for OpenGL */
             model->materials[nummaterials].shininess /= 1000.0;
@@ -418,30 +357,14 @@ glmReadMTL(GLMmodel* model, char* name, mycallback *call)
                 break;
             }
             break;
-             case 'm':
-            // harta de texturi
-            filename = (char *)malloc(FILENAME_MAX);
-            fgets(filename, FILENAME_MAX, file);
-            textura = strdup(filename);
-            free(filename);
-            if(strncmp(buf, "map_Kd", 6) == 0) 
-      {
-        char afis[80];
-        sprintf(afis,"Loading Textures (%s)...",textura);        
-                model->materials[nummaterials].IDTextura = glmFindOrAddTexture(model, textura,call);
-                free(textura);
-            } else {
-                //printf("map %s %s ignored",buf,t_filename);
-                free(textura);
-                //fgets(buf, sizeof(buf), file);
-            }
-            break;
             default:
                 /* eat up rest of line */
                 fgets(buf, sizeof(buf), file);
                 break;
         }
     }
+
+    fclose(file);
 }
 
 /* glmWriteMTL: write a wavefront material library file
@@ -451,7 +374,7 @@ glmReadMTL(GLMmodel* model, char* name, mycallback *call)
  * mtllibname - name of the material library to be written
  */
 static GLvoid
-glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
+glmWriteMTL(GLMmodel* model, const char* modelpath, const char* mtllibname)
 {
     FILE* file;
     char* dir;
@@ -479,10 +402,6 @@ glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
     fprintf(file, "#  Wavefront MTL generated by GLM library\n");
     fprintf(file, "#  \n");
     fprintf(file, "#  GLM library\n");
-    fprintf(file, "#  Nate Robins\n");
-    fprintf(file, "#  ndr@pobox.com\n");
-    fprintf(file, "#  http://www.pobox.com/~ndr\n");
-    fprintf(file, "#  \n\n");
     
     for (i = 0; i < model->nummaterials; i++) {
         material = &model->materials[i];
@@ -505,7 +424,8 @@ glmWriteMTL(GLMmodel* model, char* modelpath, char* mtllibname)
  * model - properly initialized GLMmodel structure
  * file  - (fopen'd) file descriptor 
  */
-static GLvoid glmFirstPass(GLMmodel* model, FILE* file, mycallback *call) 
+static GLvoid
+glmFirstPass(GLMmodel* model, FILE* file)
 {
     GLuint  numvertices;        /* number of vertices in model */
     GLuint  numnormals;         /* number of normals in model */
@@ -548,13 +468,13 @@ static GLvoid glmFirstPass(GLMmodel* model, FILE* file, mycallback *call)
                 break;
             }
             break;
-            case 'm': //mtllib
+            case 'm':
                 fgets(buf, sizeof(buf), file);
                 sscanf(buf, "%s %s", buf, buf);
                 model->mtllibname = strdup(buf);
-                glmReadMTL(model, buf, call);
+//貌似从材质库读取材质的函数，但是有错误                glmReadMTL(model, buf);
                 break;
-            case 'u': //usemtl
+            case 'u':
                 /* eat up rest of line */
                 fgets(buf, sizeof(buf), file);
                 break;
@@ -644,23 +564,25 @@ static GLvoid glmFirstPass(GLMmodel* model, FILE* file, mycallback *call)
  * model - properly initialized GLMmodel structure
  * file  - (fopen'd) file descriptor 
  */
-static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call) 
+static GLvoid
+glmSecondPass(GLMmodel* model, FILE* file)
 {
     GLuint  numvertices;        /* number of vertices in model */
     GLuint  numnormals;         /* number of normals in model */
     GLuint  numtexcoords;       /* number of texcoords in model */
     GLuint  numtriangles;       /* number of triangles in model */
     GLfloat*    vertices;           /* array of vertices  */
+	GLfloat*    colors;           /* array of colors  */
     GLfloat*    normals;            /* array of normals */
     GLfloat*    texcoords;          /* array of texture coordinates */
     GLMgroup* group;            /* current group pointer */
     GLuint  material;           /* current material */
     GLuint  v, n, t;
     char        buf[128];
-  char afis[80];
     
     /* set the pointer shortcuts */
     vertices       = model->vertices;
+	colors    =model->colors;
     normals    = model->normals;
     texcoords    = model->texcoords;
     group      = model->groups;
@@ -683,14 +605,16 @@ static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call)
                     &vertices[3 * numvertices + 0], 
                     &vertices[3 * numvertices + 1], 
                     &vertices[3 * numvertices + 2]);
+				char tmp;
+				fscanf(file, "%c", &tmp);
+				if(tmp==' '){
+					fscanf(file, "%f %f %f", 
+						&colors[3 * numvertices + 0], 
+						&colors[3 * numvertices + 1], 
+						&colors[3 * numvertices + 2]);
+				}
+
                 numvertices++;
-        if (numvertices%200==0)
-          if (call)
-          {
-            sprintf(afis,"%s (%s )... ",call->text, group->name);
-            int procent = ((float)((float)numvertices*70/model->numvertices+30)/100)*(call->end-call->start)+call->start;
-            call->loadcallback(procent,afis); // Modelul e 70% din incarcare
-          }
                 break;
             case 'n':           /* normal */
                 fscanf(file, "%f %f %f", 
@@ -725,20 +649,12 @@ static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call)
                 break;
             case 'f':               /* face */
                 v = n = t = 0;
-    T(numtriangles).findex = -1; // ???
-    T(numtriangles).vecini[0]=-1;
-    T(numtriangles).vecini[1]=-1;
-    T(numtriangles).vecini[2]=-1;
                 fscanf(file, "%s", buf);
                 /* can be one of %d, %d//%d, %d/%d, %d/%d/%d %d//%d */
                 if (strstr(buf, "//")) {
                     /* v//n */
                     sscanf(buf, "%d//%d", &v, &n);
                     T(numtriangles).vindices[0] = v;
-          if (n== 181228)
-          {
-            printf("");
-          }
                     T(numtriangles).nindices[0] = n;
                     fscanf(file, "%d//%d", &v, &n);
                     T(numtriangles).vindices[1] = v;
@@ -748,7 +664,7 @@ static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call)
                     T(numtriangles).nindices[2] = n;
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
-                    while(fscanf(file, "%d//%d", &v, &n) > 0) {            
+                    while(fscanf(file, "%d//%d", &v, &n) > 0) {
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
                         T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
                         T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
@@ -760,7 +676,6 @@ static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call)
                     }
                 } else if (sscanf(buf, "%d/%d/%d", &v, &t, &n) == 3) {
                     /* v/t/n */
-          
                     T(numtriangles).vindices[0] = v;
                     T(numtriangles).tindices[0] = t;
                     T(numtriangles).nindices[0] = n;
@@ -775,7 +690,6 @@ static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call)
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
                     while(fscanf(file, "%d/%d/%d", &v, &t, &n) > 0) {
-            if (n== 181228)          
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
                         T(numtriangles).tindices[0] = T(numtriangles-1).tindices[0];
                         T(numtriangles).nindices[0] = T(numtriangles-1).nindices[0];
@@ -789,7 +703,7 @@ static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call)
                         numtriangles++;
                     }
                 } else if (sscanf(buf, "%d/%d", &v, &t) == 2) {
-                    /* v/t */          
+                    /* v/t */
                     T(numtriangles).vindices[0] = v;
                     T(numtriangles).tindices[0] = t;
                     fscanf(file, "%d/%d", &v, &t);
@@ -800,8 +714,7 @@ static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call)
                     T(numtriangles).tindices[2] = t;
                     group->triangles[group->numtriangles++] = numtriangles;
                     numtriangles++;
-                    while(fscanf(file, "%d/%d", &v, &t) > 0) {            
-          
+                    while(fscanf(file, "%d/%d", &v, &t) > 0) {
                         T(numtriangles).vindices[0] = T(numtriangles-1).vindices[0];
                         T(numtriangles).tindices[0] = T(numtriangles-1).tindices[0];
                         T(numtriangles).vindices[1] = T(numtriangles-1).vindices[2];
@@ -813,7 +726,6 @@ static GLvoid glmSecondPass(GLMmodel* model, FILE* file, mycallback *call)
                     }
                 } else {
                     /* v */
-          //if (n== 181228)        
                     sscanf(buf, "%d", &v);
                     T(numtriangles).vindices[0] = v;
                     fscanf(file, "%d", &v);
@@ -1048,9 +960,8 @@ glmFacetNormals(GLMmodel* model)
     model->facetnorms = (GLfloat*)malloc(sizeof(GLfloat) *
                        3 * (model->numfacetnorms + 1));
     
-    for (i = 0; i < model->numtriangles; i++) 
-  {
-        model->triangles[i].findex = i+1;    
+    for (i = 0; i < model->numtriangles; i++) {
+        model->triangles[i].findex = i+1;
         
         u[0] = model->vertices[3 * T(i).vindices[1] + 0] -
             model->vertices[3 * T(i).vindices[0] + 0];
@@ -1180,14 +1091,8 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
         
         /* set the normal of this vertex in each triangle it is in */
         node = members[i];
-        while (node) 
-    {
-      if (node->index==204543)
-        {
-          printf("");
-        }
+        while (node) {
             if (node->averaged) {
-        
                 /* if this node was averaged, use the average normal */
                 if (T(node->index).vindices[0] == i)
                     T(node->index).nindices[0] = avg;
@@ -1196,7 +1101,6 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
                 else if (T(node->index).vindices[2] == i)
                     T(node->index).nindices[2] = avg;
             } else {
-        
                 /* if this node wasn't averaged, use the facet normal */
                 model->normals[3 * numnormals + 0] = 
                     model->facetnorms[3 * T(node->index).findex + 0];
@@ -1243,6 +1147,14 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
     free(normals);
 }
 
+
+/* glmLinearTexture: Generates texture coordinates according to a
+ * linear projection of the texture map.  It generates these by
+ * linearly mapping the vertices onto a square.
+ *
+ * model - pointer to initialized GLMmodel structure
+ */
+ /*
 GLvoid
 glmLinearTexture(GLMmodel* model)
 {
@@ -1262,7 +1174,7 @@ glmLinearTexture(GLMmodel* model)
     scalefactor = 2.0 / 
         glmAbs(glmMax(glmMax(dimensions[0], dimensions[1]), dimensions[2]));
     
-    /* do the calculations */
+    // do the calculations 
     for(i = 1; i <= model->numvertices; i++) {
         x = model->vertices[3 * i + 0] * scalefactor;
         y = model->vertices[3 * i + 2] * scalefactor;
@@ -1270,7 +1182,7 @@ glmLinearTexture(GLMmodel* model)
         model->texcoords[2 * i + 1] = (y + 1.0) / 2.0;
     }
     
-    /* go through and put texture coordinate indices in all the triangles */
+    // go through and put texture coordinate indices in all the triangles 
     group = model->groups;
     while(group) {
         for(i = 0; i < group->numtriangles; i++) {
@@ -1286,6 +1198,7 @@ glmLinearTexture(GLMmodel* model)
         model->numtexcoords);
 #endif
 }
+*/
 
 /* glmSpheremapTexture: Generates texture coordinates according to a
  * spherical projection of the texture map.  Sometimes referred to as
@@ -1366,6 +1279,7 @@ glmDelete(GLMmodel* model)
     if (model->pathname)     free(model->pathname);
     if (model->mtllibname) free(model->mtllibname);
     if (model->vertices)     free(model->vertices);
+	if (model->colors)     free(model->colors);
     if (model->normals)  free(model->normals);
     if (model->texcoords)  free(model->texcoords);
     if (model->facetnorms) free(model->facetnorms);
@@ -1373,16 +1287,8 @@ glmDelete(GLMmodel* model)
     if (model->materials) {
         for (i = 0; i < model->nummaterials; i++)
             free(model->materials[i].name);
-        free(model->materials);
     }
-    if (model->textures) {
-        for (i = 0; i < model->numtextures; i++) {
-            free(model->textures[i].name);
-            glDeleteTextures(1,&model->textures[i].id);
-        }
-        free(model->textures);
-    }
-
+    free(model->materials);
     while(model->groups) {
         group = model->groups;
         model->groups = model->groups->next;
@@ -1400,22 +1306,17 @@ glmDelete(GLMmodel* model)
  *
  * filename - name of the file containing the Wavefront .OBJ format data.  
  */
-
 GLMmodel* glmReadOBJ(const char* filename)
-{
-  return glmReadOBJ(filename, 0);
-}
-
-GLMmodel* glmReadOBJ(const char* filename, mycallback *call)
 {
     GLMmodel* model;
     FILE*   file;
-  //if (call) call->loadcallback(0,"Loading Models...");
+    
     /* open the file */
     file = fopen(filename, "r");
     if (!file) {
         fprintf(stderr, "glmReadOBJ() failed: can't open data file \"%s\".\n",
             filename);
+		system("pause");
         exit(1);
     }
     
@@ -1435,8 +1336,6 @@ GLMmodel* glmReadOBJ(const char* filename, mycallback *call)
     model->triangles       = NULL;
     model->nummaterials  = 0;
     model->materials       = NULL;
-    model->numtextures  = 0;
-    model->textures       = NULL;
     model->numgroups       = 0;
     model->groups      = NULL;
     model->position[0]   = 0.0;
@@ -1445,11 +1344,17 @@ GLMmodel* glmReadOBJ(const char* filename, mycallback *call)
     
     /* make a first pass through the file to get a count of the number
     of vertices, normals, texcoords & triangles */
-    glmFirstPass(model, file, call);
+    glmFirstPass(model, file);
     
     /* allocate memory */
     model->vertices = (GLfloat*)malloc(sizeof(GLfloat) *
         3 * (model->numvertices + 1));
+	model->colors = (GLfloat*)malloc(sizeof(GLfloat) *
+		3 * (model->numvertices + 1));
+	for(int i=0;i<3 * (model->numvertices + 1);i++){
+		model->colors[i] = 1.0f;
+	}
+
     model->triangles = (GLMtriangle*)malloc(sizeof(GLMtriangle) *
         model->numtriangles);
     if (model->numnormals) {
@@ -1464,7 +1369,7 @@ GLMmodel* glmReadOBJ(const char* filename, mycallback *call)
     /* rewind to beginning of file and read in the data this pass */
     rewind(file);
     
-    glmSecondPass(model, file,call);
+    glmSecondPass(model, file);
     
     /* close the file */
     fclose(file);
@@ -1487,14 +1392,14 @@ GLMmodel* glmReadOBJ(const char* filename, mycallback *call)
  *             GLM_COLOR and GLM_MATERIAL should not both be specified.  
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.  
  */
-GLvoid
-glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
+GLvoid glmWriteOBJ(GLMmodel* model, const char* filename, GLuint mode)
 {
     GLuint  i;
     FILE*   file;
-    GLMgroup* group;  
+    GLMgroup* group;
+
     assert(model);
-    
+
     /* do a bit of warning */
     if (mode & GLM_FLAT && !model->facetnorms) {
         printf("glmWriteOBJ() warning: flat normal output requested "
@@ -1671,7 +1576,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
  *
  * model - initialized GLMmodel structure
  * mode  - a bitwise OR of values describing what is to be rendered.
- *             GLM_NONE     -  render with only vertices
+ *             GLM_POINTS   -  render with only vertices
  *             GLM_FLAT     -  render with facet normals
  *             GLM_SMOOTH   -  render with vertex normals
  *             GLM_TEXTURE  -  render with texture coords
@@ -1680,18 +1585,13 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
  *             GLM_COLOR and GLM_MATERIAL should not both be specified.  
  *             GLM_FLAT and GLM_SMOOTH should not both be specified.  
  */
-
-GLvoid glmDraw(GLMmodel* model, GLuint mode)
-{
-  glmDraw(model,mode,0);
-}
-GLvoid glmDraw(GLMmodel* model, GLuint mode,char *drawonly)
+GLvoid
+glmDraw(GLMmodel* model, GLuint mode)
 {
     static GLuint i;
     static GLMgroup* group;
     static GLMtriangle* triangle;
     static GLMmaterial* material;
-    GLuint IDTextura;
     
     assert(model);
     assert(model->vertices);
@@ -1712,6 +1612,10 @@ GLvoid glmDraw(GLMmodel* model, GLuint mode,char *drawonly)
             "with no texture coordinates defined.\n");
         mode &= ~GLM_TEXTURE;
     }
+
+	if (mode & GLM_TEXTURE)			//@RG
+		glEnable(GL_TEXTURE_2D);
+
     if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
         printf("glmDraw() warning: flat render mode requested "
             "and smooth render mode requested (using smooth).\n");
@@ -1736,57 +1640,33 @@ GLvoid glmDraw(GLMmodel* model, GLuint mode,char *drawonly)
         glEnable(GL_COLOR_MATERIAL);
     else if (mode & GLM_MATERIAL)
         glDisable(GL_COLOR_MATERIAL);
-    if (mode & GLM_TEXTURE) {
-        glEnable(GL_TEXTURE_2D);
-        glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-    }
+    
     /* perhaps this loop should be unrolled into material, color, flat,
        smooth, etc. loops?  since most cpu's have good branch prediction
        schemes (and these branches will always go one way), probably
        wouldn't gain too much?  */
     
-    IDTextura = -1;
     group = model->groups;
-    while (group) 
-  {
-    if (drawonly)
-      if (strcmp(group->name,drawonly))
-      {
-        group=group->next;
-        continue;
-      }    
-    
-    material = &model->materials[group->material];
-    if (material)
-      IDTextura = material->IDTextura;
-    else IDTextura=-1;
-        
-    if (mode & GLM_MATERIAL) 
-    {            
+    while (group) {
+        if (mode & GLM_MATERIAL) {
+            material = &model->materials[group->material];
             glMaterialfv(GL_FRONT_AND_BACK, GL_AMBIENT, material->ambient);
             glMaterialfv(GL_FRONT_AND_BACK, GL_DIFFUSE, material->diffuse);
             glMaterialfv(GL_FRONT_AND_BACK, GL_SPECULAR, material->specular);
             glMaterialf(GL_FRONT_AND_BACK, GL_SHININESS, material->shininess);
         }
-
-    if (mode & GLM_TEXTURE) 
-    {        
-      if(IDTextura == -1)
-        glBindTexture(GL_TEXTURE_2D, 0);
-      else
-        glBindTexture(GL_TEXTURE_2D, model->textures[IDTextura].id);    
-    }
         
         if (mode & GLM_COLOR) {
             glColor3fv(material->diffuse);
         }
-        
-        glBegin(GL_TRIANGLES);
+        if(mode & GLM_POINTS)
+			glBegin(GL_POINTS);
+		else 
+			glBegin(GL_TRIANGLES);
+
         for (i = 0; i < group->numtriangles; i++) {
             triangle = &T(group->triangles[i]);
-#ifdef DebugVisibleSurfaces
-      if (!triangle->visible) continue;
-#endif
+            
             if (mode & GLM_FLAT)
                 glNormal3fv(&model->facetnorms[3 * triangle->findex]);
             
@@ -1799,10 +1679,7 @@ GLvoid glmDraw(GLMmodel* model, GLuint mode,char *drawonly)
             if (mode & GLM_SMOOTH)
                 glNormal3fv(&model->normals[3 * triangle->nindices[1]]);
             if (mode & GLM_TEXTURE)
-      {
-                //if (IDTextura==-1) printf("Warning: GLM_TEXTURE este on dar nu este setata nici o textura in material!");
                 glTexCoord2fv(&model->texcoords[2 * triangle->tindices[1]]);
-            }
             glVertex3fv(&model->vertices[3 * triangle->vindices[1]]);
             
             if (mode & GLM_SMOOTH)
@@ -1816,6 +1693,8 @@ GLvoid glmDraw(GLMmodel* model, GLuint mode,char *drawonly)
         
         group = group->next;
     }
+	if (mode & GLM_TEXTURE)			//@RG
+		glDisable(GL_TEXTURE_2D);
 }
 
 /* glmList: Generates and returns a display list for the model using
@@ -1866,7 +1745,7 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
     vectors  = model->vertices;
     copies = glmWeldVectors(vectors, &numvectors, epsilon);
     
-#if 0
+#if 1
     printf("glmWeld(): %d redundant vertices.\n", 
         model->numvertices - numvectors - 1);
 #endif
@@ -1924,7 +1803,7 @@ glmWeld(GLMmodel* model, GLfloat epsilon)
  *
  */
 GLubyte* 
-glmReadPPM(char* filename, int* width, int* height)
+glmReadPPM(const char* filename, int* width, int* height)
 {
     FILE* fp;
     int i, w, h, d;
@@ -1945,16 +1824,16 @@ glmReadPPM(char* filename, int* width, int* height)
         return NULL;
     }
     
-    /* grab the three elements in the header (width, height, maxval). */
+    /* grab the three elements in the header (height, width, maxval). */
     i = 0;
     while(i < 3) {
         fgets(head, 70, fp);
         if (head[0] == '#')     /* skip comments. */
             continue;
         if (i == 0)
-            i += sscanf(head, "%d %d %d", &w, &h, &d);
+            i += sscanf(head, "%d %d %d", &h, &w, &d);
         else if (i == 1)
-            i += sscanf(head, "%d %d", &h, &d);
+            i += sscanf(head, "%d %d", &w, &d);
         else if (i == 2)
             i += sscanf(head, "%d", &d);
     }

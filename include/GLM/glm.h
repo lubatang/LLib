@@ -12,8 +12,7 @@
       preservation of edges, welding redundant vertices & texture
       coordinate generation (spheremap and planar projections) + more.
 
-      Improved version:
-	  Tudor Carean - April 2008 - added texture support
+	  Modified by Ramgopal R to accomodate point rendering.	
 
  */
 
@@ -28,12 +27,12 @@
 #define M_PI 3.14159265f
 #endif
 
-#define GLM_NONE     (0)            /* render with only vertices */
-#define GLM_FLAT     (1 << 0)       /* render with facet normals */
-#define GLM_SMOOTH   (1 << 1)       /* render with vertex normals */
-#define GLM_TEXTURE  (1 << 2)       /* render with texture coords */
-#define GLM_COLOR    (1 << 3)       /* render with colors */
-#define GLM_MATERIAL (1 << 4)       /* render with materials */
+#define GLM_POINTS   (1 << 0)       /* render with only vertices */
+#define GLM_FLAT     (1 << 1)       /* render with facet normals */
+#define GLM_SMOOTH   (1 << 2)       /* render with vertex normals */
+#define GLM_TEXTURE  (1 << 3)       /* render with texture coords */
+#define GLM_COLOR    (1 << 4)       /* render with colors */
+#define GLM_MATERIAL (1 << 5)       /* render with materials */
 
 
 /* GLMmaterial: Structure that defines a material in a model. 
@@ -46,8 +45,6 @@ typedef struct _GLMmaterial
   GLfloat specular[4];          /* specular component */
   GLfloat emmissive[4];         /* emmissive component */
   GLfloat shininess;            /* specular exponent */
-//this is for textures
-  GLuint IDTextura;		// ID-ul texturii difuze
 } GLMmaterial;
 
 /* GLMtriangle: Structure that defines a triangle in a model.
@@ -57,18 +54,7 @@ typedef struct _GLMtriangle {
   GLuint nindices[3];           /* array of triangle normal indices */
   GLuint tindices[3];           /* array of triangle texcoord indices*/
   GLuint findex;                /* index of triangle facet normal */
-  //GLuint nrvecini;
-  GLuint vecini[3];
-  bool visible;
 } GLMtriangle;
-
-//adaugat pentru suport texturi
-typedef struct _GLMtexture {
-  char *name;
-  GLuint id;                    /* ID-ul texturii */
-  GLfloat width;		/* width and height for texture coordinates */
-  GLfloat height;
-} GLMtexture;
 
 /* GLMgroup: Structure that defines a group in a model.
  */
@@ -88,6 +74,7 @@ typedef struct _GLMmodel {
 
   GLuint   numvertices;         /* number of vertices in model */
   GLfloat* vertices;            /* array of vertices  */
+  GLfloat* colors;
 
   GLuint   numnormals;          /* number of normals in model */
   GLfloat* normals;             /* array of normals */
@@ -107,25 +94,9 @@ typedef struct _GLMmodel {
   GLuint       numgroups;       /* number of groups in model */
   GLMgroup*    groups;          /* linked list of groups */
 
-  // textures
-  GLuint       numtextures;
-  GLMtexture*  textures;
-
   GLfloat position[3];          /* position of the model */
-
 } GLMmodel;
 
-struct mycallback
-{
-	void (*loadcallback)(int,char *);
-	int start; 
-	int end;
-	char *text;
-};
-
-GLvoid glmDraw(GLMmodel* model, GLuint mode,char *drawonly);
-
-GLfloat glmDot(GLfloat* u, GLfloat* v);
 
 /* glmUnitize: "unitize" a model by translating it to the origin and
  * scaling it to fit in a unit cube around the origin.  Returns the
@@ -227,7 +198,6 @@ glmDelete(GLMmodel* model);
  * filename - name of the file containing the Wavefront .OBJ format data.  
  */
 GLMmodel* glmReadOBJ(const char* filename);
-GLMmodel* glmReadOBJ(const char* filename,mycallback *call);
 
 /* glmWriteOBJ: Writes a model description in Wavefront .OBJ format to
  * a file.
@@ -314,8 +284,4 @@ glmWeld(GLMmodel* model, GLfloat epsilon);
 GLubyte* 
 glmReadPPM(const char* filename, int* width, int* height);
 
-GLMgroup*
-glmFindGroup(GLMmodel* model, const char* name);
-
 #endif
-
