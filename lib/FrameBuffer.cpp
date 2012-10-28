@@ -4,30 +4,13 @@
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
 #include <Triangle/FrameBuffer.h>
+#include <Triangle/Color.h>
 #include <Support/FileHandle.h>
 #include <cstdlib>
 #include <cstdio>
 #include <cstring>
 
 using namespace luba;
-
-//===----------------------------------------------------------------------===//
-// Color
-//===----------------------------------------------------------------------===//
-Color::Color(const Color& pCopy)
-{
-  r = pCopy.r;
-  g = pCopy.g;
-  b = pCopy.b;
-}
-
-Color& Color::operator=(const Color& pCopy)
-{
-  r = pCopy.r;
-  g = pCopy.g;
-  b = pCopy.b;
-  return *this;
-}
 
 //===----------------------------------------------------------------------===//
 // FrameBuffer
