@@ -5,8 +5,10 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
+#include <Triangle/Model.h>
 
-GLMmodel *OBJ;
+using namespace luba;
+
 int screenWidth = 600;
 int screenHeight = 400;
 
@@ -49,7 +51,7 @@ void render(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER
     //the rendering mode is SOLID
   }
   
-  OBJ;
+  Model::Object* OBJ = Model::self().getObject();
   //how to use: here is an example
   //traverse the triangle of the model (and render them urself)
   for(int i=0;i<(int)OBJ->numtriangles;i++){
@@ -102,11 +104,11 @@ void init()
 {
   //move the object to the origin
   //scale to -1~+1
-  glmUnitize(OBJ);  
+  glmUnitize(Model::self().getObject());
   
   //calculate the vertex normals
-  glmFacetNormals(OBJ);  
-  glmVertexNormals(OBJ,90.0);
+  glmFacetNormals(Model::self().getObject());
+  glmVertexNormals(Model::self().getObject() ,90.0);
 }
 
 static void help()
@@ -144,14 +146,11 @@ int main(int argc, char ** argv)
   if (file.empty())
     error("no inputs.");
 
-  //read an obj model here
-  OBJ = glmReadOBJ(file.c_str());
+  // initialize Model.
+  Model::Initialize(file);
 
   //get into a rendering loop
   initAndRunLViewer(screenWidth, screenHeight, render, init);
-  
-  //free the model obj
-  delete OBJ;
 
   return 0;
 }

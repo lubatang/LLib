@@ -30,6 +30,8 @@ lviewer_debug_SOURCES = ${TOOLDIR}/main.cpp \
 	${LIBDIR}/LTranslateMatrix.cpp \
 	${INCDIR}/LViewer/LViewer.h \
 	${LIBDIR}/LViewer.cpp \
+	${INCDIR}/Triangle/Model.h \
+	${LIBDIR}/Model.cpp \
 	${INCDIR}/Support/Flags.h \
 	${INCDIR}/Support/FileHandle.h \
 	${LIBDIR}/FileHandle.cpp
