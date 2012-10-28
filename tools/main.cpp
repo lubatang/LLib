@@ -1,6 +1,10 @@
 // 3DGP_framework.cpp : Defines the entry point for the console application.
 //
 #include "stdafx.h"
+#include <unistd.h>
+#include <cstdlib>
+#include <string>
+#include <iostream>
 
 GLMmodel *OBJ;
 int screenWidth = 600;
@@ -96,9 +100,6 @@ void render(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER
 //////////////////////////////////////////////////////////////////////////
 void init()
 {
-  //read an obj model here
-  OBJ = glmReadOBJ("bunnyC.obj");
-  
   //move the object to the origin
   //scale to -1~+1
   glmUnitize(OBJ);  
@@ -108,8 +109,44 @@ void init()
   glmVertexNormals(OBJ,90.0);
 }
 
+static void help()
+{
+  std::cout << "Usage:\n"
+            << "  lviewer -f [input object file]\n";
+}
+
+static void error(const std::string& pMesg)
+{
+  std::cerr << "Error: ";
+  std::cerr << pMesg << std::endl;
+  exit(0);
+}
+
 int main(int argc, char ** argv)
 {
+  std::string file;
+  int option;
+  while ((option = getopt(argc, argv, "f:?h")) != -1) {
+    switch (option) {
+      case 'f': {
+        file = std::string(optarg);
+        break;
+      }
+      case '?':
+      case 'h':
+      default: {
+        help();
+        exit(0);
+      }
+    }
+  }
+
+  if (file.empty())
+    error("no inputs.");
+
+  //read an obj model here
+  OBJ = glmReadOBJ(file.c_str());
+
   //get into a rendering loop
   initAndRunLViewer(screenWidth, screenHeight, render, init);
   
