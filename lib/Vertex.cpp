@@ -4,21 +4,33 @@
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
 #include <Triangle/Vertex.h>
+#include <Triangle/Model.h>
+#include <Triangle/Color.h>
+#include <cassert>
 
 using namespace luba;
+
+Model* Vertex::f_pModel= NULL;
 
 //===----------------------------------------------------------------------===//
 // Vertex
 //===----------------------------------------------------------------------===//
-Vertex::Vertex(Model::Object& pObject)
-  : m_Object(pObject),
-    m_VertexIdx(0), m_ColorIdx(0), m_NormIdx(0), m_TextureIdx(0) {
+void Vertex::Initialize(Model& pModel)
+{
+  f_pModel = &pModel;
 }
 
-Vertex::Vertex(Model::Object& pObject,
-               size_t pVertex, size_t pColor, size_t pNorm, size_t pText)
-  : m_Object(pObject),
-    m_VertexIdx(pVertex),
+bool Vertex::isValid()
+{
+  return (NULL != f_pModel && NULL != f_pModel->getObject());
+}
+
+Vertex::Vertex()
+  :  m_VertexIdx(0), m_ColorIdx(0), m_NormIdx(0), m_TextureIdx(0) {
+}
+
+Vertex::Vertex(size_t pVertex, size_t pColor, size_t pNorm, size_t pText)
+  : m_VertexIdx(pVertex),
     m_ColorIdx(pColor),
     m_NormIdx(pNorm),
     m_TextureIdx(pText) {
@@ -26,15 +38,23 @@ Vertex::Vertex(Model::Object& pObject,
  
 void Vertex::getCoord(Coord& pCoord) const
 {
-  pCoord.x = m_Object.vertices[m_VertexIdx*3];
-  pCoord.y = m_Object.vertices[m_VertexIdx*3 + 1];
-  pCoord.z = m_Object.vertices[m_VertexIdx*3 + 2];
+  assert(isValid() &&
+         "Vertex::Initialize(Model& pModel) should be called before calling "
+         "Vertex::getCoord()");
+
+  pCoord.x = f_pModel->getObject()->vertices[m_VertexIdx*3];
+  pCoord.y = f_pModel->getObject()->vertices[m_VertexIdx*3 + 1];
+  pCoord.z = f_pModel->getObject()->vertices[m_VertexIdx*3 + 2];
 }
 
 void Vertex::getColor(Color& pColor) const
 {
-  pColor.r = m_Object.colors[m_VertexIdx*3]*128 + 255;
-  pColor.g = m_Object.colors[m_VertexIdx*3 + 1]*128 + 255;
-  pColor.b = m_Object.colors[m_VertexIdx*3 + 2]*128 + 255;
+  assert(isValid() &&
+         "Vertex::Initialize(Model& pModel) should be called before calling "
+         "Vertex::getColor()");
+
+  pColor.r = f_pModel->getObject()->colors[m_VertexIdx*3]*128 + 128;
+  pColor.g = f_pModel->getObject()->colors[m_VertexIdx*3 + 1]*128 + 128;
+  pColor.b = f_pModel->getObject()->colors[m_VertexIdx*3 + 2]*128 + 128;
 }
 
