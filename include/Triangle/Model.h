@@ -27,9 +27,9 @@ public:
 
   static void Initialize(int pArgc, char* pArgv[], const std::string& pFilename);
 
-  Object* getObject();
+  bool isValid() const;
 
-  bool draw(FrameBuffer& pFB) const;
+  Object* getObject();
 
 private:
   void LazyInitializeObject();
