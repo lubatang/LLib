@@ -4,6 +4,7 @@
 #include <stdio.h>
 #include <algebra3/algebra3.h>
 #include <vector>
+#include <cstring>
 
 using std::vector;
 using LLib::Math::vec3;

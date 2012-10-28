@@ -21,9 +21,9 @@
 #include <OpenGL/glu.h>
 #include <GLUT/glut.h>
 #else
-#include <gl/gl.h>
-#include <gl/glu.h>
-#include <gl/glut.h>
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
 #endif
 
 
