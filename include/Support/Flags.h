@@ -9,8 +9,7 @@
 #ifndef MCLD_FLAGS_H
 #define MCLD_FLAGS_H
 
-namespace llib
-{
+namespace luba {
 
 template<typename Enum>
 class Flags
@@ -97,7 +96,7 @@ private:
   int m_Data;
 };
 
-} // namespace of llib
+} // namespace of luba
 
 #endif
 

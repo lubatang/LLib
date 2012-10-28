@@ -17,7 +17,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-namespace llib {
+namespace luba {
 
 /** \class FileHandle
  *  \brief FileHandle class provides an interface for reading from and writing
@@ -136,7 +136,7 @@ private:
   OpenMode m_OpenMode;
 };
 
-} // namespace of llib
+} // namespace of luba
 
 #endif
 

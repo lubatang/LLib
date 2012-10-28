@@ -33,7 +33,7 @@
 #endif
 #endif
 
-using namespace llib;
+using namespace luba;
 
 //===----------------------------------------------------------------------===//
 // FileHandle
