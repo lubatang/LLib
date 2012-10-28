@@ -12,6 +12,8 @@
 
 namespace luba {
 
+class FrameBuffer;
+
 class Model
 {
 public:
@@ -26,6 +28,8 @@ public:
   static void Initialize(int pArgc, char* pArgv[], const std::string& pFilename);
 
   Object* getObject();
+
+  bool draw(FrameBuffer& pFB) const;
 
 private:
   void LazyInitializeObject();
