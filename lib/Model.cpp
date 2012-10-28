@@ -22,9 +22,10 @@ Model::~Model()
   delete m_pObject;
 }
 
-void Model::Initialize(const std::string& pFile)
+void Model::Initialize(int pArgc, char* pArgv[], const std::string& pFile)
 {
   m_File = pFile;
+  glutInit(&pArgc, pArgv);
 }
 
 void Model::LazyInitializeObject()

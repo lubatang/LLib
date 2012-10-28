@@ -147,7 +147,7 @@ int main(int argc, char ** argv)
     error("no inputs.");
 
   // initialize Model.
-  Model::Initialize(file);
+  Model::Initialize(argc, argv, file);
 
   //get into a rendering loop
   initAndRunLViewer(screenWidth, screenHeight, render, init);

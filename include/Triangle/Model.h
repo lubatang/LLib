@@ -22,7 +22,7 @@ public:
     return instance;
   }
 
-  static void Initialize(const std::string& pFilename);
+  static void Initialize(int pArgc, char* pArgv[], const std::string& pFilename);
 
   Object*       getObject();
 

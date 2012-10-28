@@ -159,7 +159,6 @@ int initAndRunLViewer(int winW,
 
   colorBuff = new FrameBuffer(winW, winH);
   
-
   LViewer::setWindowSize(winW, winH);
   LViewer::setIdleFunc(idle);
   LViewer::setInitFunc(initGL);
