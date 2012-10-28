@@ -7,6 +7,7 @@
 #define LUBA_MODEL_H
 #include <GLM/glm.h>
 #include <Support/FileHandle.h>
+#include <Triangle/Drawable.h>
 #include <string>
 
 namespace luba {
@@ -24,7 +25,7 @@ public:
 
   static void Initialize(int pArgc, char* pArgv[], const std::string& pFilename);
 
-  Object*       getObject();
+  Object* getObject();
 
 private:
   void LazyInitializeObject();

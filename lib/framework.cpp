@@ -1,10 +1,11 @@
 #include <LLib.h>
 #include <framework.h>
-
+#include <Triangle/FrameBuffer.h>
+#include <Support/FileHandle.h>
 
 using LLib::Viewer::LViewer;
 using LLib::Math::LTranslateMatrix;
-
+using namespace luba;
 
 /// function pointers
 static void (*renderFunc)(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER_MODE mode) = NULL;
@@ -81,7 +82,12 @@ void dumpFramebufferAsPPM()
 
   printf("screen is dumped as %s.\n", buff);
 
-  colorBuff->saveAsPPM(buff);
+  FileHandle handler;
+  handler.open(buff,
+               FileHandle::ReadWrite | FileHandle::Create | FileHandle::Truncate,
+               0755);
+  colorBuff->saveAsPPM(handler);
+  handler.close();
 }
 
 void drawFunc()

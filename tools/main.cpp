@@ -6,6 +6,7 @@
 #include <string>
 #include <iostream>
 #include <Triangle/Model.h>
+#include <Triangle/FrameBuffer.h>
 
 using namespace luba;
 
@@ -16,7 +17,7 @@ int screenHeight = 400;
 // render
 //  This is the rendering function
 //////////////////////////////////////////////////////////////////////////
-void render(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER_MODE renderingMode)
+void render(const LCamera cam, const LLight lit, FrameBuffer* colorBuff, RENDER_MODE renderingMode)
 {  
   vec3 pos,target,up;
   cam.getVectors(pos, target, up);
@@ -30,7 +31,6 @@ void render(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER
   // how to use: it's just a position coordinate
   //   light position ( lightS.n[0], lightS.n[1], lightS.n[2] )   initial value: (100,100,0)
   
-  colorBuff;//to assign pixel color
   //how to use: here is an example
   Color cc;
   for(int i=0;i<colorBuff->getWidth();i++){
