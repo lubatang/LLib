@@ -27,7 +27,7 @@ public:
 
   void clear();
 
-  void setColor(unsigned int x, unsigned int y, const Color &pColor);
+  void setColor(unsigned int pX, unsigned int pY, const Color &pColor);
 
   const uint8_t* getUCharArray() const { return (const uint8_t*)m_Colors; }
 
