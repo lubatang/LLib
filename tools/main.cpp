@@ -5,14 +5,16 @@
 #include <cstdlib>
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include <Triangle/Model.h>
+#include <Triangle/Space.h>
 #include <Triangle/Painter.h>
 #include <Triangle/FrameBuffer.h>
 
 using namespace luba;
 
 int screenWidth = 600;
-int screenHeight = 400;
+int screenHeight = 600;
 
 //===----------------------------------------------------------------------===//
 // Helper Functions
@@ -46,12 +48,14 @@ void render(const LCamera cam, const LLight lit, FrameBuffer* pFB, RENDER_MODE p
   vec3 lightS;
   lightS = lit.getPos();
 
-  // Connects MVC
+  // Connects MVC pattern
   //   Model   : Model
-  //   View    : FrameBuffer
+  //   View    : Space
   //   Control : Painter
-  Painter painter;
-  if (!painter.draw(*pFB, Model::self())) {
+  Space space(400, 400, 256);
+  space.setOrigin(100, 100, 0);
+  Painter painter(*pFB);
+  if (!painter.draw(space, Model::self())) {
     error("cannot draw the model");
   }
 }

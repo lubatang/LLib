@@ -9,22 +9,25 @@
 namespace luba {
 
 class FrameBuffer;
+class Space;
 class Coord;
 class Vertex;
 class Line;
 class Model;
 class Color;
 
-void map(FrameBuffer& pFB, Coord& pCoord, unsigned int& pX, unsigned int& pY);
-
 class Painter
 {
 public:
-  bool draw(FrameBuffer& pFB, Model& pModel) const;
-  bool draw(FrameBuffer& pFB, Line& pLine) const;
-  bool draw(FrameBuffer& pFB, Vertex& pVertex) const;
-  bool draw(FrameBuffer& pFB, Coord& pCoord, Color& pColor) const;
-  bool draw(FrameBuffer& pFB, unsigned int pX, unsigned int pY, Color& pColor) const;
+  explicit Painter(FrameBuffer& pFB);
+
+  bool draw(const Space& pSpace, Model& pModel) const;
+  bool draw(const Space& pSpace, Line& pLine) const;
+  bool draw(const Space& pSpace, Vertex& pVertex) const;
+  bool draw(const Space& pSpace, Coord& pCoord, Color& pColor) const;
+
+private:
+  FrameBuffer& m_FB;
 };
 
 } // end of namespace luba

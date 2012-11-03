@@ -4,6 +4,7 @@
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
 #include <Triangle/Vertex.h>
+#include <Triangle/Coord.h>
 #include <Triangle/Model.h>
 #include <Triangle/Color.h>
 #include <cassert>

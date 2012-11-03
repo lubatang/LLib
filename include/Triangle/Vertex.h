@@ -11,19 +11,7 @@ namespace luba {
 
 class Model;
 class Color;
-
-class Coord
-{
-public:
-  double x;
-  double y;
-  double z;
-
-public:
-  Coord() : x(0.0), y(0.0), z(0.0) {}
-  Coord(double pX, double pY, double pZ) : x(pX), y(pY), z(pZ) {}
-
-};
+class Coord;
 
 class Vertex
 {

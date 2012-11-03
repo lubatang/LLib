@@ -4,48 +4,40 @@
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
 #include <Triangle/Painter.h>
+#include <Triangle/Coord.h>
+#include <Triangle/Space.h>
 #include <Triangle/Model.h>
 #include <Triangle/Line.h>
+#include <Triangle/DrawLine.h>
 #include <Triangle/Vertex.h>
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Color.h>
 
+#include <cmath>
+#include <algorithm>
+
 using namespace luba;
-
-#include <fstream>
-using namespace std;
-
-static ofstream log_file("log.text", ios::trunc);
-//===----------------------------------------------------------------------===//
-// Helper Function
-//===----------------------------------------------------------------------===//
-void luba::map(FrameBuffer& pFB, Coord& pCoord, unsigned int& pX, unsigned int& pY)
-{
-  pX = (pFB.getWidth() + (int)(pFB.getWidth() * pCoord.x)) >> 1;
-  pY = (pFB.getHeight() + (int)(pFB.getHeight() * pCoord.y)) >> 1;
-}
 
 //===----------------------------------------------------------------------===//
 // Painter
 //===----------------------------------------------------------------------===//
-inline bool Painter::draw(FrameBuffer& pFB,
-                          unsigned int pX, unsigned int pY,
-                          Color& pColor) const
-{
-  log_file << "    " << "<pix X=" << pX << " Y=" << pY << ">" << endl;
-  pFB.setColor(pX, pY, pColor);
-  return true;
+Painter::Painter(FrameBuffer& pFB)
+  : m_FB(pFB) {
 }
 
 inline bool
-Painter::draw(FrameBuffer& pFB, Coord& pCoord, Color& pColor) const
+Painter::draw(const Space& pSpace, Coord& pCoord, Color& pColor) const
 {
-  unsigned int x, y;
-  map(pFB, pCoord, x, y);
-  return draw(pFB, x, y, pColor);
+  unsigned int x, y, z;
+  pSpace.map(pCoord, x, y, z);
+
+  float a, b, c;
+  pSpace.map(pCoord, a, b, c);
+  m_FB.setColor(x, y, pColor);
+  return true;
 }
 
-bool Painter::draw(FrameBuffer& pFB, Vertex& pVertex) const
+bool Painter::draw(const Space& pSpace, Vertex& pVertex) const
 {
   Coord coord;
   pVertex.getCoord(coord);
@@ -53,68 +45,34 @@ bool Painter::draw(FrameBuffer& pFB, Vertex& pVertex) const
   Color color;
   pVertex.getColor(color);
 
-  return draw(pFB, coord, color);
+  return draw(pSpace, coord, color);
 }
 
-bool Painter::draw(FrameBuffer& pFB, Line& pLine) const
+bool Painter::draw(const Space& pSpace, Line& pLine) const
 {
-  Coord front, rear;
-  pLine.front().getCoord(front);
-  pLine.rear().getCoord(rear);
+  DrawLine draw(pSpace, pLine);
 
-  unsigned int x0, y0, x1, y1;
-  map(pFB, front, x0, y0);
-  map(pFB, rear, x1, y1);
+  Color color;
+  Color from, to;
 
-  unsigned int tmp;
-  if (x0 > x1) {
-    // from left to right
-    tmp = x1;
-    x1 = x0;
-    x0 = tmp;
+  pLine.front().getColor(from);
+  pLine.rear().getColor(to);
 
-    tmp = y1;
-    y1 = y0;
-    y0 = tmp;
+  DrawLine::const_iterator pixel = draw.begin(), pEnd = draw.end();
+  while(pixel != pEnd) {
+    color.r = pixel.z();
+    color.g = pixel.z();
+    color.b = pixel.z();
+    m_FB.setColor(pixel.x(), pixel.y(), color);
+    pixel.next();
   }
-
-  log_file << "  " << "<line from (" << x0 << ", " << y0 << ") to (" << x1 << ", " << y1 << ")>" << endl;
-
-  int dX = x1 - x0;
-  int dY = y1 - y0;
-  int D  = 2*dY - dX;
-
-  int incrE = 2 * dY;
-  int incrNE = 2 * (dY - dX);
-
-  int x = x0;
-  int y = y0;
-
-  Color value;
-  pLine.front().getColor(value);
-  draw(pFB, x, y, value);
-
-  while (x < x1) {
-    if (D <= 0) {
-      D += incrE;
-      ++x;
-    }
-    else {
-      D += incrNE;
-      ++x;
-      ++y;
-    }
-    draw(pFB, x, y, value);
-  }
-  log_file << "  " << "</line>" << endl;
 }
 
-bool Painter::draw(FrameBuffer& pFB, Model& pModel) const
+bool Painter::draw(const Space& pSpace, Model& pModel) const
 {
   if (!Model::self().isValid())
     return false;
 
-  log_file << "<model>" << endl;
   for(int i=0; i<(int)Model::self().getObject()->numtriangles; ++i) {
     int fn = Model::self().getObject()->triangles[i].findex;
 
@@ -137,12 +95,11 @@ bool Painter::draw(FrameBuffer& pFB, Model& pModel) const
     Line l2(v2, v3);
     Line l3(v3, v1);
 
-    draw(pFB, l1);
-    draw(pFB, l2);
-    draw(pFB, l3);
+    draw(pSpace, l1);
+    draw(pSpace, l2);
+    draw(pSpace, l3);
   }
 
-  log_file << "</model>" << endl;
   return true;
 }
 
