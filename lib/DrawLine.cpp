@@ -60,3 +60,9 @@ DrawLine::const_iterator DrawLine::end() const
 {
   return const_iterator(*this, m_DX/2.0f, m_DX/2.0f, m_B.x, m_B.y, m_B.z);
 }
+
+unsigned int DrawLine::distance() const
+{
+  return abs(m_A.x - m_B.x);
+}
+

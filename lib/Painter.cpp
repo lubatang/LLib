@@ -59,12 +59,16 @@ bool Painter::draw(const Space& pSpace, Line& pLine) const
   pLine.rear().getColor(to);
 
   DrawLine::const_iterator pixel = draw.begin(), pEnd = draw.end();
+  unsigned int distance = draw.distance();
+  unsigned int step = 0;
   while(pixel != pEnd) {
-    color.r = pixel.z();
-    color.g = pixel.z();
-    color.b = pixel.z();
+    color.r = from.r + ((to.r - from.r) * step)/distance;
+    color.g = from.g + ((to.g - from.g) * step)/distance;
+    color.b = from.b + ((to.b - from.b) * step)/distance;
     m_FB.setColor(pixel.x(), pixel.y(), color);
+
     pixel.next();
+    ++step;
   }
 }
 
@@ -94,6 +98,10 @@ bool Painter::draw(const Space& pSpace, Model& pModel) const
     Line l1(v1, v2);
     Line l2(v2, v3);
     Line l3(v3, v1);
+
+    draw(pSpace, v1);
+    draw(pSpace, v2);
+    draw(pSpace, v3);
 
     draw(pSpace, l1);
     draw(pSpace, l2);

@@ -16,6 +16,7 @@ private:
   friend class DrawLine;
   friend bool operator==(const LineIterator& pX, const LineIterator& pY);
   friend bool operator!=(const LineIterator& pX, const LineIterator& pY);
+  friend unsigned int operator-(const LineIterator& pX, const LineIterator& pY);
 
   LineIterator(const DrawLine& pDrawLine, float pErrorXY, float pErrorXZ,
                float pX, float pY, float pZ);
@@ -43,6 +44,9 @@ private:
 
 bool operator==(const luba::LineIterator& pX, const luba::LineIterator& pY);
 bool operator!=(const luba::LineIterator& pX, const luba::LineIterator& pY);
+
+/// substract - the pixel distance between two iterator.
+unsigned int operator-(const luba::LineIterator& pX, const luba::LineIterator& pY);
 
 } // namespace luba
 

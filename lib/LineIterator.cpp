@@ -7,6 +7,7 @@
 #include <Triangle/DrawLine.h>
 
 #include <cassert>
+#include <cmath>
 
 using namespace luba;
 
@@ -23,6 +24,12 @@ bool luba::operator!=(const LineIterator& pA, const LineIterator& pB)
 {
   assert(pA.m_pDrawLine == pB.m_pDrawLine);
   return !(pA == pB);
+}
+
+unsigned int luba::operator-(const LineIterator& pA, const LineIterator& pB)
+{
+  assert(pA.m_pDrawLine == pB.m_pDrawLine);
+  return abs(pA.m_X - pB.m_X);
 }
 
 //===----------------------------------------------------------------------===//

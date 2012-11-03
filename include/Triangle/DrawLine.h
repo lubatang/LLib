@@ -27,8 +27,8 @@ public:
   const_iterator begin() const;
   const_iterator end  () const;
 
-  /// isReversed - do we draw the line in the reversed direction?
-  bool isReversed() const { return m_bReversed; }
+  /// distance - the number of pixels that need to be painted.
+  unsigned int distance() const;
 
 private:
   struct Point {
@@ -51,8 +51,6 @@ private:
 
   bool m_bSteepXY : 1;
   bool m_bSteepXZ : 1;
-
-  bool m_bReversed : 1;
 
   const Space& m_Space;
   const Line& m_Line;
