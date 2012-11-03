@@ -20,9 +20,9 @@ Space::Space(unsigned int pWidth, unsigned int pHeight, unsigned int pDepth)
 void Space::map(const Coord& pCoord,
                 unsigned int& pX, unsigned int& pY, unsigned int& pZ) const
 {
-  pX = m_X + (m_Width+ (int)(m_Width * pCoord.x)) >> 1;
-  pY = m_Y + (m_Height + (int)(m_Height * pCoord.y)) >> 1;
-  pZ = m_Z + (m_Depth + (int)(m_Depth * pCoord.z)) >> 1;
+  pX = m_X + ((m_Width  + (int)(m_Width  * pCoord.x)) >> 1);
+  pY = m_Y + ((m_Height + (int)(m_Height * pCoord.y)) >> 1);
+  pZ = m_Z + ((m_Depth  + (int)(m_Depth  * pCoord.z)) >> 1);
 }
 
 void Space::map(const Vertex& pVertex,
@@ -35,9 +35,9 @@ void Space::map(const Vertex& pVertex,
 
 void Space::map(const Coord& pCoord, float& pX, float& pY, float& pZ) const
 {
-  pX = m_X + (float)(m_Width + m_Width * pCoord.x)/2.0;
-  pY = m_Y + (float)(m_Height + m_Height * pCoord.y)/2.0;
-  pZ = m_Z + (float)(m_Depth + m_Depth * pCoord.z)/2.0;
+  pX = m_X + ((float)(m_Width  + m_Width  * pCoord.x)/2.0);
+  pY = m_Y + ((float)(m_Height + m_Height * pCoord.y)/2.0);
+  pZ = m_Z + ((float)(m_Depth  + m_Depth  * pCoord.z)/2.0);
 }
 
 void Space::map(const Vertex& pVertex, float& pX, float& pY, float& pZ) const
