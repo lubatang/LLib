@@ -52,7 +52,7 @@ void render(const LCamera cam, const LLight lit, FrameBuffer* pFB, RENDER_MODE p
   //   Model   : Model
   //   View    : Space
   //   Control : Painter
-  Space space(400, 400, 256);
+  Space space(400, 400, 255);
   space.setOrigin(100, 100, 0);
   Painter painter(*pFB);
   if (!painter.draw(space, Model::self())) {
