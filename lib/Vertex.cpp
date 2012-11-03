@@ -48,14 +48,16 @@ void Vertex::getCoord(Coord& pCoord) const
   pCoord.z = f_pModel->getObject()->vertices[m_VertexIdx*3 + 2];
 }
 
+/// getColor - get the RGB color of the vertex
+/// Original data is in the [-1, 1]. Linear interpolation to [0, 255]
 void Vertex::getColor(Color& pColor) const
 {
   assert(isValid() &&
          "Vertex::Initialize(Model& pModel) should be called before calling "
          "Vertex::getColor()");
 
-  pColor.r = f_pModel->getObject()->colors[m_VertexIdx*3]*128 + 128;
-  pColor.g = f_pModel->getObject()->colors[m_VertexIdx*3 + 1]*128 + 128;
-  pColor.b = f_pModel->getObject()->colors[m_VertexIdx*3 + 2]*128 + 128;
+  pColor.r = f_pModel->getObject()->colors[m_VertexIdx*3]*128 + 127;
+  pColor.g = f_pModel->getObject()->colors[m_VertexIdx*3 + 1]*128 + 127;
+  pColor.b = f_pModel->getObject()->colors[m_VertexIdx*3 + 2]*128 + 127;
 }
 
