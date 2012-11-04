@@ -13,6 +13,7 @@ class Space;
 class Coord;
 class Vertex;
 class Line;
+class Triangle;
 class Model;
 class Color;
 
@@ -22,6 +23,7 @@ public:
   explicit Painter(FrameBuffer& pFB);
 
   bool draw(const Space& pSpace, Model& pModel) const;
+  bool draw(const Space& pSpace, Triangle& pTriangle) const;
   bool draw(const Space& pSpace, Line& pLine) const;
   bool draw(const Space& pSpace, Vertex& pVertex) const;
   bool draw(const Space& pSpace, Coord& pCoord, Color& pColor) const;

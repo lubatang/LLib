@@ -38,6 +38,8 @@ lviewer_debug_SOURCES = ${TOOLDIR}/main.cpp \
 	${LIBDIR}/Vertex.cpp \
 	${INCDIR}/Triangle/Line.h \
 	${LIBDIR}/Line.cpp \
+	${INCDIR}/Triangle/Triangle.h \
+	${LIBDIR}/Triangle.cpp \
 	${INCDIR}/Triangle/Space.h \
 	${LIBDIR}/Space.cpp \
 	${INCDIR}/Triangle/DrawLine.h \

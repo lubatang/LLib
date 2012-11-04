@@ -8,6 +8,7 @@
 #include <Triangle/Space.h>
 #include <Triangle/Model.h>
 #include <Triangle/Line.h>
+#include <Triangle/Triangle.h>
 #include <Triangle/DrawLine.h>
 #include <Triangle/Vertex.h>
 #include <Triangle/FrameBuffer.h>
@@ -76,6 +77,11 @@ bool Painter::draw(const Space& pSpace, Line& pLine) const
   return true;
 }
 
+bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
+{
+  return true;
+}
+
 bool Painter::draw(const Space& pSpace, Model& pModel) const
 {
   if (!Model::self().isValid())
@@ -99,13 +105,8 @@ bool Painter::draw(const Space& pSpace, Model& pModel) const
     t  = Model::self().getObject()->triangles[i].tindices[2];
     Vertex v3(v, n, fn, t);
 
-    Line l1(v1, v2);
-    Line l2(v2, v3);
-    Line l3(v3, v1);
-
-    draw(pSpace, l1);
-    draw(pSpace, l2);
-    draw(pSpace, l3);
+    Triangle tri(v1, v2, v3);
+    draw(pSpace, tri);
   }
 
   return true;

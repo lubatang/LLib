@@ -5,18 +5,15 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_TRIANGLE_H
 #define LUBA_TRIANGLE_H
-#include <Triangle/Drawable.h>
-#include <Triangle/FrameBuffer.h>
-#include <GLM/glm.h>
 
 namespace luba {
 
-class Triangle : public Drawable
+class Vertex;
+
+class Triangle
 {
 public:
-  Triangle(const GLMtriangle& pGLMTriangle);
-
-  bool draw(FrameBuffer& pFB);
+  Triangle(const Vertex& pV1, const Vertex& pV2, const Vertex& pV3);
 };
 
 } // namespace of luba
