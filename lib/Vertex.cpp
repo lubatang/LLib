@@ -56,8 +56,8 @@ void Vertex::getColor(Color& pColor) const
          "Vertex::Initialize(Model& pModel) should be called before calling "
          "Vertex::getColor()");
 
-  pColor.r = f_pModel->getObject()->colors[m_VertexIdx*3]*128 + 127;
-  pColor.g = f_pModel->getObject()->colors[m_VertexIdx*3 + 1]*128 + 127;
-  pColor.b = f_pModel->getObject()->colors[m_VertexIdx*3 + 2]*128 + 127;
+  pColor.r = f_pModel->getObject()->colors[m_VertexIdx*3];
+  pColor.g = f_pModel->getObject()->colors[m_VertexIdx*3 + 1];
+  pColor.b = f_pModel->getObject()->colors[m_VertexIdx*3 + 2];
 }
 

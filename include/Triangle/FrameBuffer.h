@@ -17,6 +17,13 @@ class FileHandle;
  */
 class FrameBuffer
 {
+private:
+  struct Pixel {
+    uint8_t r;
+    uint8_t g;
+    uint8_t b;
+  };
+
 public:
   FrameBuffer(unsigned int width, unsigned int height);
 
@@ -29,7 +36,7 @@ public:
 
   void setColor(unsigned int pX, unsigned int pY, const Color &pColor);
 
-  const uint8_t* getUCharArray() const { return (const uint8_t*)m_Colors; }
+  const uint8_t* getUCharArray() const { return (const uint8_t*)m_Pixels; }
 
   bool saveAsPPM(FileHandle& pFile) const;
 
@@ -38,7 +45,7 @@ private:
   {  return (x < m_Width && y < m_Height);}
 
 private:
-  Color* m_Colors;
+  Pixel* m_Pixels;
 
   unsigned int m_Width;
   unsigned int m_Height;

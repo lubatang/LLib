@@ -19,24 +19,29 @@ FrameBuffer::FrameBuffer(unsigned int pWidth, unsigned int pHeight)
   : m_Width(pWidth), m_Height(pHeight) {
 
   size_t size = m_Width * m_Height;
-  m_Colors = (Color*)malloc(sizeof(Color)*size);
-  memset(m_Colors, 0u, m_Width*m_Height*sizeof(Color));
+  m_Pixels = (Pixel*)malloc(sizeof(Pixel)*size);
+  memset(m_Pixels, 0u, m_Width*m_Height*sizeof(Pixel));
 }
 
 FrameBuffer::~FrameBuffer()
 {
-  free(m_Colors);
+  free(m_Pixels);
 }
 
 void FrameBuffer::setColor(unsigned int x, unsigned int y, const Color &pColor)
 {
-  if(isValidCoord(x, y))
-    m_Colors[x+y*m_Width] = pColor;
+  if(isValidCoord(x, y)) {
+    Pixel round;
+    round.r = pColor.r * 127.5 + 127.5;
+    round.g = pColor.g * 127.5 + 127.5;
+    round.b = pColor.b * 127.5 + 127.5;
+    m_Pixels[x+y*m_Width] = round;
+  }
 };
 
 void FrameBuffer::clear()
 {
-  memset(m_Colors, 0u, m_Width*m_Height*sizeof(Color));
+  memset(m_Pixels, 0u, m_Width*m_Height*sizeof(Pixel));
 }
 
 bool FrameBuffer::saveAsPPM(FileHandle& pFile) const

@@ -21,3 +21,20 @@ Color& Color::operator=(const Color& pCopy)
   b = pCopy.b;
   return *this;
 }
+
+Color& Color::operator+=(const Color& pAddend)
+{
+  r += pAddend.r;
+  g += pAddend.g;
+  b += pAddend.b;
+  return *this;
+}
+
+Color& Color::operator-=(const Color& pAddend)
+{
+  r -= pAddend.r;
+  g -= pAddend.g;
+  b -= pAddend.b;
+  return *this;
+}
+

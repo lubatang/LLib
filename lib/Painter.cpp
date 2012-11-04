@@ -52,24 +52,28 @@ bool Painter::draw(const Space& pSpace, Line& pLine) const
 {
   DrawLine draw(pSpace, pLine);
 
-  Color color;
-  Color from, to;
+  unsigned int distance = draw.distance();
+  if (0 == distance)
+    return true;
 
+  Color from, to;
   pLine.front().getColor(from);
   pLine.rear().getColor(to);
 
-  DrawLine::const_iterator pixel = draw.begin(), pEnd = draw.end();
-  unsigned int distance = draw.distance();
-  unsigned int step = 0;
-  while(pixel != pEnd) {
-    color.r = from.r + ((to.r - from.r) * step)/distance;
-    color.g = from.g + ((to.g - from.g) * step)/distance;
-    color.b = from.b + ((to.b - from.b) * step)/distance;
-    m_FB.setColor(pixel.x(), pixel.y(), color);
+  Color color = from;
+  Color delta;
+  delta.r = (to.r - from.r)/(float)distance;
+  delta.g = (to.g - from.g)/(float)distance;
+  delta.b = (to.b - from.b)/(float)distance;
 
-    pixel.next();
-    ++step;
+  unsigned int step = 0;
+  DrawLine::const_iterator pixel, pEnd = draw.end();
+  for (pixel = draw.begin(); pixel != pEnd; pixel.next(), ++step) {
+    color += delta;
+    m_FB.setColor(pixel.x(), pixel.y(), color);
   }
+
+  return true;
 }
 
 bool Painter::draw(const Space& pSpace, Model& pModel) const
@@ -98,10 +102,6 @@ bool Painter::draw(const Space& pSpace, Model& pModel) const
     Line l1(v1, v2);
     Line l2(v2, v3);
     Line l3(v3, v1);
-
-    draw(pSpace, v1);
-    draw(pSpace, v2);
-    draw(pSpace, v3);
 
     draw(pSpace, l1);
     draw(pSpace, l2);

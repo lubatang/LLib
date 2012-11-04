@@ -15,17 +15,19 @@ namespace luba {
 class Color
 {
 public:
-  uint8_t r;
-  uint8_t g;
-  uint8_t b;
+  float r;
+  float g;
+  float b;
 
 public:
-  Color() :r(0u), g(0u), b(0u) {}
-  Color(uint8_t pR, uint8_t pG, uint8_t pB) : r(pR), g(pG), b(pB) {}
+  Color() :r(0.0), g(0.0), b(0.0) {}
+  Color(float pR, float pG, float pB) : r(pR), g(pG), b(pB) {}
 
   Color(const Color& pCopy);
   Color& operator=(const Color& pCopy);
 
+  Color& operator+=(const Color& pAddend);
+  Color& operator-=(const Color& pAddend);
 };
 
 } // namespace of luba
