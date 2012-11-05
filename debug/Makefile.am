@@ -49,6 +49,10 @@ lviewer_debug_SOURCES = ${TOOLDIR}/main.cpp \
 	${INCDIR}/Triangle/LineIterator.h \
 	${LIBDIR}/LineIterator.cpp \
 	${INCDIR}/Triangle/Painter.h \
+	${INCDIR}/Triangle/DrawTriangle.h \
+	${LIBDIR}/DrawTriangle.cpp \
+	${INCDIR}/Triangle/TriangleIterator.h \
+	${LIBDIR}/TriangleIterator.cpp \
 	${LIBDIR}/Painter.cpp \
 	${LIBDIR}/Model.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \
