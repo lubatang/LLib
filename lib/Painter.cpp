@@ -13,6 +13,7 @@
 #include <Triangle/Vertex.h>
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Color.h>
+#include <Triangle/ColorIterator.h>
 
 #include <cmath>
 #include <algorithm>
@@ -57,21 +58,10 @@ bool Painter::draw(const Space& pSpace, Line& pLine) const
   if (0 == distance)
     return true;
 
-  Color from, to;
-  pLine.front().getColor(from);
-  pLine.rear().getColor(to);
-
-  Color color = from;
-  Color delta;
-  delta.r = (to.r - from.r)/(float)distance;
-  delta.g = (to.g - from.g)/(float)distance;
-  delta.b = (to.b - from.b)/(float)distance;
-
-  unsigned int step = 0;
+  ColorIterator color = ColorIterator(pLine, distance);
   DrawLine::const_iterator pixel, pEnd = draw.end();
-  for (pixel = draw.begin(); pixel != pEnd; pixel.next(), ++step) {
-    color += delta;
-    m_FB.setColor(pixel.x(), pixel.y(), color);
+  for (pixel = draw.begin(); pixel != pEnd; pixel.next(), color.next()) {
+    m_FB.setColor(pixel.x(), pixel.y(), *color);
   }
 
   return true;
@@ -107,6 +97,13 @@ bool Painter::draw(const Space& pSpace, Model& pModel) const
 
     Triangle tri(v1, v2, v3);
     draw(pSpace, tri);
+
+    Line l1(v1, v2);
+    Line l2(v2, v3);
+    Line l3(v1, v3);
+    draw(pSpace , l1);
+    draw(pSpace , l2);
+    draw(pSpace , l3);
   }
 
   return true;
