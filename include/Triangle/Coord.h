@@ -5,6 +5,7 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_COORD_H
 #define LUBA_COORD_H
+#include <algorithm>
 
 namespace luba {
 
@@ -22,6 +23,17 @@ public:
 };
 
 } // namespace luba
+
+namespace std {
+
+template<>
+void swap(Coord& pA, Coord& pB) {
+  std::swap(pA.x, pB.x);
+  std::swap(pA.y, pB.y);
+  std::swap(pA.z, pB.z);
+}
+
+} // namespace std
 
 #endif
 
