@@ -9,12 +9,10 @@
 
 namespace luba {
 
-class Line;
-
 class ColorIterator
 {
 public:
-  ColorIterator(const Line& pLine, float pDistance);
+  ColorIterator(const Color& pCA, const Color& pCB, float pDistance);
 
   ColorIterator();
   ~ColorIterator() { }

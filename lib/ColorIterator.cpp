@@ -5,22 +5,16 @@
 //===----------------------------------------------------------------------===//
 #include <Triangle/ColorIterator.h>
 
-#include <Triangle/Line.h>
-#include <Triangle/Vertex.h>
-
 using namespace luba;
 
 //===----------------------------------------------------------------------===//
 // ColorIterator
 //===----------------------------------------------------------------------===//
-ColorIterator::ColorIterator(const Line& pLine, float pDistance)
-{
-  Color to;
-  pLine.front().getColor(m_Color);
-  pLine.rear().getColor(to);
-  m_Delta.r = (to.r - m_Color.r)/pDistance;
-  m_Delta.g = (to.g - m_Color.g)/pDistance;
-  m_Delta.b = (to.b - m_Color.b)/pDistance;
+ColorIterator::ColorIterator(const Color& pCA, const Color& pCB, float pDistance)
+  : m_Color(pCA){
+  m_Delta.r = (pCB.r - pCA.r)/pDistance;
+  m_Delta.g = (pCB.g - pCA.g)/pDistance;
+  m_Delta.b = (pCB.b - pCA.b)/pDistance;
 }
 
 ColorIterator::ColorIterator()

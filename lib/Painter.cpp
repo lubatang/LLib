@@ -54,16 +54,19 @@ bool Painter::draw(const Space& pSpace, Vertex& pVertex) const
 
 bool Painter::draw(const Space& pSpace, Line& pLine) const
 {
-  Coord from, to;
-  pLine.front().getCoord(from);
-  pLine.rear().getCoord(to);
-  DrawLine drawer(pSpace, from, to);
+  Coord v1, v2;
+  pLine.front().getCoord(v1);
+  pLine.rear().getCoord(v2);
+  DrawLine drawer(pSpace, v1, v2);
 
   unsigned int distance = drawer.distance();
   if (0 == distance)
     return true;
 
-  ColorIterator color = ColorIterator(pLine, distance);
+  Color c1, c2;
+  pLine.front().getColor(c1);
+  pLine.rear().getColor(c2);
+  ColorIterator color = ColorIterator(c1, c2, distance);
   DrawLine::const_iterator pixel, pEnd = drawer.end();
   for (pixel = drawer.begin(); pixel != pEnd; pixel.next(), color.next()) {
     m_FB.setColor(pixel.x(), pixel.y(), *color);
@@ -78,6 +81,18 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
   pTriangle.v1().getCoord(v1);
   pTriangle.v2().getCoord(v2);
   pTriangle.v3().getCoord(v3);
+
+/**
+  DrawTriangle drawer(pSpace, v1, v2, v3);
+
+  DrawTriangle::const_iterator horizon, hEnd = drawer.end();
+  for (horizon = drawer.begin(); horizon != hEnd; horizon.next()) {
+    unsigned int x, xEnd = horizon->x2(), y = horizon->y();
+    for (x = horizon->x1(); x < xEnd; ++x) {
+      m_FB.setColor(x, y, );
+    }
+  }
+**/
   return true;
 }
 
