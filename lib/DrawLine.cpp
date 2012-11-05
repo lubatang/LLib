@@ -5,7 +5,6 @@
 //===----------------------------------------------------------------------===//
 #include <Triangle/DrawLine.h>
 #include <Triangle/Space.h>
-#include <Triangle/Line.h>
 
 #include <cmath>
 #include <algorithm>
@@ -15,11 +14,11 @@ using namespace luba;
 //===----------------------------------------------------------------------===//
 // DrawLine
 //===----------------------------------------------------------------------===//
-DrawLine::DrawLine(const Space& pSpace, const Line& pLine)
-  : m_Space(pSpace), m_Line(pLine), m_bSteepXY(false), m_bSteepXZ(false) {
+DrawLine::DrawLine(const Space& pSpace, const Coord& pA, const Coord& pB)
+  : m_Space(pSpace), m_bSteepXY(false), m_bSteepXZ(false) {
 
-  pSpace.map(pLine.front(), m_A.x, m_A.y, m_A.z);
-  pSpace.map(pLine.rear(), m_B.x, m_B.y, m_B.z);
+  pSpace.map(pA, m_A.x, m_A.y, m_A.z);
+  pSpace.map(pB, m_B.x, m_B.y, m_B.z);
 
   // Extended Bresenham's line algorithm
   // @ref http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm

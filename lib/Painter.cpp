@@ -17,7 +17,9 @@
 
 #include <cmath>
 #include <algorithm>
+#include <iostream>
 
+using namespace std;
 using namespace luba;
 
 //===----------------------------------------------------------------------===//
@@ -52,15 +54,18 @@ bool Painter::draw(const Space& pSpace, Vertex& pVertex) const
 
 bool Painter::draw(const Space& pSpace, Line& pLine) const
 {
-  DrawLine draw(pSpace, pLine);
+  Coord from, to;
+  pLine.front().getCoord(from);
+  pLine.rear().getCoord(to);
+  DrawLine drawer(pSpace, from, to);
 
-  unsigned int distance = draw.distance();
+  unsigned int distance = drawer.distance();
   if (0 == distance)
     return true;
 
   ColorIterator color = ColorIterator(pLine, distance);
-  DrawLine::const_iterator pixel, pEnd = draw.end();
-  for (pixel = draw.begin(); pixel != pEnd; pixel.next(), color.next()) {
+  DrawLine::const_iterator pixel, pEnd = drawer.end();
+  for (pixel = drawer.begin(); pixel != pEnd; pixel.next(), color.next()) {
     m_FB.setColor(pixel.x(), pixel.y(), *color);
   }
 
@@ -69,6 +74,10 @@ bool Painter::draw(const Space& pSpace, Line& pLine) const
 
 bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
 {
+  Coord v1, v2, v3;
+  pTriangle.v1().getCoord(v1);
+  pTriangle.v2().getCoord(v2);
+  pTriangle.v3().getCoord(v3);
   return true;
 }
 

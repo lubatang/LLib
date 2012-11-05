@@ -6,11 +6,11 @@
 #ifndef LUBA_DRAW_LINE_H
 #define LUBA_DRAW_LINE_H
 #include <Triangle/LineIterator.h>
+#include <Triangle/Coord.h>
 
 namespace luba {
 
 class Space;
-class Line;
 
 /** \class DrawLine
  *  \brief DrawLine is an action to draw a line on certain space.
@@ -22,7 +22,7 @@ public:
   typedef LineIterator const_iterator;
 
 public:
-  DrawLine(const Space& pSpace, const Line& pLine);
+  DrawLine(const Space& pSpace, const Coord& pA, const Coord& pB);
 
   const_iterator begin() const;
   const_iterator end  () const;
@@ -31,15 +31,8 @@ public:
   unsigned int distance() const;
 
 private:
-  struct Point {
-    float x;
-    float y;
-    float z;
-  };
-
-private:
-  Point m_A;
-  Point m_B;
+  Coord m_A;
+  Coord m_B;
 
   int m_XStep;
   int m_YStep;
@@ -53,7 +46,6 @@ private:
   bool m_bSteepXZ : 1;
 
   const Space& m_Space;
-  const Line& m_Line;
 };
 
 } // namespace luba
