@@ -28,6 +28,8 @@ FrameBuffer::~FrameBuffer()
   free(m_Pixels);
 }
 
+#include <iostream>
+using namespace std;
 void FrameBuffer::setColor(unsigned int x, unsigned int y, const Color &pColor)
 {
   if(isValidCoord(x, y)) {

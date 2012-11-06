@@ -88,8 +88,8 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
   pTriangle.v3().getColor(c3);
 
   Coord S, E, A, B, C;
-  pSpace.map(v1, S.x, S.y, S.z);
-  pSpace.map(v1, E.x, E.y, E.z);
+  pSpace.map(v3, S.x, S.y, S.z);
+  pSpace.map(v3, E.x, E.y, E.z);
 
   pSpace.map(v1, A.x, A.y, A.z);
   pSpace.map(v2, B.x, B.y, B.z);
@@ -99,68 +99,113 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
     return true;
 
   float dx1, dx2, dx3;
-  dx1 = (v3.x - v1.x)/(v1.y - v3.y); // A -> C
-  dx2 = (v2.x - v1.x)/(v1.y - v2.y); // A -> B
-  dx3 = (v3.x - v2.x)/(v2.y - v3.y); // B -> C
+  Color dc1, dc2, dc3;
+  dx1 = (v1.x - v3.x)/(v1.y - v3.y); // C -> A
+  dc1.r = (c1.r - c3.r)/(A.y - C.y);
+  dc1.g = (c1.g - c3.g)/(A.y - C.y);
+  dc1.b = (c1.b - c3.b)/(A.y - C.y);
 
-  Color color(255, 255, 0);
+  dx2 = (v2.x - v3.x)/(v2.y - v3.y); // C -> B
+  dc2.r = (c2.r - c3.r)/(B.y - C.y);
+  dc2.g = (c2.g - c3.g)/(B.y - C.y);
+  dc2.b = (c2.b - c3.b)/(B.y - C.y);
+
+  dx3 = (v1.x - v2.x)/(v1.y - v2.y); // B -> A
+  dc3.r = (c1.r - c2.r)/(A.y - B.y);
+  dc3.g = (c1.g - c2.g)/(A.y - B.y);
+  dc3.b = (c1.b - c2.b)/(A.y - B.y);
+
+  Color SC, EC;
+  SC = c3;
+  EC = c3;
   if (dx2 > dx1) { // B is in the right
-    while (S.y >= B.y) {
+    while (S.y <= B.y) { // C -> B
+      Color delta;
+      delta.r = (EC.r - SC.r)/(E.x - S.x);
+      delta.g = (EC.g - SC.g)/(E.x - S.x);
+      delta.b = (EC.b - SC.b)/(E.x - S.x);
+      Color color = SC;
       unsigned int e = E.x, y = S.y;
-      for (unsigned int x = S.x; x <= e; ++x)
+      for (unsigned int x = S.x; x <= e; ++x) {
         m_FB.setColor(x, y, color);
-      --S.y;
-      --E.y;
+        color.r += delta.r;
+        color.g += delta.g;
+        color.b += delta.b;
+      }
+      ++S.y;
+      ++E.y;
       S.x += dx1;
       E.x += dx2;
+      SC.r += dc1.r; SC.g += dc1.g; SC.b += dc1.b;
+      EC.r += dc2.r; EC.g += dc2.g; EC.b += dc2.b;
     }
     E = B;
-    while (S.y >= C.y) {
+    EC = c2;
+    while (S.y <= A.y) {
+      Color delta;
+      delta.r = (EC.r - SC.r)/(E.x - S.x);
+      delta.g = (EC.g - SC.g)/(E.x - S.x);
+      delta.b = (EC.b - SC.b)/(E.x - S.x);
+      Color color = SC;
       unsigned int e = E.x, y = S.y;
-      for (unsigned int x = S.x; x <= e; ++x)
+      for (unsigned int x = S.x; x <= e; ++x) {
         m_FB.setColor(x, y, color);
-      --S.y;
-      --E.y;
+        color.r += delta.r;
+        color.g += delta.g;
+        color.b += delta.b;
+      }
+      ++S.y;
+      ++E.y;
       S.x += dx1;
       E.x += dx3;
+      SC.r += dc1.r; SC.g += dc1.g; SC.b += dc1.b;
+      EC.r += dc3.r; EC.g += dc3.g; EC.b += dc3.b;
     }
   }
   else { // B is in the left
-    while (S.y >= B.y) {
+    while (S.y <= B.y) {
+      Color delta;
+      delta.r = (EC.r - SC.r)/(E.x - S.x);
+      delta.g = (EC.g - SC.g)/(E.x - S.x);
+      delta.b = (EC.b - SC.b)/(E.x - S.x);
+      Color color = SC;
       unsigned int e = E.x, y = S.y;
-      for (unsigned int x = S.x; x <= e; ++x)
+      for (unsigned int x = S.x; x <= e; ++x) {
         m_FB.setColor(x, y, color);
-      --S.y;
-      --E.y;
+        color.r += delta.r;
+        color.g += delta.g;
+        color.b += delta.b;
+      }
+      ++S.y;
+      ++E.y;
       S.x += dx2;
       E.x += dx1;
+      SC.r += dc2.r; SC.g += dc2.g; SC.b += dc2.b;
+      EC.r += dc1.r; EC.g += dc1.g; EC.b += dc1.b;
     }
     S = B;
-    while (S.y >= C.y) {
+    SC = c2;
+    while (S.y <= A.y) {
+      Color delta;
+      delta.r = (EC.r - SC.r)/(E.x - S.x);
+      delta.g = (EC.g - SC.g)/(E.x - S.x);
+      delta.b = (EC.b - SC.b)/(E.x - S.x);
+      Color color = SC;
       unsigned int e = E.x, y = S.y;
-      for (unsigned int x = S.x; x <= e; ++x)
+      for (unsigned int x = S.x; x <= e; ++x) {
         m_FB.setColor(x, y, color);
-      --S.y;
-      --E.y;
+        color.r += delta.r;
+        color.g += delta.g;
+        color.b += delta.b;
+      }
+      ++S.y;
+      ++E.y;
       S.x += dx3;
       E.x += dx1;
+      SC.r += dc3.r; SC.g += dc3.g; SC.b += dc3.b;
+      EC.r += dc1.r; EC.g += dc1.g; EC.b += dc1.b;
     }
   }
-/**
-  DrawTriangle drawer(pSpace, v1, v2, v3, c1, c2, c3);
-
-  DrawTriangle::const_iterator horizon, hEnd = drawer.end();
-  for (horizon = drawer.begin(); horizon != hEnd; horizon.next()) {
-
-    ColorIterator color = ColorIterator(horizon.c1(),
-                                        horizon.c2(),
-                                        horizon->distance());
-    DrawLine::const_iterator pixel, pEnd = horizon->end();
-    for (pixel = horizon->begin(); pixel != pEnd; pixel.next(), color.next()) {
-      m_FB.setColor(pixel.x(), pixel.y(), *color);
-    }
-  }
-**/
   return true;
 }
 
@@ -169,7 +214,6 @@ bool Painter::draw(const Space& pSpace, Model& pModel) const
   if (!Model::self().isValid())
     return false;
 
-cerr << "<Model>" << endl;
   for(int i=0; i<(int)Model::self().getObject()->numtriangles; ++i) {
     int fn = Model::self().getObject()->triangles[i].findex;
 
@@ -190,20 +234,8 @@ cerr << "<Model>" << endl;
 
     Triangle tri(v1, v2, v3);
     draw(pSpace, tri);
-
-    Line l1(v1, v2);
-    Line l2(v2, v3);
-    Line l3(v1, v3);
-    draw(pSpace , l1);
-    draw(pSpace , l2);
-    draw(pSpace , l3);
-
-    draw(pSpace, v1);
-    draw(pSpace, v2);
-    draw(pSpace, v3);
   }
 
-cerr << "</Model>" << endl;
   return true;
 }
 
