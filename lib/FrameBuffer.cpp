@@ -20,7 +20,10 @@ FrameBuffer::FrameBuffer(unsigned int pWidth, unsigned int pHeight)
 
   size_t size = m_Width * m_Height;
   m_Pixels = (Pixel*)malloc(sizeof(Pixel)*size);
-  memset(m_Pixels, 0u, m_Width*m_Height*sizeof(Pixel));
+  memset(m_Pixels, 0u, size*sizeof(Pixel));
+
+  m_ZBuffer = (uint32_t*)malloc(sizeof(uint32_t)*size);
+  memset(m_ZBuffer, -1, size*sizeof(uint32_t));
 }
 
 FrameBuffer::~FrameBuffer()
@@ -28,22 +31,26 @@ FrameBuffer::~FrameBuffer()
   free(m_Pixels);
 }
 
-#include <iostream>
-using namespace std;
-void FrameBuffer::setColor(unsigned int x, unsigned int y, const Color &pColor)
+void FrameBuffer::setColor(unsigned int pX, unsigned int pY, unsigned int pZ,
+                           const Color &pColor)
 {
-  if(isValidCoord(x, y)) {
-    Pixel round;
-    round.r = pColor.r * 127.5 + 127.5;
-    round.g = pColor.g * 127.5 + 127.5;
-    round.b = pColor.b * 127.5 + 127.5;
-    m_Pixels[x+y*m_Width] = round;
+  if(isValidCoord(pX, pY)) {
+    size_t index = pX + pY*m_Width;
+    if (pZ < m_ZBuffer[index]) {
+      Pixel round;
+      round.r = pColor.r * 127.5 + 127.5;
+      round.g = pColor.g * 127.5 + 127.5;
+      round.b = pColor.b * 127.5 + 127.5;
+      m_Pixels[index] = round;
+      m_ZBuffer[index] = pZ;
+    }
   }
 };
 
 void FrameBuffer::clear()
 {
   memset(m_Pixels, 0u, m_Width*m_Height*sizeof(Pixel));
+  memset(m_ZBuffer, -1, m_Width*m_Height*sizeof(uint32_t));
 }
 
 bool FrameBuffer::saveAsPPM(FileHandle& pFile) const
