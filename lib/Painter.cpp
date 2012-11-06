@@ -18,9 +18,7 @@
 
 #include <cmath>
 #include <algorithm>
-#include <iostream>
 
-using namespace std;
 using namespace luba;
 
 //===----------------------------------------------------------------------===//
@@ -89,6 +87,66 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
   pTriangle.v2().getColor(c2);
   pTriangle.v3().getColor(c3);
 
+  Coord S, E, A, B, C;
+  pSpace.map(v1, S.x, S.y, S.z);
+  pSpace.map(v1, E.x, E.y, E.z);
+
+  pSpace.map(v1, A.x, A.y, A.z);
+  pSpace.map(v2, B.x, B.y, B.z);
+  pSpace.map(v3, C.x, C.y, C.z);
+
+  if ((unsigned int)A.y == (unsigned int)B.y && (unsigned int)B.y == (unsigned int)C.y)
+    return true;
+
+  float dx1, dx2, dx3;
+  dx1 = (v3.x - v1.x)/(v1.y - v3.y); // A -> C
+  dx2 = (v2.x - v1.x)/(v1.y - v2.y); // A -> B
+  dx3 = (v3.x - v2.x)/(v2.y - v3.y); // B -> C
+
+  Color color(255, 255, 0);
+  if (dx2 > dx1) { // B is in the right
+    while (S.y >= B.y) {
+      unsigned int e = E.x, y = S.y;
+      for (unsigned int x = S.x; x <= e; ++x)
+        m_FB.setColor(x, y, color);
+      --S.y;
+      --E.y;
+      S.x += dx1;
+      E.x += dx2;
+    }
+    E = B;
+    while (S.y >= C.y) {
+      unsigned int e = E.x, y = S.y;
+      for (unsigned int x = S.x; x <= e; ++x)
+        m_FB.setColor(x, y, color);
+      --S.y;
+      --E.y;
+      S.x += dx1;
+      E.x += dx3;
+    }
+  }
+  else { // B is in the left
+    while (S.y >= B.y) {
+      unsigned int e = E.x, y = S.y;
+      for (unsigned int x = S.x; x <= e; ++x)
+        m_FB.setColor(x, y, color);
+      --S.y;
+      --E.y;
+      S.x += dx2;
+      E.x += dx1;
+    }
+    S = B;
+    while (S.y >= C.y) {
+      unsigned int e = E.x, y = S.y;
+      for (unsigned int x = S.x; x <= e; ++x)
+        m_FB.setColor(x, y, color);
+      --S.y;
+      --E.y;
+      S.x += dx3;
+      E.x += dx1;
+    }
+  }
+/**
   DrawTriangle drawer(pSpace, v1, v2, v3, c1, c2, c3);
 
   DrawTriangle::const_iterator horizon, hEnd = drawer.end();
@@ -102,7 +160,7 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
       m_FB.setColor(pixel.x(), pixel.y(), *color);
     }
   }
-
+**/
   return true;
 }
 
@@ -111,6 +169,7 @@ bool Painter::draw(const Space& pSpace, Model& pModel) const
   if (!Model::self().isValid())
     return false;
 
+cerr << "<Model>" << endl;
   for(int i=0; i<(int)Model::self().getObject()->numtriangles; ++i) {
     int fn = Model::self().getObject()->triangles[i].findex;
 
@@ -138,8 +197,13 @@ bool Painter::draw(const Space& pSpace, Model& pModel) const
     draw(pSpace , l1);
     draw(pSpace , l2);
     draw(pSpace , l3);
+
+    draw(pSpace, v1);
+    draw(pSpace, v2);
+    draw(pSpace, v3);
   }
 
+cerr << "</Model>" << endl;
   return true;
 }
 
