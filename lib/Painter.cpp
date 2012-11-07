@@ -228,7 +228,7 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
   return true;
 }
 
-bool Painter::draw(const Space& pSpace, Model& pModel) const
+bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
 {
   if (!Model::self().isValid())
     return false;
@@ -251,8 +251,18 @@ bool Painter::draw(const Space& pSpace, Model& pModel) const
     t  = Model::self().getObject()->triangles[i].tindices[2];
     Vertex v3(v, n, fn, t);
 
-    Triangle tri(v1, v2, v3);
-    draw(pSpace, tri);
+    if (pSolid) {
+      Triangle tri(v1, v2, v3);
+      draw(pSpace, tri);
+    }
+    else {
+      Line l1(v1, v2);
+      Line l2(v1, v3);
+      Line l3(v2, v3);
+      draw(pSpace, l1);
+      draw(pSpace, l2);
+      draw(pSpace, l3);
+    }
   }
 
   return true;

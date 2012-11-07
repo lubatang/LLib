@@ -22,7 +22,7 @@ class Painter
 public:
   explicit Painter(FrameBuffer& pFB);
 
-  bool draw(const Space& pSpace, Model& pModel) const;
+  bool draw(const Space& pSpace, Model& pModel, bool pSolid) const;
   bool draw(const Space& pSpace, Triangle& pTriangle) const;
   bool draw(const Space& pSpace, Line& pLine) const;
   bool draw(const Space& pSpace, Vertex& pVertex) const;
