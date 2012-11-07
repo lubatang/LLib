@@ -13,8 +13,8 @@
 
 using namespace luba;
 
-int screenWidth = 600;
-int screenHeight = 600;
+int screenWidth = 1000;
+int screenHeight = 1000;
 
 //===----------------------------------------------------------------------===//
 // Helper Functions
@@ -52,7 +52,7 @@ void render(const LCamera cam, const LLight lit, FrameBuffer* pFB, RENDER_MODE p
   //   Model   : Model
   //   View    : Space
   //   Control : Painter
-  Space space(400, 400, 255);
+  Space space(800, 800, 800);
   space.setOrigin(100, 100, 0);
   Painter painter(*pFB);
   bool solid = (pRenderMode == SOLID);

@@ -23,7 +23,7 @@ FrameBuffer::FrameBuffer(unsigned int pWidth, unsigned int pHeight)
   memset(m_Pixels, 0u, size*sizeof(Pixel));
 
   m_ZBuffer = (uint32_t*)malloc(sizeof(uint32_t)*size);
-  memset(m_ZBuffer, -1, size*sizeof(uint32_t));
+  memset(m_ZBuffer, 0, size*sizeof(uint32_t));
 }
 
 FrameBuffer::~FrameBuffer()
@@ -36,7 +36,7 @@ void FrameBuffer::setColor(unsigned int pX, unsigned int pY, unsigned int pZ,
 {
   if(isValidCoord(pX, pY)) {
     size_t index = pX + pY*m_Width;
-    if (pZ < m_ZBuffer[index]) {
+    if (pZ >= m_ZBuffer[index]) {
       Pixel round;
       round.r = pColor.r * 127.5 + 127.5;
       round.g = pColor.g * 127.5 + 127.5;
@@ -50,7 +50,7 @@ void FrameBuffer::setColor(unsigned int pX, unsigned int pY, unsigned int pZ,
 void FrameBuffer::clear()
 {
   memset(m_Pixels, 0u, m_Width*m_Height*sizeof(Pixel));
-  memset(m_ZBuffer, -1, m_Width*m_Height*sizeof(uint32_t));
+  memset(m_ZBuffer, 0, m_Width*m_Height*sizeof(uint32_t));
 }
 
 bool FrameBuffer::saveAsPPM(FileHandle& pFile) const

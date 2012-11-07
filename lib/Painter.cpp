@@ -254,6 +254,12 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     if (pSolid) {
       Triangle tri(v1, v2, v3);
       draw(pSpace, tri);
+      Line l1(v1, v2);
+      Line l2(v1, v3);
+      Line l3(v2, v3);
+      draw(pSpace, l1);
+      draw(pSpace, l2);
+      draw(pSpace, l3);
     }
     else {
       Line l1(v1, v2);
