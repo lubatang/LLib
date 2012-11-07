@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ $# -lt 2 ]; then
+if [ $# -lt 1 ]; then
   echo "Usage:"
   echo "$ ./run.sh [Path of Test Directory]"
   echo
