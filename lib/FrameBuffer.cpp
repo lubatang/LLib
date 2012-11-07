@@ -22,8 +22,8 @@ FrameBuffer::FrameBuffer(unsigned int pWidth, unsigned int pHeight)
   m_Pixels = (Pixel*)malloc(sizeof(Pixel)*size);
   memset(m_Pixels, 0u, size*sizeof(Pixel));
 
-  m_ZBuffer = (uint32_t*)malloc(sizeof(uint32_t)*size);
-  memset(m_ZBuffer, 0, size*sizeof(uint32_t));
+  m_ZBuffer = (unsigned int*)malloc(sizeof(unsigned int)*size);
+  memset(m_ZBuffer, 0u, size*sizeof(unsigned int));
 }
 
 FrameBuffer::~FrameBuffer()
@@ -50,7 +50,7 @@ void FrameBuffer::setColor(unsigned int pX, unsigned int pY, unsigned int pZ,
 void FrameBuffer::clear()
 {
   memset(m_Pixels, 0u, m_Width*m_Height*sizeof(Pixel));
-  memset(m_ZBuffer, 0, m_Width*m_Height*sizeof(uint32_t));
+  memset(m_ZBuffer, 0u, m_Width*m_Height*sizeof(unsigned int));
 }
 
 bool FrameBuffer::saveAsPPM(FileHandle& pFile) const

@@ -15,13 +15,13 @@ namespace luba {
 class Color
 {
 public:
-  float r;
-  float g;
-  float b;
+  double r;
+  double g;
+  double b;
 
 public:
   Color() :r(0.0), g(0.0), b(0.0) {}
-  Color(float pR, float pG, float pB) : r(pR), g(pG), b(pB) {}
+  Color(double pR, double pG, double pB) : r(pR), g(pG), b(pB) {}
 
   Color(const Color& pCopy);
   Color& operator=(const Color& pCopy);

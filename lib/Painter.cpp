@@ -34,7 +34,7 @@ Painter::draw(const Space& pSpace, Coord& pCoord, Color& pColor) const
   unsigned int x, y, z;
   pSpace.map(pCoord, x, y, z);
 
-  float a, b, c;
+  double a, b, c;
   pSpace.map(pCoord, a, b, c);
   m_FB.setColor(x, y, z, pColor);
   return true;
@@ -87,50 +87,64 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
   pTriangle.v2().getColor(c2);
   pTriangle.v3().getColor(c3);
 
+  // maping to space
   Coord S, E, A, B, C;
-  pSpace.map(v3, S.x, S.y, S.z);
-  pSpace.map(v3, E.x, E.y, E.z);
-
   pSpace.map(v1, A.x, A.y, A.z);
   pSpace.map(v2, B.x, B.y, B.z);
   pSpace.map(v3, C.x, C.y, C.z);
 
-  if ((unsigned int)A.y == (unsigned int)B.y && (unsigned int)B.y == (unsigned int)C.y)
+  if ((A.y - B.y) < 1 && (B.y - C.y) < 1)
+    return true;
+
+  if (fabs(A.x - B.x) < 1 && fabs(B.x - C.x) < 1)
     return true;
 
   float dx1, dx2, dx3, dz1, dz2, dz3;
   Color dc1, dc2, dc3;
   dx1 = (v1.x - v3.x)/(v1.y - v3.y); // C -> A
   dz1 = (v1.z - v3.z)/(v1.y - v3.y); // C -> A
-  dc1.r = (c1.r - c3.r)/(A.y - C.y);
-  dc1.g = (c1.g - c3.g)/(A.y - C.y);
-  dc1.b = (c1.b - c3.b)/(A.y - C.y);
+  if ((A.y -C.y) > 0) {
+    dc1.r = (c1.r - c3.r)/(A.y - C.y);
+    dc1.g = (c1.g - c3.g)/(A.y - C.y);
+    dc1.b = (c1.b - c3.b)/(A.y - C.y);
+  }
+  else
+    dc1.r = dc1.g = dc1.b = 0;
 
   dx2 = (v2.x - v3.x)/(v2.y - v3.y); // C -> B
   dz2 = (v2.z - v3.z)/(v2.y - v3.y); // C -> B
-  dc2.r = (c2.r - c3.r)/(B.y - C.y);
-  dc2.g = (c2.g - c3.g)/(B.y - C.y);
-  dc2.b = (c2.b - c3.b)/(B.y - C.y);
+  if ((B.y - C.y) > 0) {
+    dc2.r = (c2.r - c3.r)/(B.y - C.y);
+    dc2.g = (c2.g - c3.g)/(B.y - C.y);
+    dc2.b = (c2.b - c3.b)/(B.y - C.y);
+  }
+  else
+    dc2.r = dc2.g = dc2.b = 0;
 
   dx3 = (v1.x - v2.x)/(v1.y - v2.y); // B -> A
   dz3 = (v1.z - v2.z)/(v1.y - v2.y); // B -> A
-  dc3.r = (c1.r - c2.r)/(A.y - B.y);
-  dc3.g = (c1.g - c2.g)/(A.y - B.y);
-  dc3.b = (c1.b - c2.b)/(A.y - B.y);
+  if ((A.y - B.y) > 0) {
+    dc3.r = (c1.r - c2.r)/(A.y - B.y);
+    dc3.g = (c1.g - c2.g)/(A.y - B.y);
+    dc3.b = (c1.b - c2.b)/(A.y - B.y);
+  }
+  else
+    dc3.r = dc3.g = dc3.b = 0;
 
   Color SC, EC;
   SC = c3;
   EC = c3;
+  S = E = C;
   if (dx2 > dx1) { // B is in the right
-    while (S.y <= B.y) { // C -> B
+    while (S.y < B.y) { // C -> B
       Color delta;
       delta.r = (EC.r - SC.r)/(E.x - S.x);
       delta.g = (EC.g - SC.g)/(E.x - S.x);
       delta.b = (EC.b - SC.b)/(E.x - S.x);
-      float dz = (E.z - S.z)/(E.x - S.x);
+      double dz = ((E.x - S.x) > 0)?(E.z - S.z)/(E.x - S.x):0;
       Color color = SC;
-      unsigned int e = E.x, y = S.y, z = S.z;
-      for (unsigned int x = S.x; x <= e; ++x) {
+      double e = E.x, y = S.y, z = S.z;
+      for (double x = S.x; x < e; ++x) {
         m_FB.setColor(x, y, z, color);
         color.r += delta.r;
         color.g += delta.g;
@@ -148,15 +162,15 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
     }
     E = B;
     EC = c2;
-    while (S.y <= A.y) {
+    while (S.y < A.y) {
       Color delta;
       delta.r = (EC.r - SC.r)/(E.x - S.x);
       delta.g = (EC.g - SC.g)/(E.x - S.x);
       delta.b = (EC.b - SC.b)/(E.x - S.x);
-      float dz = (E.z - S.z)/(E.x - S.x);
+      double dz = ((E.x - S.x)>0)?(E.z - S.z)/(E.x - S.x):0;
       Color color = SC;
-      unsigned int e = E.x, y = S.y, z = S.z;
-      for (unsigned int x = S.x; x <= e; ++x) {
+      double e = E.x, y = S.y, z = S.z;
+      for (double x = S.x; x < e; ++x) {
         m_FB.setColor(x, y, z, color);
         color.r += delta.r;
         color.g += delta.g;
@@ -174,15 +188,16 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
     }
   }
   else { // B is in the left
-    while (S.y <= B.y) {
+    // down half
+    while (S.y < B.y) {
       Color delta;
       delta.r = (EC.r - SC.r)/(E.x - S.x);
       delta.g = (EC.g - SC.g)/(E.x - S.x);
       delta.b = (EC.b - SC.b)/(E.x - S.x);
-      float dz = (E.z - S.z)/(E.x - S.x);
+      double dz = ((E.x - S.x)>0)? (E.z - S.z)/(E.x - S.x):0;
       Color color = SC;
-      unsigned int e = E.x, y = S.y, z = S.z;
-      for (unsigned int x = S.x; x <= e; ++x) {
+      double e = E.x, y = S.y, z = S.z;
+      for (double x = S.x; x < e; ++x) {
         m_FB.setColor(x, y, z, color);
         color.r += delta.r;
         color.g += delta.g;
@@ -198,17 +213,18 @@ bool Painter::draw(const Space& pSpace, Triangle& pTriangle) const
       SC.r += dc2.r; SC.g += dc2.g; SC.b += dc2.b;
       EC.r += dc1.r; EC.g += dc1.g; EC.b += dc1.b;
     }
+    // top half
     S = B;
     SC = c2;
-    while (S.y <= A.y) {
+    while (S.y < A.y) {
       Color delta;
       delta.r = (EC.r - SC.r)/(E.x - S.x);
       delta.g = (EC.g - SC.g)/(E.x - S.x);
       delta.b = (EC.b - SC.b)/(E.x - S.x);
-      float dz = (E.z - S.z)/(E.x - S.x);
+      double dz = ((E.x - S.x) > 0)?(E.z - S.z)/(E.x - S.x):0;
       Color color = SC;
-      unsigned int e = E.x, y = S.y, z = S.z;
-      for (unsigned int x = S.x; x <= e; ++x) {
+      double e = E.x, y = S.y, z = S.z;
+      for (double x = S.x; x < e; ++x) {
         m_FB.setColor(x, y, z, color);
         color.r += delta.r;
         color.g += delta.g;
@@ -254,6 +270,7 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     if (pSolid) {
       Triangle tri(v1, v2, v3);
       draw(pSpace, tri);
+
       Line l1(v1, v2);
       Line l2(v1, v3);
       Line l3(v2, v3);

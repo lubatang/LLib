@@ -18,6 +18,8 @@ Compilation Instructions
 
   6.  Type `make install` to install the package into your system.
 
+  7.  Type `./run.sh [Path of Test Directory]` to run the program.
+
 ===================
 Directory Structure
 ===================

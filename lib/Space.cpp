@@ -33,14 +33,14 @@ void Space::map(const Vertex& pVertex,
   map(coord, pX, pY, pZ);
 }
 
-void Space::map(const Coord& pCoord, float& pX, float& pY, float& pZ) const
+void Space::map(const Coord& pCoord, double& pX, double& pY, double& pZ) const
 {
-  pX = m_X + ((float)(m_Width  + m_Width  * pCoord.x)/2.0);
-  pY = m_Y + ((float)(m_Height + m_Height * pCoord.y)/2.0);
-  pZ = m_Z + ((float)(m_Depth  + m_Depth  * pCoord.z)/2.0);
+  pX = m_X + ((double)(m_Width  + m_Width  * pCoord.x)/2.0);
+  pY = m_Y + ((double)(m_Height + m_Height * pCoord.y)/2.0);
+  pZ = m_Z + ((double)(m_Depth  + m_Depth  * pCoord.z)/2.0);
 }
 
-void Space::map(const Vertex& pVertex, float& pX, float& pY, float& pZ) const
+void Space::map(const Vertex& pVertex, double& pX, double& pY, double& pZ) const
 {
   Coord coord;
   pVertex.getCoord(coord);

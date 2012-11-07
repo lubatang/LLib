@@ -12,13 +12,13 @@ namespace luba {
 class Coord
 {
 public:
-  float x;
-  float y;
-  float z;
+  double x;
+  double y;
+  double z;
 
 public:
   Coord() : x(0.0), y(0.0), z(0.0) {}
-  Coord(float pX, float pY, float pZ) : x(pX), y(pY), z(pZ) {}
+  Coord(double pX, double pY, double pZ) : x(pX), y(pY), z(pZ) {}
 
 };
 

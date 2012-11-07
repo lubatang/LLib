@@ -22,8 +22,8 @@ public:
   void map(const Vertex& pVertex,
            unsigned int& pX, unsigned int& pY, unsigned int& pZ) const;
 
-  void map(const Coord& pCoord, float& pX, float& pY, float& pZ) const;
-  void map(const Vertex& pVertex, float& pX, float& pY, float& pZ) const;
+  void map(const Coord& pCoord, double& pX, double& pY, double& pZ) const;
+  void map(const Vertex& pVertex, double& pX, double& pY, double& pZ) const;
 
   void setOrigin(unsigned int pX, unsigned int pY, unsigned int pZ);
 
