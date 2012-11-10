@@ -5,7 +5,7 @@
 #  Autoconf/Automake Initialization
 
 dnl AC_INIT(PKG_NAME, BUILD_VERSION, BUG_REPORTER)
-AC_INIT([LLib],[begin],[lubatang@gmail.com])
+AC_INIT([LViewer],[9562814],[lubatang@gmail.com])
 AC_PREREQ(2.59)
 
 AC_CONFIG_AUX_DIR([scripts])
