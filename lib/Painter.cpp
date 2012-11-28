@@ -11,7 +11,7 @@
 #include <Triangle/DrawLine.h>
 #include <Triangle/Triangle.h>
 #include <Triangle/DrawTriangle.h>
-#include <Triangle/Vertex.h>
+#include <Triangle/ModelVertex.h>
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Color.h>
 #include <Triangle/ColorIterator.h>
@@ -227,17 +227,17 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     int v  = Model::self().getObject()->triangles[i].vindices[0];
     int n  = Model::self().getObject()->triangles[i].nindices[0];
     int t  = Model::self().getObject()->triangles[i].tindices[0];
-    Vertex v1(v, n, fn, t);
+    ModelVertex v1(v, n, fn, t);
 
     v  = Model::self().getObject()->triangles[i].vindices[1];
     n  = Model::self().getObject()->triangles[i].nindices[1];
     t  = Model::self().getObject()->triangles[i].tindices[1];
-    Vertex v2(v, n, fn, t);
+    ModelVertex v2(v, n, fn, t);
 
     v  = Model::self().getObject()->triangles[i].vindices[2];
     n  = Model::self().getObject()->triangles[i].nindices[2];
     t  = Model::self().getObject()->triangles[i].tindices[2];
-    Vertex v3(v, n, fn, t);
+    ModelVertex v3(v, n, fn, t);
 
     if (pSolid) {
       Triangle tri(v1, v2, v3);

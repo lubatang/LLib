@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 #include <Triangle/Model.h>
 #include <Triangle/Triangle.h>
-#include <Triangle/Vertex.h>
+#include <Triangle/ModelVertex.h>
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Line.h>
 
@@ -42,7 +42,7 @@ void Model::LazyInitializeObject()
   if (NULL == m_pObject) {
     if (!m_File.empty()) {
       m_pObject = glmReadOBJ(m_File.c_str());
-      Vertex::Initialize(*this);
+      ModelVertex::Initialize(*this);
     }
   }
 }

@@ -37,7 +37,8 @@ lviewer_debug_SOURCES = ${TOOLDIR}/main.cpp \
 	${LIBDIR}/ColorIterator.cpp \
 	${INCDIR}/Triangle/Coord.h \
 	${INCDIR}/Triangle/Vertex.h \
-	${LIBDIR}/Vertex.cpp \
+	${INCDIR}/Triangle/ModelVertex.h \
+	${LIBDIR}/ModelVertex.cpp \
 	${INCDIR}/Triangle/Line.h \
 	${LIBDIR}/Line.cpp \
 	${INCDIR}/Triangle/Triangle.h \
