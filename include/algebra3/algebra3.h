@@ -181,19 +181,15 @@ namespace LLib
     };
 
     /****************************************************************
-    *                *
-    *          3D Vector        *
-    *                *
+    *          3D Vector
     ****************************************************************/
-
     class vec3
     {
-    protected:
     public:
-    double n[3];
+      double n[3];
 
 
-
+    public:
     // Constructors
 
     vec3(void);
