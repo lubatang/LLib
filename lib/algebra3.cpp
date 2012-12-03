@@ -50,6 +50,7 @@
 #include <math.h>
 #include <algebra3/algebra3.h>
 #include <ctype.h>
+#include <iostream>
 
 namespace LLib
 {
@@ -186,11 +187,10 @@ namespace LLib
     int operator != (const vec2& a, const vec2& b)
     { return !(a == b); }
 
-    /*ostream& operator << (ostream& s, vec2& v)
+    std::ostream& operator << (std::ostream& s, vec2& v)
     { return s << "| " << v.n[VX] << ' ' << v.n[VY] << " |"; }
-    */
 
-    /*istream& operator >> (istream& s, vec2& v) {
+    std::istream& operator >> (std::istream& s, vec2& v) {
       vec2  v_tmp;
       char  c = ' ';
 
@@ -211,7 +211,6 @@ namespace LLib
       v = v_tmp;
       return s;
     }
-    */
 
     void swap(vec2& a, vec2& b)
     { vec2 tmp(a); a = b; b = tmp; }
@@ -359,10 +358,10 @@ namespace LLib
     int operator != (const vec3& a, const vec3& b)
     { return !(a == b); }
 
-    /*ostream& operator << (ostream& s, vec3& v)
+    std::ostream& operator << (std::ostream& s, vec3& v)
     { return s << "| " << v.n[VX] << ' ' << v.n[VY] << ' ' << v.n[VZ] << " |"; }
 
-    istream& operator >> (istream& s, vec3& v) {
+    std::istream& operator >> (std::istream& s, vec3& v) {
       vec3  v_tmp;
       char  c = ' ';
 
@@ -383,7 +382,6 @@ namespace LLib
       v = v_tmp;
       return s;
     }
-    */
 
     void swap(vec3& a, vec3& b)
     { vec3 tmp(a); a = b; b = tmp; }
@@ -529,11 +527,11 @@ namespace LLib
     int operator != (const vec4& a, const vec4& b)
     { return !(a == b); }
 
-    /*ostream& operator << (ostream& s, vec4& v)
+    std::ostream& operator << (std::ostream& s, vec4& v)
     { return s << "| " << v.n[VX] << ' ' << v.n[VY] << ' ' << v.n[VZ] << ' '
     << v.n[VW] << " |"; }
 
-    istream& operator >> (istream& s, vec4& v) {
+    std::istream& operator >> (std::istream& s, vec4& v) {
       vec4  v_tmp;
       char  c = ' ';
 
@@ -554,7 +552,7 @@ namespace LLib
       v = v_tmp;
       return s;
     }
-    */
+
     void swap(vec4& a, vec4& b)
     { vec4 tmp(a); a = b; b = tmp; }
     /*
@@ -703,10 +701,10 @@ namespace LLib
     int operator != (const mat3& a, const mat3& b)
     { return !(a == b); }
 
-    /*ostream& operator << (ostream& s, mat3& m)
+    std::ostream& operator << (std::ostream& s, mat3& m)
     { return s << m.v[VX] << '\n' << m.v[VY] << '\n' << m.v[VZ]; }
 
-    istream& operator >> (istream& s, mat3& m) {
+    std::istream& operator >> (std::istream& s, mat3& m) {
       mat3    m_tmp;
 
       s >> m_tmp[VX] >> m_tmp[VY] >> m_tmp[VZ];
@@ -714,7 +712,6 @@ namespace LLib
       m = m_tmp;
       return s;
     }
-    */
 
     void swap(mat3& a, mat3& b)
     { mat3 tmp(a); a = b; b = tmp; }
@@ -914,10 +911,10 @@ namespace LLib
     int operator != (const mat4& a, const mat4& b)
     { return !(a == b); }
 
-    /*ostream& operator << (ostream& s, mat4& m)
+    std::ostream& operator << (std::ostream& s, mat4& m)
     { return s << m.v[VX] << '\n' << m.v[VY] << '\n' << m.v[VZ] << '\n' << m.v[VW]; }
 
-    istream& operator >> (istream& s, mat4& m)
+    std::istream& operator >> (std::istream& s, mat4& m)
     {
       mat4    m_tmp;
 
@@ -926,7 +923,7 @@ namespace LLib
       m = m_tmp;
       return s;
     }
-    */
+
     void swap(mat4& a, mat4& b)
     { mat4 tmp(a); a = b; b = tmp; }
 

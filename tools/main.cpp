@@ -13,9 +13,6 @@
 
 using namespace luba;
 
-int screenWidth = 1000;
-int screenHeight = 1000;
-
 //===----------------------------------------------------------------------===//
 // Helper Functions
 //===----------------------------------------------------------------------===//
@@ -44,7 +41,7 @@ void render(const LCamera cam, const LLight lit, FrameBuffer* pFB, RENDER_MODE p
   //   camera position (   pos.n[0],    pos.n[1],   pos.n[2] )   initial value: (0,250,0)
   //   camera target   (target.n[0], target.n[1],target.n[2] )   initial value: (0,249,0)
   //   camera upVector (    up.n[0],     up.n[1],    up.n[2] )   initial value: (1,0,0)
-  
+
   vec3 lightS;
   lightS = lit.getPos();
 
@@ -108,7 +105,7 @@ int main(int argc, char ** argv)
   Model::Initialize(argc, argv, file);
 
   //get into a rendering loop
-  initAndRunLViewer(screenWidth, screenHeight, render, init);
+  initAndRunLViewer(1000, 1000, render, init);
 
   return 0;
 }

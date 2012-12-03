@@ -30,8 +30,9 @@
 using namespace LLib::Math;
 using namespace LLib::Viewer;
 
-/* =====================================================*/
-/* function for rendering screen */
+//===----------------------------------------------------------------------===//
+// function for rendering screen
+//===----------------------------------------------------------------------===//
 GLubyte * LLib::Viewer::readScreenBits(int channelNumbers, int *w, int *h)
 {
   long  bitsize, width;
@@ -128,16 +129,16 @@ GLfloat * LLib::Viewer::readScreenFloat(int channelNumbers, int *w, int *h)
 }
 
 
-      void renderTextureOnScreenTop( GLuint tex, float xMin, float xMax, float yMin, float yMax, float uMin, float uMax, float vMin, float vMax, bool board)
-      {
-        /*
+void renderTextureOnScreenTop( GLuint tex, float xMin, float xMax, float yMin, float yMax, float uMin, float uMax, float vMin, float vMax, bool board)
+{
+   /*
         (uMax,vMin)    (uMax,vMax)
         ----------
-        |         |
+        |        |
         |        |
         ----------
         (uMin,vMin)  (uMin,vMax)
-        */
+   */
         glDisable(GL_DEPTH_TEST);
 
         glMatrixMode(GL_PROJECTION);
@@ -197,7 +198,7 @@ GLfloat * LLib::Viewer::readScreenFloat(int channelNumbers, int *w, int *h)
         /*
         (0,1)        (1,1)
         ----------
-        |         |
+        |        |
         |        |
         ----------
         (0,0)      (1,0)
@@ -257,235 +258,199 @@ GLfloat * LLib::Viewer::readScreenFloat(int channelNumbers, int *w, int *h)
       }
 
 
-      void renderTextOnScreenTop(char * text, bool isReset)
-      {
-        // change openGL states
-        {
-          glDisable(GL_DEPTH_TEST);
-          glMatrixMode(GL_PROJECTION);
-          glPushMatrix();  // push projection matrix
-          glLoadIdentity();
-          gluOrtho2D(0, 512, 0, 512);
-          glMatrixMode(GL_MODELVIEW);
-          glPushMatrix();  // push modelview matrix
-          glLoadIdentity();
-        }
-        // render text
-        if(text != NULL)
-        {
-          static int line = 1;
-          int len = strlen( text);
-          if(isReset)
-            line = 1;
-          glRasterPos3d( 10, 512 - 20 * line,0);
-          for (int i=0; i< len; i++)
-          {
-            switch(text[i])
-            {
-            case '\n':
-              glRasterPos3d( 10, 512 - 20 * ++line,0);
-              break;
-            case '\t':
-              for(int j=0; j<8; j++)
-                glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ' ');
-              break;
-            default:
-              glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);
-            }
-            
-          }
-
-        }
-        // restore openGL states
-        {
-          glPopMatrix();  // pop modelview matrix
-          glMatrixMode(GL_PROJECTION);
-          glPopMatrix();  // pop projection matrix
-          glMatrixMode(GL_MODELVIEW);
-          glEnable(GL_DEPTH_TEST);
-        }
-
+void renderTextOnScreenTop(char * text, bool isReset)
+{
+  // change openGL states
+  {
+    glDisable(GL_DEPTH_TEST);
+    glMatrixMode(GL_PROJECTION);
+    glPushMatrix();  // push projection matrix
+    glLoadIdentity();
+    gluOrtho2D(0, 512, 0, 512);
+    glMatrixMode(GL_MODELVIEW);
+    glPushMatrix();  // push modelview matrix
+    glLoadIdentity();
+  }
+  // render text
+  if(text != NULL) {
+    static int line = 1;
+    int len = strlen( text);
+    if(isReset)
+      line = 1;
+    glRasterPos3d( 10, 512 - 20 * line,0);
+    for (int i=0; i< len; i++) {
+      switch(text[i]) {
+        case '\n':
+          glRasterPos3d( 10, 512 - 20 * ++line,0);
+          break;
+        case '\t':
+          for(int j=0; j<8; j++)
+            glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, ' ');
+          break;
+        default:
+          glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, text[i]);
       }
-    /* =====================================================*/
-      LTranslateMatrix LViewer::viewMatrix(vec3( 0, 250, 0), vec3( 0, 0, 0), vec3(1,0,0));
-      LTranslateMatrix * LViewer::controlMatrix = &LViewer::viewMatrix;
-      LTranslateMatrix * LViewer::currentViewMatrix = &LViewer::viewMatrix;
+    }
+  }
+  // restore openGL states
+  {
+    glPopMatrix();  // pop modelview matrix
+    glMatrixMode(GL_PROJECTION);
+    glPopMatrix();  // pop projection matrix
+    glMatrixMode(GL_MODELVIEW);
+    glEnable(GL_DEPTH_TEST);
+  }
+} // end of renderTextOnScreenTop
+
+//===----------------------------------------------------------------------===//
+// Static Initialization
+//===----------------------------------------------------------------------===//
+LTranslateMatrix LViewer::viewMatrix(vec3( 0, 250, 0), vec3( 0, 0, 0), vec3(1,0,0));
+LTranslateMatrix * LViewer::controlMatrix = &LViewer::viewMatrix;
+LTranslateMatrix * LViewer::currentViewMatrix = &LViewer::viewMatrix;
+
+// class static initialize
+bool __isFlagRegistered[32] = {false};
+int __flagN[10];
+int __flag[32];
+
+bool* LViewer::isFlagRegistered = __isFlagRegistered;
+int * LViewer::flagN = __flagN;
+int * LViewer::flag  = __flag;
 
 
-    // class static initialize
-      bool __isFlagRegistered[32] = {false};
-      int __flagN[10];
-      int __flag[32];
-
-      bool* LViewer::isFlagRegistered = __isFlagRegistered;
-      int * LViewer::flagN = __flagN;
-      int * LViewer::flag  = __flag;
+int LViewer::win_id = 0;
+//GLUI * LViewer::gluiContext = NULL;
 
 
-      int LViewer::win_id = 0;
-      //GLUI * LViewer::gluiContext = NULL;
+vec3 LViewer::viewerPosition    = vec3( 0, 250, 0);    // vec3( 0, 0, -50);
+vec3 LViewer::viewerDirection    = vec3( 0, -1, 0);  // vec3( 0, 0, 1);  // z
+vec3 LViewer::viewerUpDirection    = vec3( 1, 0, 0);  // vec3( 0, 1, 0);  // y
+vec3 LViewer::viewerLeftDirection;              //  = vec3( 1, 0, 0);  // x
+vec3 LViewer::ballTracingCenter;
+vec3 LViewer::modelCenter      = vec3( 0, 0, 0);
+
+double  LViewer::seeda      = 0;
+double  LViewer::phi      = 0;
+double  LViewer::DirLength    = 10;
+float  LViewer::FOV      = 60;
+int    LViewer::width      = 300;
+int    LViewer::height      = 300;
+
+double  LViewer::nearPlane    = 50.0;
+double  LViewer::farPlane    = 3000.0;
+
+int    LViewer::currentFlagN  =0;
+double  LViewer::preX      =0;
+double  LViewer::preY      =0;
+double  LViewer::prepreX    =0;
+double  LViewer::prepreY    =0;
+int    LViewer::mouseLKey    = KEYUP;
+int    LViewer::mouseRKey    = KEYUP;
+int    LViewer::mouseMKey    = KEYUP;
+
+float  LViewer::moveSpeedMode  = LVIEWER_HIGH;
+bool  LViewer::modelCenterMode= true;
+bool  LViewer::rotating        = false;
+int*  LViewer::rotatingMouseKey= NULL;
+
+void (*  LViewer::m_drawModel)    (void);
+void (* LViewer::m_init)      (void) = NULL;
+void (* LViewer::m_idlef)      (void) = NULL;
+int  (* LViewer::m_keyboard)    (unsigned char key, int x, int y) = NULL;
+void (* LViewer::m_changScreenSize)  (int w, int h)  = NULL;
+int  (* LViewer::m_mouseFun)    (int button, int state, int x, int y) = NULL;
+int  (* LViewer::m_motionFun)    (int x, int y) = NULL;
+
+// private
+bool  LViewer::m_isFullScreen = false;
+int    LViewer::tmpWinX = -1;  // for full screen
+int    LViewer::tmpWinY = -1;  // for full screen
+int    LViewer::tmpWinW = -1;  // for full screen
+int    LViewer::tmpWinH = -1;  // for full screen
+
+// Function List
+void _renderScreen(void);
+void _changScreenSize(int x, int y);
+void _keyboard(unsigned char key, int x, int y);
+void _specialKey(int key, int x, int y);
+void _mouse(int button, int state, int x, int y);
+void _init_gl(void);
+
+void _changScreenSize(int w, int h)
+{
+  GLfloat aspect;
+
+  glViewport(0, 0, w, h);
+  LViewer::width = w;
+  LViewer::height = h;
+
+  glMatrixMode (GL_PROJECTION);
+  glLoadIdentity();
+  if (h==0) h = 1;
+
+  aspect = w/(float)h;
+
+  gluPerspective(  LViewer::FOV, aspect, LViewer::getNearPlane(), LViewer::getFarPlane());
 
 
-      vec3 LViewer::viewerPosition    = vec3( 0, 250, 0);    // vec3( 0, 0, -50);
-      vec3 LViewer::viewerDirection    = vec3( 0, -1, 0);  // vec3( 0, 0, 1);  // z
-      vec3 LViewer::viewerUpDirection    = vec3( 1, 0, 0);  // vec3( 0, 1, 0);  // y
-      vec3 LViewer::viewerLeftDirection;              //  = vec3( 1, 0, 0);  // x
-      vec3 LViewer::ballTracingCenter;
-      vec3 LViewer::modelCenter      = vec3( 0, 0, 0);
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 
-      double  LViewer::seeda      = 0;
-      double  LViewer::phi      = 0;
-      double  LViewer::DirLength    = 10;
-      float  LViewer::FOV      = 60;
-      int    LViewer::width      = 300;
-      int    LViewer::height      = 300;
+  return ;
+}
 
-      double  LViewer::nearPlane    = 50.0;
-      double  LViewer::farPlane    = 3000.0;
-
-      int    LViewer::currentFlagN  =0;
-      double  LViewer::preX      =0;
-      double  LViewer::preY      =0;
-      double  LViewer::prepreX    =0;
-      double  LViewer::prepreY    =0;
-      int    LViewer::mouseLKey    = KEYUP;
-      int    LViewer::mouseRKey    = KEYUP;
-      int    LViewer::mouseMKey    = KEYUP;
-
-      float  LViewer::moveSpeedMode  = LVIEWER_HIGH;
-      bool  LViewer::modelCenterMode= true;
-      bool  LViewer::rotating        = false;
-      int*  LViewer::rotatingMouseKey= NULL;
-
-      void (*  LViewer::m_drawModel)    (void);
-      void (* LViewer::m_init)      (void) = NULL;
-      void (* LViewer::m_idlef)      (void) = NULL;
-      int  (* LViewer::m_keyboard)    (unsigned char key, int x, int y) = NULL;
-      void (* LViewer::m_changScreenSize)  (int w, int h)  = NULL;
-      int  (* LViewer::m_mouseFun)    (int button, int state, int x, int y) = NULL;
-      int  (* LViewer::m_motionFun)    (int x, int y) = NULL;
-
-    // private
-      bool  LViewer::m_isFullScreen = false;
-      int    LViewer::tmpWinX = -1;  // for full screen
-      int    LViewer::tmpWinY = -1;  // for full screen
-      int    LViewer::tmpWinW = -1;  // for full screen
-      int    LViewer::tmpWinH = -1;  // for full screen
-      
-      
-
-    // Function List
-    void _renderScreen(void);
-    void _changScreenSize(int x, int y);
-    void _keyboard(unsigned char key, int x, int y);
-    void _specialKey(int key, int x, int y);
-    void _mouse(int button, int state, int x, int y);
-    void _init_gl(void);
-
-
-
-
-
-    // Globe Variable List
-
-
-
-
-    void _changScreenSize(int w, int h)
-    {
-      
-      GLfloat aspect;
-
-      glViewport(0, 0, w, h);
-      LViewer::width = w;
-      LViewer::height = h;
-
-      glMatrixMode (GL_PROJECTION);
-      glLoadIdentity();
-      if (h==0) h = 1;
-
-      aspect = w/(float)h;
-
-      gluPerspective(  LViewer::FOV, aspect, LViewer::getNearPlane(), LViewer::getFarPlane());
-
-
-      glMatrixMode(GL_MODELVIEW);
-      glLoadIdentity();
-
+void _keyboard(unsigned char key, int x, int y)
+{
+  // user defined keyboard function
+  if (LViewer::m_keyboard != NULL) {
+    if(FINISH == (*LViewer::m_keyboard)(key, x, y))
       return ;
+  }
+
+  // default keyboard action
+  if (key == 'q' || key == 'Q')
+    exit(1);
+  else if ( key == 'r' || key == 'R' ) {
+    LViewer::controlMatrix->reset();
+  }
+  else if ( key =='s' || key == 'S') {
+    if (LViewer::moveSpeedMode == LVIEWER_HIGH) {
+      printf("Move Speed Mode Change to LOW.\n");
+      LViewer::moveSpeedMode = LVIEWER_LOW;
+      LViewer::controlMatrix->setMoveSpeed( LVIEWER_LOW );
+    }
+    else {
+      printf("Move Speed Mode Change to HIGH.\n");
+      LViewer::moveSpeedMode = LVIEWER_HIGH;
+      LViewer::controlMatrix->setMoveSpeed( LVIEWER_HIGH );
     }
 
+  }
+  else if ( key == 'u' || key == 'U' ) {
+    LViewer::controlMatrix->move3DUpDown(1);
+  }
+  else if ( key == 'd' || key == 'D' ) {
+    LViewer::controlMatrix->move3DUpDown(-1);
+  }
 
+  // flag [A-Za-z]
+  if ( (key - 'a'<32) && (key -'a' >=0)) {
+    LViewer::flag[key - 'a'] ^= 1;
+  }
+  else if ( (key - 'A'<32) && (key -'A' >=0)) {
+    LViewer::flag[key - 'A'] ^= 1;
+  }
 
-    void _keyboard(unsigned char key, int x, int y)
-    {
+  // numbers [0-9]
+  if ( (key - '0'<10) && (key -'0' >=0)) {
+    LViewer::flagN[LViewer::currentFlagN] = 0;
+    LViewer::currentFlagN = key - '0';
+    LViewer::flagN[key - '0'] = 1;
+  }
 
-      // user defined keyboard function
-      if (LViewer::m_keyboard != NULL)
-      {
-        if(FINISH == (*LViewer::m_keyboard)(key, x, y))
-          return ;
-      }
-
-      // default keyboard action
-      if (key == 'q' || key == 'Q')
-        exit(1);
-      else if ( key == 'r' || key == 'R' )
-      {
-        LViewer::controlMatrix->reset();
-      }
-      else if ( key =='s' || key == 'S')
-      {
-        if (LViewer::moveSpeedMode == LVIEWER_HIGH)
-        {
-          printf("Move Speed Mode Change to LOW.\n");
-          LViewer::moveSpeedMode = LVIEWER_LOW;
-          LViewer::controlMatrix->setMoveSpeed( LVIEWER_LOW );
-        }
-        else
-        {
-          printf("Move Speed Mode Change to HIGH.\n");
-          LViewer::moveSpeedMode = LVIEWER_HIGH;
-          LViewer::controlMatrix->setMoveSpeed( LVIEWER_HIGH );
-        }
-
-      }
-      else if ( key == 'u' || key == 'U' )
-        LViewer::controlMatrix->move3DUpDown(1);
-      else if ( key == 'd' || key == 'D' )
-        LViewer::controlMatrix->move3DUpDown(-1);
-
-      else if( key == '+')
-      {
-      }
-      else if (key == '-')
-      {
-      }
-
-// flag [A-Za-z]
-      if ( (key - 'a'<32) && (key -'a' >=0))
-      {
-        LViewer::flag[key - 'a'] ^= 1;
-      }
-      else if ( (key - 'A'<32) && (key -'A' >=0))
-      {
-        LViewer::flag[key - 'A'] ^= 1;
-      }
-
-
-// numbers [0-9]
-      if ( (key - '0'<10) && (key -'0' >=0))
-      {
-        LViewer::flagN[LViewer::currentFlagN] = 0;
-        LViewer::currentFlagN = key - '0';
-        LViewer::flagN[key - '0'] = 1;
-      }
-
-      glutPostRedisplay();
-
-    }
-
-
+  glutPostRedisplay();
+}
 
 void _specialKey(int key, int x, int y)
 {
@@ -728,8 +693,7 @@ void LViewer::_idle()
     _motion( x, y);
     *LViewer::rotatingMouseKey = KEYUP;
   }
-  if (LViewer::m_idlef != NULL)
-  {
+  if (NULL != LViewer::m_idlef) {
     if( glutGetWindow() != LViewer::win_id )
       glutSetWindow( LViewer::win_id );
     LViewer::m_idlef();

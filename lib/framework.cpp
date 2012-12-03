@@ -91,13 +91,14 @@ void dumpFramebufferAsPPM()
 }
 
 void drawFunc()
-{
-  
-  const LCamera cam(LViewer::viewMatrix.getPos3v(), LViewer::viewMatrix.getPos3v() + LViewer::viewMatrix.getViewDir3v(), LViewer::viewMatrix.getUpDir3v());
+{  
+  const LCamera cam(LViewer::viewMatrix.getPos3v(),
+                    LViewer::viewMatrix.getPos3v() + LViewer::viewMatrix.getViewDir3v(),
+                    LViewer::viewMatrix.getUpDir3v());
+
   const LLight lit(lightMatrix.getPos3v());
 
-  if(renderFunc && colorBuff)  
-  {
+  if(renderFunc && colorBuff) {
     (*renderFunc)(cam, lit, colorBuff, renderMode);
 
     updateTex();
@@ -152,8 +153,6 @@ void idle()
   glutPostRedisplay();
   return ;
 }
-
-
 
 int initAndRunLViewer(int winW,
                       int winH,
