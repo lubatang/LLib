@@ -428,9 +428,11 @@ void _keyboard(unsigned char key, int x, int y)
 
   }
   else if ( key == 'u' || key == 'U' ) {
+    // This will change the position of camera.
     LViewer::controlMatrix->move3DUpDown(1);
   }
   else if ( key == 'd' || key == 'D' ) {
+    // This will change the position of camera.
     LViewer::controlMatrix->move3DUpDown(-1);
   }
 
