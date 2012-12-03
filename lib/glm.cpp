@@ -434,10 +434,7 @@ glmFirstPass(GLMmodel* model, FILE* file)
     GLMgroup* group;            /* current group */
     unsigned    v, n, t;
     char        buf[128];
-    
-    /* make a default group */
-    group = glmAddGroup(model, "default");
-    
+
     numvertices = numnormals = numtexcoords = numtriangles = 0;
     while(fscanf(file, "%s", buf) != EOF) {
         switch(buf[0]) {
@@ -472,11 +469,16 @@ glmFirstPass(GLMmodel* model, FILE* file)
                 fgets(buf, sizeof(buf), file);
                 sscanf(buf, "%s %s", buf, buf);
                 model->mtllibname = strdup(buf);
-//貌似从材质库读取材质的函数，但是有错误                glmReadMTL(model, buf);
+                glmReadMTL(model, buf);
                 break;
             case 'u':
                 /* eat up rest of line */
                 fgets(buf, sizeof(buf), file);
+                sscanf(buf, "%s %s", buf, buf);
+                group = glmFindGroup(model,buf);
+                if(!group){
+                  group = glmAddGroup(model, buf );
+                }
                 break;
             case 'g':               /* group */
                 /* eat up rest of line */
@@ -572,7 +574,7 @@ glmSecondPass(GLMmodel* model, FILE* file)
     GLuint  numtexcoords;       /* number of texcoords in model */
     GLuint  numtriangles;       /* number of triangles in model */
     GLfloat*    vertices;           /* array of vertices  */
-	GLfloat*    colors;           /* array of colors  */
+    GLfloat*    colors;           /* array of colors  */
     GLfloat*    normals;            /* array of normals */
     GLfloat*    texcoords;          /* array of texture coordinates */
     GLMgroup* group;            /* current group pointer */
@@ -581,10 +583,10 @@ glmSecondPass(GLMmodel* model, FILE* file)
     char        buf[128];
     
     /* set the pointer shortcuts */
-    vertices       = model->vertices;
-	colors    =model->colors;
+    vertices   = model->vertices;
+    colors     = model->colors;
     normals    = model->normals;
-    texcoords    = model->texcoords;
+    texcoords  = model->texcoords;
     group      = model->groups;
     
     /* on the second pass through the file, read all the data into the
@@ -605,14 +607,14 @@ glmSecondPass(GLMmodel* model, FILE* file)
                     &vertices[3 * numvertices + 0], 
                     &vertices[3 * numvertices + 1], 
                     &vertices[3 * numvertices + 2]);
-				char tmp;
-				fscanf(file, "%c", &tmp);
-				if(tmp==' '){
-					fscanf(file, "%f %f %f", 
-						&colors[3 * numvertices + 0], 
-						&colors[3 * numvertices + 1], 
-						&colors[3 * numvertices + 2]);
-				}
+                char tmp;
+                fscanf(file, "%c", &tmp);
+                if(tmp==' '){
+                  fscanf(file, "%f %f %f", 
+                  &colors[3 * numvertices + 0], 
+                  &colors[3 * numvertices + 1], 
+                  &colors[3 * numvertices + 2]);
+                }
 
                 numvertices++;
                 break;
@@ -634,6 +636,7 @@ glmSecondPass(GLMmodel* model, FILE* file)
             case 'u':
                 fgets(buf, sizeof(buf), file);
                 sscanf(buf, "%s %s", buf, buf);
+                group = glmFindGroup(model, buf);
                 group->material = material = glmFindMaterial(model, buf);
                 break;
             case 'g':               /* group */
@@ -1279,7 +1282,7 @@ glmDelete(GLMmodel* model)
     if (model->pathname)     free(model->pathname);
     if (model->mtllibname) free(model->mtllibname);
     if (model->vertices)     free(model->vertices);
-	if (model->colors)     free(model->colors);
+    if (model->colors)     free(model->colors);
     if (model->normals)  free(model->normals);
     if (model->texcoords)  free(model->texcoords);
     if (model->facetnorms) free(model->facetnorms);
@@ -1314,10 +1317,10 @@ GLMmodel* glmReadOBJ(const char* filename)
     /* open the file */
     file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "glmReadOBJ() failed: can't open data file \"%s\".\n",
-            filename);
-		system("pause");
-        exit(1);
+      fprintf(stderr, "glmReadOBJ() failed: can't open data file \"%s\".\n",
+              filename);
+      system("pause");
+      exit(1);
     }
     
     /* allocate a new model */
@@ -1349,11 +1352,11 @@ GLMmodel* glmReadOBJ(const char* filename)
     /* allocate memory */
     model->vertices = (GLfloat*)malloc(sizeof(GLfloat) *
         3 * (model->numvertices + 1));
-	model->colors = (GLfloat*)malloc(sizeof(GLfloat) *
-		3 * (model->numvertices + 1));
-	for(int i=0;i<3 * (model->numvertices + 1);i++){
-		model->colors[i] = 1.0f;
-	}
+    model->colors = (GLfloat*)malloc(sizeof(GLfloat) *
+        3 * (model->numvertices + 1));
+    for(int i=0;i<3 * (model->numvertices + 1);i++){
+      model->colors[i] = 1.0f;
+    }
 
     model->triangles = (GLMtriangle*)malloc(sizeof(GLMtriangle) *
         model->numtriangles);
@@ -1613,8 +1616,8 @@ glmDraw(GLMmodel* model, GLuint mode)
         mode &= ~GLM_TEXTURE;
     }
 
-	if (mode & GLM_TEXTURE)			//@RG
-		glEnable(GL_TEXTURE_2D);
+  if (mode & GLM_TEXTURE)      //@RG
+    glEnable(GL_TEXTURE_2D);
 
     if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
         printf("glmDraw() warning: flat render mode requested "
@@ -1660,9 +1663,9 @@ glmDraw(GLMmodel* model, GLuint mode)
             glColor3fv(material->diffuse);
         }
         if(mode & GLM_POINTS)
-			glBegin(GL_POINTS);
-		else 
-			glBegin(GL_TRIANGLES);
+      glBegin(GL_POINTS);
+    else 
+      glBegin(GL_TRIANGLES);
 
         for (i = 0; i < group->numtriangles; i++) {
             triangle = &T(group->triangles[i]);
@@ -1693,8 +1696,8 @@ glmDraw(GLMmodel* model, GLuint mode)
         
         group = group->next;
     }
-	if (mode & GLM_TEXTURE)			//@RG
-		glDisable(GL_TEXTURE_2D);
+  if (mode & GLM_TEXTURE)      //@RG
+    glDisable(GL_TEXTURE_2D);
 }
 
 /* glmList: Generates and returns a display list for the model using
