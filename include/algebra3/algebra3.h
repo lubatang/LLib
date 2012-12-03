@@ -114,24 +114,18 @@ namespace LLib
     enum {RED, GREEN, BLUE, ALPHA};      // colors
     enum {KA, KD, KS, ES};        // phong coefficients
 
-    /****************************************************************
-    *                *
-    *          2D Vector        *
-    *                *
+   /****************************************************************
+    *  2D Vector
     ****************************************************************/
 
     class vec2
     {
     protected:
-
-    double n[2];
+      double n[2];
 
     public:
-
-    // Constructors
-
-    vec2(void);
-    vec2(const double x, const double y);
+      vec2(void);
+      vec2(const double x, const double y);
     vec2(const double d);
     vec2(const vec2& v);      // copy constructor
     vec2(const vec3& v);      // cast v3 to v2
@@ -180,7 +174,7 @@ namespace LLib
     friend class vec3;
     };
 
-    /****************************************************************
+   /***************************************************************
     *          3D Vector
     ****************************************************************/
     class vec3
@@ -380,30 +374,23 @@ namespace LLib
     friend vec2 operator * (const mat3& a, const vec2& v);      // linear transform
     };
 
-    /****************************************************************
-    *                *
-    *         4x4 Matrix        *
-    *                *
+   /****************************************************************
+    *         4x4 Matrix
     ****************************************************************/
-
     class mat4
     {
-    protected:
     public:
+      vec4 v[4];
 
-    vec4 v[4];
-
-
-    // Constructors
-
-    mat4(void);
-    mat4(const vec4& v0, const vec4& v1, const vec4& v2, const vec4& v3);
-    mat4(const double d);
-    mat4(const mat4& m);
-    mat4(const double a00, const double a01, const double a02, const double a03,
-      const double a10, const double a11, const double a12, const double a13,
-      const double a20, const double a21, const double a22, const double a23,
-      const double a30, const double a31, const double a32, const double a33 );
+    public:
+      mat4(void);
+      mat4(const vec4& v0, const vec4& v1, const vec4& v2, const vec4& v3);
+      mat4(const double d);
+      mat4(const mat4& m);
+      mat4(const double a00, const double a01, const double a02, const double a03,
+           const double a10, const double a11, const double a12, const double a13,
+           const double a20, const double a21, const double a22, const double a23,
+           const double a30, const double a31, const double a32, const double a33 );
 
 
     // Assignment operators
@@ -447,22 +434,19 @@ namespace LLib
     friend vec3 operator * (const vec3& v, const mat4& a);      // linear transform
     };
 
-    /****************************************************************
-    *                *
-    *         2D functions and 3D functions      *
-    *                *
+   /****************************************************************
+    *         2D functions and 3D functions
     ****************************************************************/
-
-    mat3 identity2D(void);              // identity 2D
-    mat3 translation2D(vec2& v);            // translation 2D
-    mat3 rotation2D(vec2& Center, const double angleDeg);      // rotation 2D
-    mat3 scaling2D(vec2& scaleVector);          // scaling 2D
-    mat4 identity3D(void);              // identity 3D
-    mat4 translation3D(vec3& v);            // translation 3D
-    mat4 rotation3D(vec3& Axis, const double angleDeg);      // rotation 3D
-    mat4 rotation3Drad(vec3& Axis, const double angleRad);      // rotation 3D
-    mat4 scaling3D(vec3& scaleVector);          // scaling 3D
-    mat4 perspective3D(const double d);          // perspective 3D
+    mat3 identity2D(void);
+    mat3 translation2D(vec2& v);
+    mat3 rotation2D(vec2& Center, const double angleDeg);
+    mat3 scaling2D(vec2& scaleVector);
+    mat4 identity3D(void);
+    mat4 translation3D(vec3& v);
+    mat4 rotation3D(vec3& Axis, const double angleDeg);
+    mat4 rotation3Drad(vec3& Axis, const double angleRad);
+    mat4 scaling3D(vec3& scaleVector);
+    mat4 perspective3D(const double d);
 
 
     vec3 operator * (const vec3& v, mat3& a);

@@ -50,14 +50,13 @@
 #include <math.h>
 #include <algebra3/algebra3.h>
 #include <ctype.h>
+
 namespace LLib
 {
   namespace Math
   {
     /****************************************************************
-    *                *
-    *        vec2 Member functions      *
-    *                *
+    *        vec2 Member functions
     ****************************************************************/
 
     /******************** vec2 CONSTRUCTORS ********************/
@@ -227,9 +226,7 @@ namespace LLib
     { return vec2(a.n[VX] * b.n[VX], a.n[VY] * b.n[VY]); }
 
     /****************************************************************
-    *                *
-    *        vec3 Member functions      *
-    *                *
+    *        vec3 Member functions
     ****************************************************************/
 
     // CONSTRUCTORS
@@ -740,11 +737,8 @@ namespace LLib
 
 
     /****************************************************************
-    *                *
-    *        mat4 member functions      *
-    *                *
-    ****************************************************************/
-
+     *        mat4 member functions
+     ****************************************************************/
     // CONSTRUCTORS
 
     mat4::mat4(void) { *this = identity3D();}
@@ -938,49 +932,59 @@ namespace LLib
 
 
     /****************************************************************
-    *                *
-    *         2D functions and 3D functions      *
-    *                *
+    *         2D functions and 3D functions
     ****************************************************************/
 
     mat3 identity2D(void)
-    {   return mat3(vec3(1.0, 0.0, 0.0),
-        vec3(0.0, 1.0, 0.0),
-        vec3(0.0, 0.0, 1.0)); }
+    {
+      return mat3(vec3(1.0, 0.0, 0.0),
+                  vec3(0.0, 1.0, 0.0),
+                  vec3(0.0, 0.0, 1.0));
+    }
 
     mat3 translation2D(vec2& v)
-    {   return mat3(vec3(1.0, 0.0, v[VX]),
-        vec3(0.0, 1.0, v[VY]),
-        vec3(0.0, 0.0, 1.0)); }
+    {
+      return mat3(vec3(1.0, 0.0, v[VX]),
+                  vec3(0.0, 1.0, v[VY]),
+                  vec3(0.0, 0.0, 1.0));
+    }
 
-    mat3 rotation2D(vec2& Center, const double angleDeg) {
+    mat3 rotation2D(vec2& Center, const double angleDeg)
+    {
       double  angleRad = angleDeg * M_PI / 180.0,
-        c = cos(angleRad),
-        s = sin(angleRad);
+              c = cos(angleRad),
+              s = sin(angleRad);
 
       return mat3(vec3(c, -s, Center[VX] * (1.0-c) + Center[VY] * s),
-        vec3(s, c, Center[VY] * (1.0-c) - Center[VX] * s),
-        vec3(0.0, 0.0, 1.0));
+                  vec3(s, c, Center[VY] * (1.0-c) - Center[VX] * s),
+                  vec3(0.0, 0.0, 1.0));
     }
 
     mat3 scaling2D(vec2& scaleVector)
-    {   return mat3(vec3(scaleVector[VX], 0.0, 0.0),
-        vec3(0.0, scaleVector[VY], 0.0),
-        vec3(0.0, 0.0, 1.0)); }
+    {
+      return mat3(vec3(scaleVector[VX], 0.0, 0.0),
+                  vec3(0.0, scaleVector[VY], 0.0),
+                  vec3(0.0, 0.0, 1.0));
+    }
 
     mat4 identity3D(void)
-    {   return mat4(vec4(1.0, 0.0, 0.0, 0.0),
-        vec4(0.0, 1.0, 0.0, 0.0),
-        vec4(0.0, 0.0, 1.0, 0.0),
-        vec4(0.0, 0.0, 0.0, 1.0)); }
+    {
+      return mat4(vec4(1.0, 0.0, 0.0, 0.0),
+                  vec4(0.0, 1.0, 0.0, 0.0),
+                  vec4(0.0, 0.0, 1.0, 0.0),
+                  vec4(0.0, 0.0, 0.0, 1.0));
+    }
 
     mat4 translation3D(vec3& v)
-    {   return mat4(vec4(1.0, 0.0, 0.0, v[VX]),
-        vec4(0.0, 1.0, 0.0, v[VY]),
-        vec4(0.0, 0.0, 1.0, v[VZ]),
-        vec4(0.0, 0.0, 0.0, 1.0)); }
+    {
+      return mat4(vec4(1.0, 0.0, 0.0, v[VX]),
+                  vec4(0.0, 1.0, 0.0, v[VY]),
+                  vec4(0.0, 0.0, 1.0, v[VZ]),
+                  vec4(0.0, 0.0, 0.0, 1.0));
+    }
 
-    mat4 rotation3D(vec3& Axis, const double angleDeg) {
+    mat4 rotation3D(vec3& Axis, const double angleDeg)
+    {
       double  angleRad = angleDeg * M_PI / 180.0,
         c = cos(angleRad),
         s = sin(angleRad),
@@ -1024,15 +1028,20 @@ namespace LLib
     }
 
     mat4 scaling3D(vec3& scaleVector)
-    {   return mat4(vec4(scaleVector[VX], 0.0, 0.0, 0.0),
-        vec4(0.0, scaleVector[VY], 0.0, 0.0),
-        vec4(0.0, 0.0, scaleVector[VZ], 0.0),
-        vec4(0.0, 0.0, 0.0, 1.0)); }
+    {
+      return mat4(vec4(scaleVector[VX], 0.0, 0.0, 0.0),
+                  vec4(0.0, scaleVector[VY], 0.0, 0.0),
+                  vec4(0.0, 0.0, scaleVector[VZ], 0.0),
+                  vec4(0.0, 0.0, 0.0, 1.0));
+    }
 
     mat4 perspective3D(const double d)
-    {   return mat4(vec4(1.0, 0.0, 0.0, 0.0),
-        vec4(0.0, 1.0, 0.0, 0.0),
-        vec4(0.0, 0.0, 1.0, 0.0),
-        vec4(0.0, 0.0, 1.0/d, 0.0)); }
-  };
-};
+    {
+      return mat4(vec4(1.0, 0.0, 0.0, 0.0),
+                  vec4(0.0, 1.0, 0.0, 0.0),
+                  vec4(0.0, 0.0, 1.0, 0.0),
+                  vec4(0.0, 0.0, 1.0/d, 0.0));
+    }
+
+} // namespace math
+} // namespace LLib
