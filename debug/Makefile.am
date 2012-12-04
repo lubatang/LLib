@@ -15,8 +15,13 @@ lviewer_debug_LDFLAGS = -L$(BUILDTOP)/lib -lglut -lGLU -lGL -L/usr/X11R6/lib/ -l
 
 lviewer_debug_SOURCES = ${TOOLDIR}/main.cpp \
 	${TOOLDIR}/stdafx.h \
-	${INCDIR}/algebra3/algebra3.h \
-	${LIBDIR}/algebra3.cpp \
+	${INCDIR}/algebra/algebra.h \
+	${LIBDIR}/algebra.cpp \
+	${LIBDIR}/vec2.cpp \
+	${LIBDIR}/vec3.cpp \
+	${LIBDIR}/vec4.cpp \
+	${LIBDIR}/mat3.cpp \
+	${LIBDIR}/mat4.cpp \
 	${INCDIR}/framework.h \
 	${LIBDIR}/framework.cpp \
 	${INCDIR}/GLM/glm.h \

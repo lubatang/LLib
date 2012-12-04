@@ -28,7 +28,7 @@
 #include <GL/glut.h>
 #endif
 
-#include <algebra3/algebra3.h>
+#include <algebra/algebra.h>
 #include <LGlobal/LGlobal.h>
 #include <LTranslateMatrix/LTranslateMatrix.h>
 

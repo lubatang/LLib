@@ -112,6 +112,22 @@ enum {PA, PB, PC, PD};          ///< planes
 enum {RED, GREEN, BLUE, ALPHA}; ///< colors
 enum {KA, KD, KS, ES};          ///< phong coefficients
 
+} // namespace of Math
+} // namespace of LLib
+
+namespace std {
+
+void swap(LLib::Math::vec2& a, LLib::Math::vec2& b);
+void swap(LLib::Math::vec3& a, LLib::Math::vec3& b);
+void swap(LLib::Math::vec4& a, LLib::Math::vec4& b);
+void swap(LLib::Math::mat3& a, LLib::Math::mat3& b);
+void swap(LLib::Math::mat4& a, LLib::Math::mat4& b);
+
+} // namespace of std
+
+namespace LLib {
+namespace Math {
+
 /****************************************************************
  *  2D Vector
  ****************************************************************/
@@ -160,7 +176,7 @@ public:
   friend int operator != (const vec2& a, const vec2& b);      // v1 != v2 ?
   friend std::ostream& operator << (std::ostream& s, vec2& v);      // output to stream
   friend std::istream& operator >> (std::istream& s, vec2& v);      // input from strm.
-  friend void swap(vec2& a, vec2& b);          // swap v1 & v2
+  friend void std::swap(vec2& a, vec2& b);          // swap v1 & v2
   //friend vec2 min(const vec2& a, const vec2& b);        // min(v1, v2)
   //friend vec2 max(const vec2& a, const vec2& b);        // max(v1, v2)
   friend vec2 prod(const vec2& a, const vec2& b);        // term by term *
@@ -224,7 +240,7 @@ public:
   friend int operator != (const vec3& a, const vec3& b);      // v1 != v2 ?
   friend std::ostream& operator << (std::ostream& s, vec3& v);      // output to stream
   friend std::istream& operator >> (std::istream& s, vec3& v);      // input from strm.
-  friend void swap(vec3& a, vec3& b);              // swap v1 & v2
+  friend void std::swap(vec3& a, vec3& b);              // swap v1 & v2
   //friend vec3 min(const vec3& a, const vec3& b);        // min(v1, v2)
   //friend vec3 max(const vec3& a, const vec3& b);        // max(v1, v2)
   friend vec3 prod(const vec3& a, const vec3& b);       // term by term *
@@ -289,7 +305,7 @@ public:
   friend int operator != (const vec4& a, const vec4& b);      // v1 != v2 ?
   friend std::ostream& operator << (std::ostream& s, vec4& v);      // output to stream
   friend std::istream& operator >> (std::istream& s, vec4& v);      // input from strm.
-  friend void swap(vec4& a, vec4& b);          // swap v1 & v2
+  friend void std::swap(vec4& a, vec4& b);          // swap v1 & v2
   //friend vec4 min(const vec4& a, const vec4& b);        // min(v1, v2)
   //friend vec4 max(const vec4& a, const vec4& b);        // max(v1, v2)
   friend vec4 prod(const vec4& a, const vec4& b);        // term by term *
@@ -345,7 +361,7 @@ public:
   friend int operator != (const mat3& a, const mat3& b);      // m1 != m2 ?
   friend std::ostream& operator << (std::ostream& s, mat3& m);      // output to stream
   friend std::istream& operator >> (std::istream& s, mat3& m);      // input from strm.
-  friend void swap(mat3& a, mat3& b);          // swap m1 & m2
+  friend void std::swap(mat3& a, mat3& b);          // swap m1 & m2
 
   // necessary friend declarations
 
@@ -399,7 +415,7 @@ public:
   friend int operator != (const mat4& a, const mat4& b);      // m1 != m2 ?
   friend std::ostream& operator << (std::ostream& s, mat4& m);      // output to stream
   friend std::istream& operator >> (std::istream& s, mat4& m);      // input from strm.
-  friend void swap(mat4& a, mat4& b);          // swap m1 & m2
+  friend void std::swap(mat4& a, mat4& b);          // swap m1 & m2
 
   // necessary friend declarations
   friend vec4 operator * (const mat4& a, const vec4& v);      // linear transform

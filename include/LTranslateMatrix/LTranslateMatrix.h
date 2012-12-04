@@ -1,7 +1,7 @@
 #ifndef _LTRANSLATEDMATRIX_H_
 #define _LTRANSLATEDMATRIX_H_
 
-#include <algebra3/algebra3.h>
+#include <algebra/algebra.h>
 #include <LGlobal/LGlobal.h>  // for PI
 
 using namespace LLib::Math;

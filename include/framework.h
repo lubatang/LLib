@@ -2,7 +2,7 @@
 #define FRAMEWORK_H
 
 #include <stdio.h>
-#include <algebra3/algebra3.h>
+#include <algebra/algebra.h>
 #include <vector>
 #include <cstring>
 #include <Triangle/FrameBuffer.h>

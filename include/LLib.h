@@ -17,9 +17,9 @@
 //#endif
 
 
-#include "algebra3/algebra3.h"
-#include "LViewer/LViewer.h"
-#include "LTranslateMatrix/LTranslateMatrix.h"
+#include <algebra/algebra.h>
+#include <LViewer/LViewer.h>
+#include <LTranslateMatrix/LTranslateMatrix.h>
 
 //#include "fboClass/framebufferObject.h"
 //#include "fboClass/renderbuffer.h"
