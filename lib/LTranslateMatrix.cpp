@@ -7,7 +7,11 @@
 #include <GL/glut.h>
 #endif
 
+#include <cmath>
+
 using namespace LLib::Math;
+using namespace std;
+using namespace luba;
 
 void LTranslateMatrix::initialize(vec3 pos, vec3 targetPos, vec3 up)
 {
@@ -54,7 +58,7 @@ const mat3 LTranslateMatrix::getRotationMat3() const
 
 const mat4 LTranslateMatrix::getRotationMat4() const
 {
-  return mat4( vec4(rightDir, 0), vec4(upDir, 0), vec4(backDir), vec4(0,0,0,1));
+  return mat4( vec4(rightDir, 0), vec4(upDir, 0), vec4(backDir, 1.0), vec4(0,0,0,1));
 }
 
 void LTranslateMatrix::moveOnSphere( double dX, double dY)
@@ -272,7 +276,7 @@ void LTranslateMatrix::render3CoordAxisGL( float scaleLen)
     glPointSize(10);
     glColor3f(1,1,1);
     glBegin(GL_POINTS);
-    glVertex3dv(this->getPos3v().n);
+    glVertex3dv(this->getPos3v().native());
     glEnd();
     glPointSize(1);
 
@@ -282,104 +286,31 @@ void LTranslateMatrix::render3CoordAxisGL( float scaleLen)
     glBegin(GL_LINES);
     // front
     glColor3f(0,1,1);
-    glVertex3dv( this->pos.n);
-    glVertex3dv( (this->pos - scaleLen * this->backDir).n);
+    glVertex3dv( this->pos.native());
+    glVertex3dv( (this->pos - scaleLen * this->backDir).native());
     // up
     glColor3f(1,0,1);
-    glVertex3dv( this->pos.n);
-    glVertex3dv( (this->pos + scaleLen * this->upDir).n);
+    glVertex3dv( this->pos.native());
+    glVertex3dv( (this->pos + scaleLen * this->upDir).native());
     // right
     glColor3f(1,1,0);
-    glVertex3dv( this->pos.n);
-    glVertex3dv( (this->pos + scaleLen * this->rightDir).n);
+    glVertex3dv( this->pos.native());
+    glVertex3dv( (this->pos + scaleLen * this->rightDir).native());
     glEnd();
   }
   // 3 characters 'D','U','R' on the 3 corrdinate lines
   {
     glColor3f(0,1,1);
-    glRasterPos3dv((this->pos - scaleLen * this->backDir).n);
+    glRasterPos3dv((this->pos - scaleLen * this->backDir).native());
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, 'D');
 
     glColor3f(1,0,1);
-    glRasterPos3dv( (this->pos + scaleLen * this->upDir).n);
+    glRasterPos3dv( (this->pos + scaleLen * this->upDir).native());
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, 'U');
 
     glColor3f(1,1,0);
-    glRasterPos3dv( (this->pos + scaleLen * this->rightDir).n);
+    glRasterPos3dv( (this->pos + scaleLen * this->rightDir).native());
     glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, 'R');
   }
 }
 
-void LTranslateMatrix::debug()
-{
-  this->sphereCenter.print(stdout, "sphereCenter");
-  this->pos.print(stdout, "pos");
-  this->rightDir.print(stdout, "right");
-  this->upDir.print(stdout, "up");
-  this->backDir.print(stdout, "back");
-  for(int i=0; i<16; i++) {
-    printf("%f ", this->RotationMatrix[i]);
-    if(i%4 == 3)
-      printf("\n");
-  }
-  printf("Move Speed: %lf\n", this->moveSpeed);
-}
-
-bool LTranslateMatrix::saveMat(const char * fname)
-{
-  if (fname!=NULL) {
-    FILE * fp;
-    if( (fp = fopen(fname, "w")) != NULL) {
-      this->sphereCenter.print(fp, "sphereCenter");
-      this->pos.print(fp, "pos");
-      this->rightDir.print(fp, "right");
-      this->upDir.print(fp, "up");
-      this->backDir.print(fp, "back");
-      for(int i=0; i<16; i++) {
-        fprintf(fp,"%f ", this->RotationMatrix[i]);
-        if(i%4 == 3)
-          fprintf(fp,"\n");
-      }
-      fprintf(fp,"Move Speed: %lf\n", this->moveSpeed);
-      fclose(fp);
-
-      return true;
-    }
-    else {
-      printf("LTranslateMatrix::saveMat():: %s file open Error!\n", fname);
-    }
-  }
-  return false;  // if file not opened.
-}
-
-bool LTranslateMatrix::loadMat(const char * fname)
-{
-  if (fname!=NULL) {
-    FILE * fp;
-    char buff[128];
-    double tmp[3];
-    if( NULL != (fp = fopen(fname, "r"))) {
-      fscanf(fp, "%s <%lf, %lf, %lf>\n", buff, &tmp[0],&tmp[1],&tmp[2]);
-      this->sphereCenter = vec3(tmp[0], tmp[1], tmp[2]);
-      fscanf(fp, "%s <%lf, %lf, %lf>\n", buff, &tmp[0],&tmp[1],&tmp[2]);
-      this->pos = vec3(tmp[0], tmp[1], tmp[2]);
-      fscanf(fp, "%s <%lf, %lf, %lf>\n", buff, &tmp[0],&tmp[1],&tmp[2]);
-      this->rightDir = vec3(tmp[0], tmp[1], tmp[2]);
-      fscanf(fp, "%s <%lf, %lf, %lf>\n", buff, &tmp[0],&tmp[1],&tmp[2]);
-      this->upDir = vec3(tmp[0], tmp[1], tmp[2]);
-      fscanf(fp, "%s <%lf, %lf, %lf>\n", buff, &tmp[0],&tmp[1],&tmp[2]);
-      this->backDir = vec3(tmp[0], tmp[1], tmp[2]);
-      for(int i=0; i<16; i++) {
-        fscanf(fp, "%f", &this->RotationMatrix[i]);
-      }
-      fscanf(fp, "%s: %lf\n", buff, &this->moveSpeed);
-      fclose(fp);
-
-      return true;  // if file loaded
-    }
-  }
-  else {
-    printf("LTranslateMatrix::loadMat():: %s file open Error!\n", fname);
-  }
-  return false; // if file not found.
-}

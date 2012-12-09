@@ -4,8 +4,7 @@
 #include <algebra/algebra.h>
 #include <LGlobal/LGlobal.h>  // for PI
 
-using namespace LLib::Math;
-
+using namespace luba;
 
 namespace LLib {
 namespace Math {
@@ -42,9 +41,6 @@ public:
   ~LTranslateMatrix();
 
   // Save & Load
-  bool saveMat(const char * fname); // return true if saved, false if file not opened.
-  bool loadMat(const char * fname);  // return true if loaded, false if file not found.
-
   // mouse control
   void moveOnSphere( double dX, double dY);
   void moveView(double dX, double dY);
@@ -80,8 +76,6 @@ public:
   void setMoveSpeed(double newSpeed = 1);
 
   void render3CoordAxisGL( float scaleLen = 20);
-
-  void debug();
 
 private:
   void initialize( vec3 pos, vec3 targetPos, vec3 up);

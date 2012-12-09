@@ -6,6 +6,7 @@
 using LLib::Viewer::LViewer;
 using LLib::Math::LTranslateMatrix;
 using namespace luba;
+using namespace std;
 
 /// function pointers
 static void (*renderFunc)(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER_MODE mode) = NULL;

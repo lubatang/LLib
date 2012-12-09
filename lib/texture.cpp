@@ -1,6 +1,6 @@
-#include <stdafx.h>
 #include <GLM/texture.h>
 #include <stdio.h>
+#include <cstring>
 
 TGAHeader tgaheader;                  // TGA header
 TGA tga;                        // TGA image data

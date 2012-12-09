@@ -1,14 +1,15 @@
 #ifndef FRAMEWORK_H
 #define FRAMEWORK_H
 
-#include <stdio.h>
 #include <algebra/algebra.h>
+#include <algebra/vec3.h>
+
+#include <stdio.h>
 #include <vector>
 #include <cstring>
 #include <Triangle/FrameBuffer.h>
 
 using std::vector;
-using LLib::Math::vec3;
 using namespace luba;
 
 

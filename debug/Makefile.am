@@ -14,14 +14,18 @@ lviewer_debug_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(
 lviewer_debug_LDFLAGS = -L$(BUILDTOP)/lib -lglut -lGLU -lGL -L/usr/X11R6/lib/ -lXext -lX11
 
 lviewer_debug_SOURCES = ${TOOLDIR}/main.cpp \
-	${TOOLDIR}/stdafx.h \
+	${INCDIR}/algebra/vec2.h \
+	${LIBDIR}/algebra/vec2.cpp \
+	${INCDIR}/algebra/vec3.h \
+	${LIBDIR}/algebra/vec3.cpp \
+	${INCDIR}/algebra/vec4.h \
+	${LIBDIR}/algebra/vec4.cpp \
+	${INCDIR}/algebra/mat3.h \
+	${LIBDIR}/algebra/mat3.cpp \
+	${INCDIR}/algebra/mat4.h \
+	${LIBDIR}/algebra/mat4.cpp \
 	${INCDIR}/algebra/algebra.h \
-	${LIBDIR}/algebra.cpp \
-	${LIBDIR}/vec2.cpp \
-	${LIBDIR}/vec3.cpp \
-	${LIBDIR}/vec4.cpp \
-	${LIBDIR}/mat3.cpp \
-	${LIBDIR}/mat4.cpp \
+	${LIBDIR}/algebra/algebra.cpp \
 	${INCDIR}/framework.h \
 	${LIBDIR}/framework.cpp \
 	${INCDIR}/GLM/glm.h \

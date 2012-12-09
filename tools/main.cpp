@@ -1,15 +1,33 @@
-// 3DGP_framework.cpp : Defines the entry point for the console application.
+//===- main.cpp -----------------------------------------------------------===//
 //
-#include "stdafx.h"
+// Copyright (C), 2012-
+// Luba Tang <lubatang@gmail.com>
+//===----------------------------------------------------------------------===//
+
+#ifdef __APPLE__
+//openGL related library
+#include <OpenGL/gl.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/gl.h>
+#include <GL/glut.h>
+#endif
+
+//the framework library
+#include <framework.h>
+
+//the OBJ model library
+#include <GLM/glm.h>
+#include <Triangle/Model.h>
+#include <Triangle/Space.h>
+#include <Triangle/Painter.h>
+#include <Triangle/FrameBuffer.h>
+
 #include <unistd.h>
 #include <cstdlib>
 #include <string>
 #include <iostream>
 #include <algorithm>
-#include <Triangle/Model.h>
-#include <Triangle/Space.h>
-#include <Triangle/Painter.h>
-#include <Triangle/FrameBuffer.h>
 
 using namespace luba;
 

@@ -33,6 +33,7 @@
 #include <LTranslateMatrix/LTranslateMatrix.h>
 
 using namespace LLib::Math;
+using namespace luba;
 
 namespace LLib
 {
@@ -148,8 +149,11 @@ namespace LLib
         static void setCurrentControlMatrix( LTranslateMatrix * matrix = &LViewer::viewMatrix)  { LViewer::controlMatrix = matrix; };
         static void setCurrentViewMatrix( LTranslateMatrix * matrix = &LViewer::viewMatrix)  { LViewer::currentViewMatrix = matrix; };
 
-        static void setModelCenter      ( vec3 value )  {LViewer::modelCenterMode = true; LViewer::controlMatrix->setSphereCenter3v( LViewer::modelCenter = value);};
-        static void setModelCenter      ( vec4 value )  {LViewer::modelCenterMode = true; LViewer::controlMatrix->setSphereCenter3v(LViewer::modelCenter = vec3 (value));};
+        static void setModelCenter ( vec3 value ) {
+          LViewer::modelCenterMode = true;
+          LViewer::controlMatrix->setSphereCenter3v( LViewer::modelCenter = value);
+        }
+
         static void setDrawModelFunc    ( void (*drawModelP)    (void))                  { m_drawModel = drawModelP;};
         static void setInitFunc        ( void (*init)        (void))                  { m_init = init;};
         static void setIdleFunc        ( void (*idle)        (void))                  { m_idlef = idle;};
