@@ -12,6 +12,6 @@ using namespace luba;
 // GenVertex
 //===----------------------------------------------------------------------===//
 GenVertex::GenVertex()
-  : m_Coord(0, 0, 0), m_Color(0, 0, 0) {
+  : m_Color(0, 0, 0) {
 }
 

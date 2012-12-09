@@ -5,11 +5,12 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_VERTEX_H
 #define LUBA_VERTEX_H
+#include <algebra/vec4.h>
+#include <Triangle/Color.h>
 
 namespace luba {
 
-class Coord;
-class Color;
+typedef vec4 Coord;
 
 class Vertex
 {

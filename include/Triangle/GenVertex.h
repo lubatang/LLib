@@ -8,13 +8,9 @@
 #include <cstddef>
 
 #include <Triangle/Vertex.h>
-#include <Triangle/Coord.h>
 #include <Triangle/Color.h>
 
 namespace luba {
-
-class Color;
-class Coord;
 
 class GenVertex : public Vertex
 {

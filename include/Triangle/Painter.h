@@ -5,12 +5,12 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_PAINTER_H
 #define LUBA_PAINTER_H
+#include <Triangle/Vertex.h>
 
 namespace luba {
 
 class FrameBuffer;
 class Space;
-class Coord;
 class Vertex;
 class Line;
 class Triangle;

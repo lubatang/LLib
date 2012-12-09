@@ -5,7 +5,6 @@
 //===----------------------------------------------------------------------===//
 #include <Triangle/Line.h>
 #include <Triangle/Vertex.h>
-#include <Triangle/Coord.h>
 #include <Triangle/Space.h>
 
 #include <cmath>

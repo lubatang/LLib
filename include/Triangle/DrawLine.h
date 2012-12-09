@@ -6,7 +6,7 @@
 #ifndef LUBA_DRAW_LINE_H
 #define LUBA_DRAW_LINE_H
 #include <Triangle/LineIterator.h>
-#include <Triangle/Coord.h>
+#include <Triangle/Vertex.h>
 
 namespace luba {
 

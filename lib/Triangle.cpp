@@ -5,7 +5,6 @@
 //===----------------------------------------------------------------------===//
 #include <Triangle/Triangle.h>
 #include <Triangle/Vertex.h>
-#include <Triangle/Coord.h>
 
 #include <algorithm>
 
@@ -19,16 +18,16 @@ Triangle::Triangle(const Vertex& pV1, const Vertex& pV2, const Vertex& pV3)
   pV2.getCoord(v[1]);
   pV3.getCoord(v[2]);
 
-  if (v[0].y < v[1].y) {
+  if (v[0][1] < v[1][1]) {
     std::swap(v[0], v[1]);
     std::swap(m_pV1, m_pV2);
   }
-  if (v[0].y < v[2].y) {
+  if (v[0][1] < v[2][1]) {
     std::swap(v[0], v[2]);
     std::swap(m_pV1, m_pV3);
   }
 
-  if (v[1].y < v[2].y) {
+  if (v[1][1] < v[2][1]) {
     std::swap(v[1], v[2]);
     std::swap(m_pV2, m_pV3);
   }

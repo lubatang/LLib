@@ -4,7 +4,6 @@
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
 #include <Triangle/ModelVertex.h>
-#include <Triangle/Coord.h>
 #include <Triangle/Model.h>
 #include <Triangle/Color.h>
 #include <cassert>
@@ -43,9 +42,10 @@ void ModelVertex::getCoord(Coord& pCoord) const
          "ModelVertex::Initialize(Model& pModel) should be called before calling "
          "ModelVertex::getCoord()");
 
-  pCoord.x = f_pModel->getObject()->vertices[m_VertexIdx*3];
-  pCoord.y = f_pModel->getObject()->vertices[m_VertexIdx*3 + 1];
-  pCoord.z = f_pModel->getObject()->vertices[m_VertexIdx*3 + 2];
+  pCoord[0] = f_pModel->getObject()->vertices[m_VertexIdx*3];
+  pCoord[1] = f_pModel->getObject()->vertices[m_VertexIdx*3 + 1];
+  pCoord[2] = f_pModel->getObject()->vertices[m_VertexIdx*3 + 2];
+  pCoord[3] = 1.0;
 }
 
 /// getColor - get the RGB color of the vertex

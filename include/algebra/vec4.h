@@ -37,6 +37,18 @@ public:
   double  operator [] (unsigned int idx) const;
   double& operator [] (unsigned int idx);
 
+  double  x() const { return m_N[0]; }
+  double& x()       { return m_N[0]; }
+
+  double  y() const { return m_N[1]; }
+  double& y()       { return m_N[1]; }
+
+  double  z() const { return m_N[2]; }
+  double& z()       { return m_N[2]; }
+
+  double  w() const { return m_N[3]; }
+  double& w()       { return m_N[3]; }
+
   double length() const;
 
   vec4& normalize();
@@ -54,7 +66,7 @@ public:
 
   double* native() { return m_N; }
 
-private:
+protected:
   double m_N[4];
 
 };

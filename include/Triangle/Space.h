@@ -5,11 +5,9 @@
 //===----------------------------------------------------------------------===//
 #ifndef SPACE_H
 #define SPACE_H
+#include <Triangle/Vertex.h>
 
 namespace luba {
-
-class Coord;
-class Vertex;
 
 class Space
 {

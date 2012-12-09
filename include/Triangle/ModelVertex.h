@@ -13,7 +13,6 @@ namespace luba {
 
 class Model;
 class Color;
-class Coord;
 
 class ModelVertex : public Vertex
 {
