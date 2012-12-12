@@ -15,9 +15,16 @@ typedef vec4 Coord;
 class Vertex
 {
 public:
-  virtual void getCoord(Coord& pCoord) const = 0;
+  const Coord& coord() const { return m_Coord; }
+  Coord&       coord()       { return m_Coord; }
 
-  virtual void getColor(Color& pColor) const = 0;
+  const Color& color() const { return m_Color; }
+  Color&       color()       { return m_Color; }
+
+public:
+  Coord m_Coord;
+  Color m_Color;
+
 };
 
 } // namespace of luba

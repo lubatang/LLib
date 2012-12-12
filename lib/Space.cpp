@@ -27,8 +27,7 @@ void Space::map(const Coord& pCoord,
 void Space::map(const Vertex& pVertex,
                 unsigned int& pX, unsigned int& pY, unsigned int& pZ) const
 {
-  Coord coord;
-  pVertex.getCoord(coord);
+  Coord coord = pVertex.coord();
   map(coord, pX, pY, pZ);
 }
 
@@ -41,8 +40,7 @@ void Space::map(const Coord& pCoord, double& pX, double& pY, double& pZ) const
 
 void Space::map(const Vertex& pVertex, double& pX, double& pY, double& pZ) const
 {
-  Coord coord;
-  pVertex.getCoord(coord);
+  Coord coord = pVertex.coord();
   map(coord, pX, pY, pZ);
 }
 

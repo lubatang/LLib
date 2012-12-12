@@ -1,4 +1,4 @@
-//===- ModelVertex.h ------------------------------------------------------===//
+//===- ModelToVertex.h ----------------------------------------------------===//
 //
 // Copyright (C), 2012-
 // Luba Tang <lubatang@gmail.com>
@@ -14,24 +14,21 @@ namespace luba {
 class Model;
 class Color;
 
-class ModelVertex : public Vertex
+class ModelToVertex
 {
 public:
-  static void Initialize(Model& pModel);
+  ModelToVertex(Model& pModel);
 
-  static bool isValid();
+  void setConverter(size_t pVertex, size_t pColor, size_t m_Norm, size_t m_Text);
 
-public:
-  ModelVertex();
-
-  ModelVertex(size_t pVertex, size_t pColor, size_t m_Norm, size_t m_Text);
+  void getVertex(Vertex& pVertex) const;
 
   void getCoord(Coord& pCoord) const;
 
   void getColor(Color& pColor) const;
 
 private:
-  static Model* f_pModel;
+  Model& m_Model;
 
   size_t m_VertexIdx;
   size_t m_ColorIdx;

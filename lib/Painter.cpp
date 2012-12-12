@@ -10,7 +10,7 @@
 #include <Triangle/DrawLine.h>
 #include <Triangle/Triangle.h>
 #include <Triangle/DrawTriangle.h>
-#include <Triangle/ModelVertex.h>
+#include <Triangle/ModelToVertex.h>
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Color.h>
 #include <Triangle/ColorIterator.h>
@@ -29,13 +29,11 @@ Painter::Painter(FrameBuffer& pFB)
 }
 
 inline bool
-Painter::draw(const Space& pSpace, Coord& pCoord, Color& pColor) const
+Painter::draw(Coord& pCoord, Color& pColor) const
 {
   unsigned int x, y, z;
   pSpace.map(pCoord, x, y, z);
 
-  double a, b, c;
-  pSpace.map(pCoord, a, b, c);
   m_FB.setColor(x, y, z, pColor);
   return true;
 }
@@ -51,25 +49,16 @@ bool Painter::draw(const Space& pSpace, Vertex& pVertex) const
   return draw(pSpace, coord, color);
 }
 
-bool Painter::draw(const Space& pSpace, Line& pLine) const
+bool Painter::draw(Line& pLine) const
 {
-  Coord v1, v2;
-  pLine.front().getCoord(v1);
-  pLine.rear().getCoord(v2);
-  DrawLine drawer(pSpace, v1, v2);
+  DrawLine drawer(pLine.front(), pLine.rear());
 
-  unsigned int distance = drawer.distance();
-  if (0 == distance)
+  if (0 == drawer.distance())
     return true;
 
-  Color c1, c2;
-  pLine.front().getColor(c1);
-  pLine.rear().getColor(c2);
-
-  ColorIterator color = ColorIterator(c1, c2, distance);
   DrawLine::const_iterator pixel, pEnd = drawer.end();
-  for (pixel = drawer.begin(); pixel != pEnd; pixel.next(), color.next()) {
-    m_FB.setColor(pixel.x(), pixel.y(), pixel.z(), *color);
+  for (pixel = drawer.begin(); pixel != pEnd; pixel.next()) {
+    pixel.draw();
   }
 
   return true;
@@ -222,41 +211,51 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     return false;
 
   for(int i=0; i<(int)Model::self().getObject()->numtriangles; ++i) {
+    Vertex v1, v2, v3;
+    ModelToVertex converter(*Model::self());
+
     int fn = Model::self().getObject()->triangles[i].findex;
 
     int v  = Model::self().getObject()->triangles[i].vindices[0];
     int n  = Model::self().getObject()->triangles[i].nindices[0];
     int t  = Model::self().getObject()->triangles[i].tindices[0];
-    ModelVertex v1(v, n, fn, t);
+    converter.setConverter(v, n, fn, t);
+    converter.getVertex(v1);
 
     v  = Model::self().getObject()->triangles[i].vindices[1];
     n  = Model::self().getObject()->triangles[i].nindices[1];
     t  = Model::self().getObject()->triangles[i].tindices[1];
-    ModelVertex v2(v, n, fn, t);
+    converter.setConverter(v, n, fn, t);
+    converter.getVertex(v2);
 
     v  = Model::self().getObject()->triangles[i].vindices[2];
     n  = Model::self().getObject()->triangles[i].nindices[2];
     t  = Model::self().getObject()->triangles[i].tindices[2];
-    ModelVertex v3(v, n, fn, t);
+    converter.setConverter(v, n, fn, t);
+    converter.getVertex(v3);
+
+    pSpace.map(v1);
+    pSpace.map(v2);
+    pSpace.map(v3);
 
     if (pSolid) {
       Triangle tri(v1, v2, v3);
-      draw(pSpace, tri);
+      draw(tri);
 
       Line l1(v1, v2);
       Line l2(v1, v3);
       Line l3(v2, v3);
-      draw(pSpace, l1);
-      draw(pSpace, l2);
-      draw(pSpace, l3);
+      draw(l1);
+      draw(l2);
+      draw(l3);
     }
     else {
       Line l1(v1, v2);
       Line l2(v1, v3);
       Line l3(v2, v3);
-      draw(pSpace, l1);
-      draw(pSpace, l2);
-      draw(pSpace, l3);
+      draw(l1);
+      draw(l2);
+      draw(l3);
     }
   }
 
