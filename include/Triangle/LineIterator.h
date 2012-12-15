@@ -5,6 +5,7 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_LINE_ITERATOR_H
 #define LUBA_LINE_ITERATOR_H
+#include <Triangle/Vertex.h>
 
 namespace luba {
 
@@ -19,7 +20,7 @@ private:
   friend unsigned int operator-(const LineIterator& pX, const LineIterator& pY);
 
   LineIterator(const DrawLine& pDrawLine, float pErrorXY, float pErrorXZ,
-               float pX, float pY, float pZ);
+               const Vertex& pVertex);
 
 public:
   LineIterator();
@@ -33,6 +34,8 @@ public:
 
   LineIterator& next();
 
+  Vertex& operator*();
+
 private:
   const DrawLine* m_pDrawLine;
   float m_ErrorXY;
@@ -40,6 +43,7 @@ private:
   unsigned int m_X;
   unsigned int m_Y;
   unsigned int m_Z;
+  Vertex m_Vertex;
 };
 
 bool operator==(const luba::LineIterator& pX, const luba::LineIterator& pY);

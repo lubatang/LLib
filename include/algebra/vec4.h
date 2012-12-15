@@ -7,6 +7,7 @@
 #define LUBA_VECTOR_4X1_H
 
 #include <iosfwd>
+#include <algorithm>
 
 namespace luba {
 
@@ -71,20 +72,22 @@ protected:
 
 };
 
+vec4 operator + (const vec4& a, const vec4& b);
+vec4 operator - (const vec4& a, const vec4& b);
+vec4 operator * (const vec4& a, double d);
+vec4 operator * (double d, const vec4& a);
+double operator * (const vec4& a, const vec4& b);
+vec4 operator / (const vec4& a, double d);
+bool operator == (const vec4& a, const vec4& b);
+bool operator != (const vec4& a, const vec4& b);
+
 } // namespace of luba
 
 namespace std {
 
-luba::vec4 operator + (const luba::vec4& a, const luba::vec4& b);
-luba::vec4 operator - (const luba::vec4& a, const luba::vec4& b);
-luba::vec4 operator * (const luba::vec4& a, double d);
-luba::vec4 operator * (double d, const luba::vec4& a);
-double operator * (const luba::vec4& a, const luba::vec4& b);
-luba::vec4 operator / (const luba::vec4& a, double d);
-bool operator == (const luba::vec4& a, const luba::vec4& b);
-bool operator != (const luba::vec4& a, const luba::vec4& b);
+ostream& operator<< (ostream& s, const luba::vec4& v);
 
-std::ostream& operator<< (ostream& s, const luba::vec4& v);
+template<>
 void swap(luba::vec4& a, luba::vec4& b);
 
 } // namespace of std

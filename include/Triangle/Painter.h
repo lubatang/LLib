@@ -23,10 +23,9 @@ public:
   explicit Painter(FrameBuffer& pFB);
 
   bool draw(const Space& pSpace, Model& pModel, bool pSolid) const;
-  bool draw(Triangle& pTriangle) const;
-  bool draw(Line& pLine) const;
-  bool draw(Vertex& pVertex) const;
-  bool draw(Coord& pCoord, Color& pColor) const;
+  bool draw(const Triangle& pTriangle) const;
+  bool draw(const Line& pLine) const;
+  bool draw(const Vertex& pVertex) const;
 
 private:
   FrameBuffer& m_FB;

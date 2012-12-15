@@ -7,6 +7,7 @@
 #define LUBA_MATRIX_4X4_H
 
 #include <algebra/vec4.h>
+#include <algorithm>
 #include <iosfwd>
 
 namespace luba {
@@ -65,24 +66,25 @@ public:
 template<> void mat4::swap<mat4::Row>   (unsigned int i, unsigned int j);
 template<> void mat4::swap<mat4::Column>(unsigned int i, unsigned int j);
 
-} // namespace of luba
+mat4 operator + (const mat4& a, const mat4& b);
+mat4 operator - (const mat4& a, const mat4& b);
+mat4 operator * (const mat4& a, const mat4& b);
+mat4 operator * (const mat4& a, double d);
+mat4 operator * (double d, const mat4& a);
+vec4 operator * (const mat4& a, const vec4& v);
+vec4 operator * (const vec4& v, const mat4& a);
+mat4 operator / (const mat4& a, double d);
+
+bool operator == (const mat4& a, const mat4& b);
+bool operator != (const mat4& a, const mat4& b);
+
+} // namespace luba
 
 namespace std {
 
-luba::mat4 operator + (const luba::mat4& a, const luba::mat4& b);
-luba::mat4 operator - (const luba::mat4& a, const luba::mat4& b);
-luba::mat4 operator * (const luba::mat4& a, const luba::mat4& b);
-luba::mat4 operator * (const luba::mat4& a, double d);
-luba::mat4 operator * (double d, const luba::mat4& a);
-luba::vec4 operator * (const luba::mat4& a, const luba::vec4& v);
-luba::vec4 operator * (const luba::vec4& v, const luba::mat4& a);
-luba::mat4 operator / (const luba::mat4& a, double d);
-
-bool operator == (const luba::mat4& a, const luba::mat4& b);
-bool operator != (const luba::mat4& a, const luba::mat4& b);
-
 ostream& operator << (ostream& s, const luba::mat4& m);
 
+template<>
 void swap(luba::mat4& a, luba::mat4& b);
 
 } // namespace of std

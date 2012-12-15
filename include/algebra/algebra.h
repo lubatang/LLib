@@ -13,11 +13,42 @@
 
 namespace luba {
 
-typedef vec3 vec2D;
-typedef vec4 vec3D;
+class vec2D : public vec3
+{
+public:
+  vec2D();
+  vec2D(const vec2D& v);
+  explicit vec2D(double x, double y);
+  explicit vec2D(const vec2& v);
 
-/// translate - move 2D point pOrig with offset pOffset
+  vec2D& operator=(const vec3& pCopy);
+  vec2D& operator=(const vec2D& pCopy);
+};
+
+class vec3D : public vec4
+{
+public:
+  vec3D();
+  vec3D(const vec3D& v);
+
+  explicit vec3D(double x, double y, double z);
+  explicit vec3D(const vec3& v);
+
+  vec3D& operator=(const vec4& pCopy);
+  vec3D& operator=(const vec3D& pCopy);
+};
+
+//===----------------------------------------------------------------------===//
+// 2D functions
+//===----------------------------------------------------------------------===//
 void translate(vec2D& pOrig, const vec2& pOffset);
+
+//===----------------------------------------------------------------------===//
+// 3D functions
+//===----------------------------------------------------------------------===//
+void translate(vec3D& pVector, double pX, double pY, double pZ);
+
+void scaling(vec3D& pVector, double pX, double pY, double pZ);
 
 } // namespace of luba
 

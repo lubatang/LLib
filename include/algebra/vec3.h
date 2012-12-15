@@ -49,7 +49,7 @@ public:
 
   double* native() { return m_N; }
 
-private:
+protected:
   double m_N[3];
 
 };

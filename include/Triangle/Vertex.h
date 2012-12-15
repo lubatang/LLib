@@ -5,12 +5,12 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_VERTEX_H
 #define LUBA_VERTEX_H
-#include <algebra/vec4.h>
+#include <algebra/algebra.h>
 #include <Triangle/Color.h>
 
 namespace luba {
 
-typedef vec4 Coord;
+typedef vec3D Coord;
 
 class Vertex
 {
@@ -20,6 +20,15 @@ public:
 
   const Color& color() const { return m_Color; }
   Color&       color()       { return m_Color; }
+
+  double  x() const { return m_Coord[0]; }
+  double& x()       { return m_Coord[0]; }
+
+  double  y() const { return m_Coord[1]; }
+  double& y()       { return m_Coord[1]; }
+
+  double  z() const { return m_Coord[2]; }
+  double& z()       { return m_Coord[2]; }
 
 public:
   Coord m_Coord;

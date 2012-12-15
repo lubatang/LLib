@@ -14,14 +14,7 @@ class Space
 public:
   Space(unsigned int pWidth, unsigned int pHeight, unsigned int pDepth);
 
-  void map(const Coord& pCoord,
-           unsigned int& pX, unsigned int& pY, unsigned int& pZ) const;
-
-  void map(const Vertex& pVertex,
-           unsigned int& pX, unsigned int& pY, unsigned int& pZ) const;
-
-  void map(const Coord& pCoord, double& pX, double& pY, double& pZ) const;
-  void map(const Vertex& pVertex, double& pX, double& pY, double& pZ) const;
+  void map(Vertex& pVertex) const;
 
   void setOrigin(unsigned int pX, unsigned int pY, unsigned int pZ);
 

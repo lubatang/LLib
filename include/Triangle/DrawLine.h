@@ -10,8 +10,6 @@
 
 namespace luba {
 
-class Space;
-
 /** \class DrawLine
  *  \brief DrawLine is an action to draw a line on certain space.
  */
@@ -22,7 +20,7 @@ public:
   typedef LineIterator const_iterator;
 
 public:
-  DrawLine(const Space& pSpace, const Coord& pA, const Coord& pB);
+  DrawLine(const Vertex& pA, const Vertex& pB);
 
   const_iterator begin() const;
   const_iterator end  () const;
@@ -31,8 +29,8 @@ public:
   unsigned int distance() const;
 
 private:
-  Coord m_A;
-  Coord m_B;
+  Vertex m_A;
+  Vertex m_B;
 
   int m_XStep;
   int m_YStep;
@@ -45,7 +43,6 @@ private:
   bool m_bSteepXY : 1;
   bool m_bSteepXZ : 1;
 
-  const Space& m_Space;
 };
 
 } // namespace luba

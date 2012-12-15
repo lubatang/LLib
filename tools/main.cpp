@@ -29,6 +29,8 @@
 #include <iostream>
 #include <algorithm>
 
+#include <gtest.h>
+
 using namespace luba;
 
 //===----------------------------------------------------------------------===//
@@ -45,6 +47,12 @@ static void error(const std::string& pMesg)
   std::cerr << "Error: ";
   std::cerr << pMesg << std::endl;
   exit(0);
+}
+
+int unit_test( int argc, char* argv[] )
+{
+  testing::InitGoogleTest( &argc, argv );
+  return RUN_ALL_TESTS();
 }
 
 //////////////////////////////////////////////////////////////////////////
@@ -101,10 +109,15 @@ int main(int argc, char ** argv)
 {
   std::string file;
   int option;
-  while ((option = getopt(argc, argv, "f:?h")) != -1) {
+  while ((option = getopt(argc, argv, "f:t?h")) != -1) {
     switch (option) {
       case 'f': {
         file = std::string(optarg);
+        break;
+      }
+      case 't': {
+        unit_test(argc, argv);
+        exit(0);
         break;
       }
       case '?':

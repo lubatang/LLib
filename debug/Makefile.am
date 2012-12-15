@@ -4,16 +4,17 @@ TOOLDIR=${TOPLEVEL}/tools
 
 LIBDIR=${TOPLEVEL}/lib
 INCDIR=${TOPLEVEL}/include/
+UNITTEST=${TOPLEVEL}/unittests
 
-AM_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(TOOLDIR) -I/usr/X11R6/include
+AM_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(TOOLDIR) -I/usr/X11R6/include -I$(TOPLEVEL)/utils/gtest/include
 
 bin_PROGRAMS = lviewer.debug
 
-lviewer_debug_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(TOOLDIR) -I/usr/X11R6/include
+lviewer_debug_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(TOOLDIR) -I/usr/X11R6/include -I$(TOPLEVEL)/utils/gtest/include
 
-lviewer_debug_LDFLAGS = -L$(BUILDTOP)/lib -lglut -lGLU -lGL -L/usr/X11R6/lib/ -lXext -lX11
+lviewer_debug_LDFLAGS = -lglut -lGLU -lGL -L/usr/X11R6/lib/ -lXext -lX11 -L$(BUILDTOP)/utils/gtest/lib -lgtest
 
-lviewer_debug_SOURCES = ${TOOLDIR}/main.cpp \
+SRC =	${TOOLDIR}/main.cpp \
 	${INCDIR}/algebra/vec2.h \
 	${LIBDIR}/algebra/vec2.cpp \
 	${INCDIR}/algebra/vec3.h \
@@ -70,3 +71,12 @@ lviewer_debug_SOURCES = ${TOOLDIR}/main.cpp \
 	${INCDIR}/Support/FileHandle.h \
 	${LIBDIR}/FileHandle.cpp
 
+TEST_SRC = ${UNITTEST}/AlgebraTest.h \
+	${UNITTEST}/AlgebraTest.cpp \
+	${UNITTEST}/SpaceTest.h \
+	${UNITTEST}/SpaceTest.cpp \
+	${UNITTEST}/LineTest.h \
+	${UNITTEST}/LineTest.cpp
+
+SOURCE = $(SRC) $(TEST_SRC)
+lviewer_debug_SOURCES = $(SOURCE)

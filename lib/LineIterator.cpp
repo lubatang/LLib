@@ -5,6 +5,7 @@
 //===----------------------------------------------------------------------===//
 #include <Triangle/LineIterator.h>
 #include <Triangle/DrawLine.h>
+#include <Triangle/Vertex.h>
 
 #include <cassert>
 #include <cmath>
@@ -37,11 +38,11 @@ unsigned int luba::operator-(const LineIterator& pA, const LineIterator& pB)
 //===----------------------------------------------------------------------===//
 LineIterator::LineIterator(const DrawLine& pDrawLine,
                            float pErrorXY, float pErrorXZ,
-                           float pX, float pY, float pZ)
-  : m_pDrawLine(&pDrawLine), m_ErrorXY(pErrorXY), m_ErrorXZ(pErrorXZ) {
-  m_X = (unsigned int)pX;
-  m_Y = (unsigned int)pY;
-  m_Z = (unsigned int)pZ;
+                           const Vertex& pVertex)
+  : m_pDrawLine(&pDrawLine), m_ErrorXY(pErrorXY), m_ErrorXZ(pErrorXZ), m_Vertex(pVertex) {
+  m_X = (unsigned int)pVertex.x();
+  m_Y = (unsigned int)pVertex.y();
+  m_Z = (unsigned int)pVertex.z();
 }
 
 LineIterator::LineIterator()
@@ -51,7 +52,7 @@ LineIterator::LineIterator()
 LineIterator::LineIterator(const LineIterator& pCopy)
   : m_pDrawLine(pCopy.m_pDrawLine),
     m_ErrorXY(pCopy.m_ErrorXY), m_ErrorXZ(pCopy.m_ErrorXZ),
-    m_X(pCopy.m_X), m_Y(pCopy.m_Y), m_Z(pCopy.m_Z) {
+    m_X(pCopy.m_X), m_Y(pCopy.m_Y), m_Z(pCopy.m_Z), m_Vertex(pCopy.m_Vertex) {
 }
 
 LineIterator& LineIterator::operator=(const LineIterator& pCopy)
@@ -62,6 +63,7 @@ LineIterator& LineIterator::operator=(const LineIterator& pCopy)
   m_X = pCopy.m_X;
   m_Y = pCopy.m_Y;
   m_Z = pCopy.m_Z;
+  m_Vertex = pCopy.m_Vertex;
   return *this;
 }
 
@@ -112,5 +114,13 @@ unsigned int LineIterator::z() const
   if (m_pDrawLine->m_bSteepXZ)
     return m_X;
   return m_Z;
+}
+
+Vertex& LineIterator::operator*()
+{
+  m_Vertex.x() = x();
+  m_Vertex.y() = y();
+  m_Vertex.z() = z();
+  return m_Vertex;
 }
 
