@@ -14,8 +14,21 @@ using namespace luba;
 //===----------------------------------------------------------------------===//
 // DrawLine
 //===----------------------------------------------------------------------===//
+DrawLine::DrawLine()
+  : m_bSteepXY(false), m_bSteepXZ(false) {
+}
+
 DrawLine::DrawLine(const Vertex& pA, const Vertex& pB)
-  : m_A(pA), m_B(pB), m_bSteepXY(false), m_bSteepXZ(false) {
+{
+  setTerminals(pA, pB);
+}
+
+DrawLine& DrawLine::setTerminals(const Vertex& pA, const Vertex& pB)
+{
+  m_A = pA;
+  m_B = pB;
+  m_bSteepXY = false;
+  m_bSteepXZ = false;
 
   // Extended Bresenham's line algorithm
   // @ref http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm
@@ -41,10 +54,11 @@ DrawLine::DrawLine(const Vertex& pA, const Vertex& pB)
   m_DY = fabs(m_B.y() - m_A.y());
   m_DZ = fabs(m_B.z() - m_A.z());
 
-  m_XStep = (m_A.x() < m_B.z()) ? 1 : -1;
-  m_YStep = (m_A.y() < m_B.z()) ? 1 : -1;
+  m_XStep = (m_A.x() < m_B.x()) ? 1 : -1;
+  m_YStep = (m_A.y() < m_B.y()) ? 1 : -1;
   m_ZStep = (m_A.z() < m_B.z()) ? 1 : -1;
 
+  return *this;
 }
 
 DrawLine::const_iterator DrawLine::begin() const

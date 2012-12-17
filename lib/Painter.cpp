@@ -54,12 +54,26 @@ bool Painter::draw(const Line& pLine) const
 
 bool Painter::draw(const Triangle& pTriangle) const
 {
+  DrawTriangle drawer(pTriangle.v1(), pTriangle.v2(), pTriangle.v3());
+  if (!drawer.hasArea())
+    return true;
+
+  DrawTriangle::const_iterator horizon, hEnd = drawer.end();
+  for (horizon = drawer.begin(); horizon != hEnd; horizon.next()) {
+    DrawLine::const_iterator pixel, pEnd = horizon->end();
+    for (pixel = horizon->begin(); pixel != pEnd; pixel.next()) {
+      cerr << (*pixel).coord() << endl;
+      draw(*pixel);
+    }
+  }
+}
+
+/**
+bool Painter::draw(const Triangle& pTriangle) const
+{
   const Vertex& v1 = pTriangle.v1();
   const Vertex& v2 = pTriangle.v2();
   const Vertex& v3 = pTriangle.v3();
-  cerr << "v1=" << v1.coord() << endl;
-  cerr << "v2=" << v2.coord() << endl;
-  cerr << "v3=" << v3.coord() << endl;
 
   if ((v1.y() - v2.y()) < 1 && (v2.y() - v3.y()) < 1) {
     // a horizontal line. v1.y must >= v2.y, and v2.y must >= v3.y
@@ -132,6 +146,7 @@ bool Painter::draw(const Triangle& pTriangle) const
     }
   }
 }
+**/
 
 bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
 {
@@ -174,8 +189,9 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     draw(l2);
     draw(l3);
 
-    if (pSolid)
+    if (pSolid) {
       draw(tri);
+    }
   }
 
   return true;

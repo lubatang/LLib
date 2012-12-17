@@ -26,6 +26,8 @@ void Space::setOrigin(unsigned int pX, unsigned int pY, unsigned int pZ)
 void Space::map(Vertex& pVertex) const
 {
   scaling(pVertex.coord(), (double)m_Width/2, (double)m_Height/2, (double)m_Depth/2);
-  translate(pVertex.coord(), (double)m_Width/2, (double)m_Height/2, (double)m_Depth/2);
+  translate(pVertex.coord(), (double)(m_Width/2 + m_X),
+                             (double)(m_Height/2 + m_Y),
+                             (double)(m_Depth/2 + m_Z));
 }
 

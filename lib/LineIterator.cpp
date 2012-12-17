@@ -124,3 +124,11 @@ Vertex& LineIterator::operator*()
   return m_Vertex;
 }
 
+Vertex* LineIterator::operator->()
+{
+  m_Vertex.x() = x();
+  m_Vertex.y() = y();
+  m_Vertex.z() = z();
+  return &m_Vertex;
+}
+

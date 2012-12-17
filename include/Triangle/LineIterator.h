@@ -35,6 +35,7 @@ public:
   LineIterator& next();
 
   Vertex& operator*();
+  Vertex* operator->();
 
 private:
   const DrawLine* m_pDrawLine;

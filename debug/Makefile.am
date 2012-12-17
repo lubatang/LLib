@@ -46,6 +46,7 @@ SRC =	${TOOLDIR}/main.cpp \
 	${INCDIR}/Triangle/ColorIterator.h \
 	${LIBDIR}/ColorIterator.cpp \
 	${INCDIR}/Triangle/Vertex.h \
+	${LIBDIR}/Vertex.cpp \
 	${INCDIR}/Triangle/ModelToVertex.h \
 	${LIBDIR}/ModelToVertex.cpp \
 	${INCDIR}/Triangle/Line.h \
@@ -76,7 +77,9 @@ TEST_SRC = ${UNITTEST}/AlgebraTest.h \
 	${UNITTEST}/SpaceTest.h \
 	${UNITTEST}/SpaceTest.cpp \
 	${UNITTEST}/LineTest.h \
-	${UNITTEST}/LineTest.cpp
+	${UNITTEST}/LineTest.cpp \
+	${UNITTEST}/TriangleTest.h \
+	${UNITTEST}/TriangleTest.cpp
 
 SOURCE = $(SRC) $(TEST_SRC)
 lviewer_debug_SOURCES = $(SOURCE)

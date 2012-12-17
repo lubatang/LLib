@@ -18,9 +18,12 @@ public:
   const Coord& coord() const { return m_Coord; }
   Coord&       coord()       { return m_Coord; }
 
+  Vertex& setCoord(double pX, double pY, double pZ);
+
   const Color& color() const { return m_Color; }
   Color&       color()       { return m_Color; }
 
+  // -----  accessors  ----- //
   double  x() const { return m_Coord[0]; }
   double& x()       { return m_Coord[0]; }
 
