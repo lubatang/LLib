@@ -89,7 +89,6 @@ TEST_F(TriangleTest, begin_iterator_test)
   DrawTriangle::const_iterator horizon, hEnd = drawer.end();
   for (horizon = drawer.begin(); horizon != hEnd; horizon.next()) {
     DrawLine::const_iterator pixel, pEnd = horizon->end();
-<<<<<<< HEAD
     //cerr << "line: " << (horizon->begin())->coord() << " -> " << (horizon->end())->coord() << endl;
     pixel = horizon->begin();
     while (pixel != pEnd) {
