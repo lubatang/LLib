@@ -43,6 +43,19 @@ LineIterator::LineIterator(const DrawLine& pDrawLine,
   m_X = (unsigned int)pVertex.x();
   m_Y = (unsigned int)pVertex.y();
   m_Z = (unsigned int)pVertex.z();
+
+  if (m_pDrawLine->m_bSteepXZ) {
+    m_Vertex.setX(m_Z);
+    m_Vertex.setZ(m_X);
+  }
+
+  if (m_pDrawLine->m_bSteepXY) {
+    m_Vertex.setX(m_Y);
+    if (m_pDrawLine->m_bSteepXZ)
+      m_Vertex.setY(m_Z);
+    else
+      m_Vertex.setY(m_X);
+  }
 }
 
 LineIterator::LineIterator()

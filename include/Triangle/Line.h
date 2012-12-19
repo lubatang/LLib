@@ -5,6 +5,7 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_LINE_H
 #define LUBA_LINE_H
+#include <iosfwd>
 
 namespace luba {
 
@@ -24,5 +25,11 @@ private:
 };
 
 } // namespace luba
+
+namespace std {
+
+std::ostream& operator << (std::ostream& s, const luba::Line& pLine);
+
+} // namespace std
 #endif
 
