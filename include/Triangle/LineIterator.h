@@ -36,6 +36,7 @@ public:
 
   const Vertex& operator*() const;
   Vertex& operator*();
+  Vertex* operator->();
 
   const Vertex* operator->() const;
   Vertex* operator->();

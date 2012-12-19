@@ -75,7 +75,7 @@ TEST_F(TriangleTest, has_area_test)
   ASSERT_FALSE(drawer2.hasArea());
 }
 
-TEST_F(TriangleTest, right_triangle_test)
+TEST_F(TriangleTest, begin_iterator_test)
 {
   Vertex v1, v2, v3;
   v1.setCoord(0, 4, 0);
@@ -89,6 +89,7 @@ TEST_F(TriangleTest, right_triangle_test)
   DrawTriangle::const_iterator horizon, hEnd = drawer.end();
   for (horizon = drawer.begin(); horizon != hEnd; horizon.next()) {
     DrawLine::const_iterator pixel, pEnd = horizon->end();
+<<<<<<< HEAD
     //cerr << "line: " << (horizon->begin())->coord() << " -> " << (horizon->end())->coord() << endl;
     pixel = horizon->begin();
     while (pixel != pEnd) {

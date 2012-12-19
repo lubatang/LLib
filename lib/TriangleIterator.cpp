@@ -16,39 +16,69 @@ using namespace luba;
 //===----------------------------------------------------------------------===//
 bool luba::operator==(const TriangleIterator& pA, const TriangleIterator& pB)
 {
-  assert(pA.m_pDrawTriangle == pB.m_pDrawTriangle);
-  return true;
+  if (pA.m_pParent != pB.m_pParent)
+    return false;
+
+  if (pA.m_Start == pB.m_Start)
+    return true;
+  return false;
 }
 
 bool luba::operator!=(const TriangleIterator& pA, const TriangleIterator& pB)
 {
-  assert(pA.m_pDrawTriangle == pB.m_pDrawTriangle);
   return !(pA == pB);
 }
 
 //===----------------------------------------------------------------------===//
 // TriangleIterator
 //===----------------------------------------------------------------------===//
-TriangleIterator::TriangleIterator(const DrawTriangle& pDrawTriangle)
-  : m_pDrawTriangle(&pDrawTriangle), m_pDrawLine(NULL) {
+TriangleIterator::TriangleIterator()
+  : m_pParent(NULL) {
 }
 
-TriangleIterator::TriangleIterator()
-  : m_pDrawTriangle(NULL), m_pDrawLine(NULL) {
+TriangleIterator::TriangleIterator(const DrawTriangle& pParent,
+                                   DrawLine::const_iterator pStart,
+                                   DrawLine::const_iterator pRear)
+  : m_pParent(&pParent), m_Start(pStart), m_Rear(pRear),
+    m_Horizon(*pStart, *pRear) {
+}
+
+TriangleIterator::~TriangleIterator()
+{
 }
 
 TriangleIterator::TriangleIterator(const TriangleIterator& pCopy)
-  : m_pDrawTriangle(pCopy.m_pDrawTriangle), m_pDrawLine(pCopy.m_pDrawLine) {
+  : m_pParent(pCopy.m_pParent), m_Start(pCopy.m_Start), m_Rear(pCopy.m_Rear),
+    m_Horizon(pCopy.m_Horizon) {
 }
 
 TriangleIterator& TriangleIterator::operator=(const TriangleIterator& pCopy)
 {
-  m_pDrawTriangle = pCopy.m_pDrawTriangle;
-  m_pDrawLine = pCopy.m_pDrawLine;
+  m_pParent = pCopy.m_pParent;
+  m_Start = pCopy.m_Start;
+  m_Rear = pCopy.m_Rear;
+  m_Horizon = pCopy.m_Horizon;
   return *this;
 }
 
 TriangleIterator& TriangleIterator::next()
 {
+  m_Start.next();
+  m_Rear.next();
+  if (m_Rear == m_pParent->m_DownEdge.end())
+    m_Rear = m_pParent->m_UpEdge.begin();
+
+  m_Horizon.setTerminals(*m_Start, *m_Rear);
+  return *this;
+}
+
+DrawLine& TriangleIterator::operator*()
+{
+  return m_Horizon;
+}
+
+DrawLine* TriangleIterator::operator->()
+{
+  return &m_Horizon;
 }
 

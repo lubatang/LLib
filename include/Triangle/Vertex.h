@@ -23,7 +23,6 @@ public:
   void setY(double pY) { m_Coord[1] = pY; }
   void setZ(double pZ) { m_Coord[2] = pZ; }
 
-
   const Color& color() const { return m_Color; }
   Color&       color()       { return m_Color; }
 

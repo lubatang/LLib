@@ -19,32 +19,27 @@ private:
   friend bool operator==(const TriangleIterator& pX, const TriangleIterator& pY);
   friend bool operator!=(const TriangleIterator& pX, const TriangleIterator& pY);
 
-  TriangleIterator(const DrawTriangle& pDrawer);
+  TriangleIterator(const DrawTriangle& pParent,
+                   DrawLine::const_iterator pStart,
+                   DrawLine::const_iterator pRear);
+
 public:
   TriangleIterator();
-  ~TriangleIterator() { }
+  ~TriangleIterator();
   TriangleIterator(const TriangleIterator& pCopy);
   TriangleIterator& operator=(const TriangleIterator& pCopy);
 
   TriangleIterator& next();
 
-  const Color& c1() const { return m_C1; }
-  Color&       c1()       { return m_C1; }
-  const Color& c2() const { return m_C2; }
-  Color&       c2()       { return m_C2; }
-
-  const DrawLine* operator->() const { return m_pDrawLine; }
-  DrawLine*       operator->()       { return m_pDrawLine; }
-
-  const DrawLine& operator*() const { return *m_pDrawLine; }
-  DrawLine&       operator*()       { return *m_pDrawLine; }
+  DrawLine& operator*();
+  DrawLine* operator->();
 
 private:
-  const DrawTriangle* m_pDrawTriangle;
+  const DrawTriangle* m_pParent;
+  DrawLine m_Horizon;
+  DrawLine::const_iterator m_Start;
+  DrawLine::const_iterator m_Rear;
 
-  DrawLine* m_pDrawLine;
-  Color m_C1;
-  Color m_C2;
 };
 
 bool operator==(const luba::TriangleIterator& pX, const luba::TriangleIterator& pY);

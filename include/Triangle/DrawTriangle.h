@@ -6,11 +6,9 @@
 #ifndef LUBA_DRAW_TRIANGLE_H
 #define LUBA_DRAW_TRIANGLE_H
 #include <Triangle/TriangleIterator.h>
+#include <Triangle/Vertex.h>
 
 namespace luba {
-
-class Space;
-class Color;
 
 /** \class DrawTriangle
  *  \brief DrawTriangle is an action to draw a triangle on certain space.
@@ -22,15 +20,21 @@ public:
   typedef TriangleIterator const_iterator;
 
 public:
-  DrawTriangle(const Space& pSpace,
-               const Coord& pA, const Coord& pB, const Coord& pC,
-               const Color& pCA, const Color& pCB, const Color& pCC);
+  DrawTriangle(const Vertex& pA, const Vertex& pB, const Vertex& pC);
+
+  bool hasArea() const;
 
   const_iterator begin() const;
-  const_iterator end  () const;
+  const_iterator end() const;
 
 private:
-  const Space& m_Space;
+  const Vertex& m_A;
+  const Vertex& m_B;
+  const Vertex& m_C;
+
+  DrawLine m_LongEdge;
+  DrawLine m_UpEdge;
+  DrawLine m_DownEdge;
 };
 
 } // namespace luba
