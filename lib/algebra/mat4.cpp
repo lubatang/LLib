@@ -218,8 +218,6 @@ mat4 luba::operator * (double d, const mat4& a)
   return result;
 }
 
-#include <iostream>
-using namespace std;
 vec4 luba::operator * (const mat4& a, const vec4& v)
 {
 #define ROWCOL(i) a[i][0]*v[0] + a[i][1]*v[1] + a[i][2]*v[2] + a[i][3]*v[3]
