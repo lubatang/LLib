@@ -16,7 +16,7 @@ static void (*initFunc)() = NULL;
 /// global variables
 FrameBuffer *colorBuff = NULL;
 unsigned int texID = 0;
-RENDER_MODE renderMode = SOLID;
+RENDER_MODE renderMode = WIRE;
 
 
 bool g_isOutputPPM = false;
