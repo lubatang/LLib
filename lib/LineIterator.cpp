@@ -17,13 +17,13 @@ using namespace luba;
 //===----------------------------------------------------------------------===//
 bool luba::operator==(const LineIterator& pA, const LineIterator& pB)
 {
-  assert(pA.m_pDrawLine == pB.m_pDrawLine);
+  if (pA.m_pDrawLine != pB.m_pDrawLine)
+    return false;
   return (pA.m_X == pB.m_X);
 }
 
 bool luba::operator!=(const LineIterator& pA, const LineIterator& pB)
 {
-  assert(pA.m_pDrawLine == pB.m_pDrawLine);
   return !(pA == pB);
 }
 
@@ -84,43 +84,53 @@ LineIterator& LineIterator::next()
 
   m_X += m_pDrawLine->m_XStep;
 
+  m_Vertex.setCoord(m_X, m_Y, m_Z);
+  if (m_pDrawLine->m_bSteepXZ) {
+    m_Vertex.setX(m_Z);
+    m_Vertex.setZ(m_X);
+  }
+
+  if (m_pDrawLine->m_bSteepXY) {
+    m_Vertex.setX(m_Y);
+    if (m_pDrawLine->m_bSteepXZ)
+      m_Vertex.setY(m_Z);
+    else
+      m_Vertex.setY(m_X);
+  }
 }
 
 unsigned int LineIterator::x() const
 {
-  unsigned int x = m_X;
-  if (m_pDrawLine->m_bSteepXZ)
-    x = m_Z;
-  if (m_pDrawLine->m_bSteepXY)
-    x = m_Y;
-
-  return x;
+  return m_Vertex.x();
 }
 
 unsigned int LineIterator::y() const
 {
-  unsigned int y = m_Y;
-  unsigned int x = m_X;
-  if (m_pDrawLine->m_bSteepXZ)
-    x = m_Z;
-  if (m_pDrawLine->m_bSteepXY)
-    y = x;
-
-  return y;
+  return m_Vertex.y();
 }
 
 unsigned int LineIterator::z() const
 {
-  if (m_pDrawLine->m_bSteepXZ)
-    return m_X;
-  return m_Z;
+  return m_Vertex.z();
+}
+
+const Vertex& LineIterator::operator*() const
+{
+  return m_Vertex;
 }
 
 Vertex& LineIterator::operator*()
 {
-  m_Vertex.x() = x();
-  m_Vertex.y() = y();
-  m_Vertex.z() = z();
   return m_Vertex;
+}
+
+const Vertex* LineIterator::operator->() const
+{
+  return &m_Vertex;
+}
+
+Vertex* LineIterator::operator->()
+{
+  return &m_Vertex;
 }
 
