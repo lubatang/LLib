@@ -258,11 +258,10 @@ glmReadMTL(GLMmodel* model, const char* name)
     strcpy(filename, dir);
     strcat(filename, name);
     free(dir);
-    
+
     file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "glmReadMTL() failed: can't open material file \"%s\".\n",
-            filename);
+        fprintf(stderr, "glmReadMTL() failed: can't open material file \"%s\".\n", filename);
         exit(1);
     }
     free(filename);
