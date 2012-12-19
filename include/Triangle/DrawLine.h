@@ -20,7 +20,11 @@ public:
   typedef LineIterator const_iterator;
 
 public:
+  DrawLine();
+
   DrawLine(const Vertex& pA, const Vertex& pB);
+
+  DrawLine& setTerminals(const Vertex& pA, const Vertex& pB);
 
   const_iterator begin() const;
   const_iterator end  () const;
