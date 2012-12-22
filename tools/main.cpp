@@ -22,6 +22,7 @@
 #include <Triangle/Space.h>
 #include <Triangle/Painter.h>
 #include <Triangle/FrameBuffer.h>
+#include <Triangle/Camera.h>
 
 #include <unistd.h>
 #include <cstdlib>
@@ -59,15 +60,8 @@ int unit_test( int argc, char* argv[] )
 // render
 //  This is the rendering function
 //////////////////////////////////////////////////////////////////////////
-void render(const LCamera cam, const LLight lit, FrameBuffer* pFB, RENDER_MODE pRenderMode)
+void render(const Camera& pCam, const LLight& lit, FrameBuffer* pFB, RENDER_MODE pRenderMode)
 {  
-  vec3 pos,target,up;
-  cam.getVectors(pos, target, up);
-  // how to use: just like the input of gluLookAt
-  //   camera position (   pos.n[0],    pos.n[1],   pos.n[2] )   initial value: (0,250,0)
-  //   camera target   (target.n[0], target.n[1],target.n[2] )   initial value: (0,249,0)
-  //   camera upVector (    up.n[0],     up.n[1],    up.n[2] )   initial value: (1,0,0)
-
   vec3 lightS;
   lightS = lit.getPos();
 

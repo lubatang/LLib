@@ -55,6 +55,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/Triangle.cpp \
 	${INCDIR}/Triangle/Space.h \
 	${LIBDIR}/Space.cpp \
+	${INCDIR}/Triangle/Camera.h \
+	${LIBDIR}/Camera.cpp \
 	${INCDIR}/Triangle/DrawLine.h \
 	${LIBDIR}/DrawLine.cpp \
 	${INCDIR}/Triangle/LineIterator.h \

@@ -1,3 +1,4 @@
+#include <Triangle/Camera.h>
 #include <LLib.h>
 #include <framework.h>
 #include <Triangle/FrameBuffer.h>
@@ -8,10 +9,8 @@ using LLib::Math::LTranslateMatrix;
 using namespace luba;
 using namespace std;
 
-/// function pointers
-static void (*renderFunc)(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER_MODE mode) = NULL;
-static void (*initFunc)() = NULL;
-
+static RenderFuncType renderFunc = NULL;
+static InitFuncType initFunc = NULL;
 
 /// global variables
 FrameBuffer *colorBuff = NULL;
@@ -93,9 +92,9 @@ void dumpFramebufferAsPPM()
 
 void drawFunc()
 {  
-  const LCamera cam(LViewer::viewMatrix.getPos3v(),
-                    LViewer::viewMatrix.getPos3v() + LViewer::viewMatrix.getViewDir3v(),
-                    LViewer::viewMatrix.getUpDir3v());
+  Camera cam(LViewer::viewMatrix.getPos3v(),
+             LViewer::viewMatrix.getPos3v() + LViewer::viewMatrix.getViewDir3v(),
+             LViewer::viewMatrix.getUpDir3v());
 
   const LLight lit(lightMatrix.getPos3v());
 
@@ -155,17 +154,17 @@ void idle()
   return ;
 }
 
-int initAndRunLViewer(int winW,
-                      int winH,
-                      void (*render)(const LCamera cam, const LLight lit, FrameBuffer * colorB, RENDER_MODE mode),
-                      void (*initFun)())
+int initAndRunLViewer(unsigned int pWinW,
+                      unsigned int pWinH,
+                      RenderFuncType render,
+                      InitFuncType initFun)
 {
   renderFunc = render;
   initFunc   = initFun;
 
-  colorBuff = new FrameBuffer(winW, winH);
+  colorBuff = new FrameBuffer(pWinW, pWinH);
   
-  LViewer::setWindowSize(winW, winH);
+  LViewer::setWindowSize(pWinW, pWinH);
   LViewer::setIdleFunc(idle);
   LViewer::setInitFunc(initGL);
   LViewer::setDrawModelFunc(drawFunc);

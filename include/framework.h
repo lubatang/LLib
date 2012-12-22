@@ -8,6 +8,7 @@
 #include <vector>
 #include <cstring>
 #include <Triangle/FrameBuffer.h>
+#include <Triangle/Camera.h>
 
 using std::vector;
 using namespace luba;
@@ -20,18 +21,6 @@ enum RENDER_MODE
   NUM
 };
 
-class LCamera
-{
-protected:
-  vec3 _pos;
-  vec3 _target;
-  vec3 _up;
-
-public:
-  LCamera(const vec3 pos, const vec3 tgt, const vec3 up): _pos(pos), _target(tgt), _up(up) {};
-  void getVectors( vec3 &pos, vec3 &target, vec3 &up)  const {  pos = _pos; target = _target; up = _up;}
-};
-
 class LLight
 {
 protected:
@@ -42,6 +31,9 @@ public:
   inline const vec3& getPos() const { return _pos;}
 };
 
-int initAndRunLViewer( const int winW, const int winH, void (*render)(const LCamera cam, const LLight lit, FrameBuffer * colorBuff, RENDER_MODE mode), void (*initFun)());
+typedef void (*RenderFuncType)(const Camera&, const LLight&, FrameBuffer* , RENDER_MODE);
+typedef void (*InitFuncType)();
+
+int initAndRunLViewer(unsigned int pWinW, unsigned int pWinH, RenderFuncType, InitFuncType);
 
 #endif
