@@ -39,6 +39,7 @@ SRC =	${TOOLDIR}/main.cpp \
 	${INCDIR}/LViewer/LViewer.h \
 	${LIBDIR}/LViewer.cpp \
 	${INCDIR}/Triangle/Model.h \
+	${LIBDIR}/Model.cpp \
 	${INCDIR}/Triangle/Color.h \
 	${LIBDIR}/Color.cpp \
 	${INCDIR}/Triangle/ColorIterator.h \
@@ -60,14 +61,15 @@ SRC =	${TOOLDIR}/main.cpp \
 	${INCDIR}/Triangle/LineIterator.h \
 	${LIBDIR}/LineIterator.cpp \
 	${INCDIR}/Triangle/Painter.h \
+	${LIBDIR}/Painter.cpp \
 	${INCDIR}/Triangle/DrawTriangle.h \
 	${LIBDIR}/DrawTriangle.cpp \
 	${INCDIR}/Triangle/TriangleIterator.h \
 	${LIBDIR}/TriangleIterator.cpp \
 	${INCDIR}/Triangle/Vectors.h \
 	${LIBDIR}/Vectors.cpp \
-	${LIBDIR}/Painter.cpp \
-	${LIBDIR}/Model.cpp \
+	${INCDIR}/Triangle/ManagedStatic.h \
+	${LIBDIR}/ManagedStatic.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \
 	${LIBDIR}/FrameBuffer.cpp \
 	${INCDIR}/Support/Flags.h \
