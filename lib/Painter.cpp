@@ -45,7 +45,6 @@ bool Painter::draw(const Line& pLine) const
 
   DrawLine::const_iterator pixel, pEnd = drawer.end();
   for (pixel = drawer.begin(); pixel != pEnd; pixel.next()) {
-    cerr << (*pixel).coord() << endl;
     draw(*pixel);
   }
 
@@ -62,7 +61,6 @@ bool Painter::draw(const Triangle& pTriangle) const
   for (horizon = drawer.begin(); horizon != hEnd; horizon.next()) {
     DrawLine::const_iterator pixel, pEnd = horizon->end();
     for (pixel = horizon->begin(); pixel != pEnd; pixel.next()) {
-      cerr << (*pixel).coord() << endl;
       draw(*pixel);
     }
   }
@@ -152,6 +150,8 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
 {
   if (!Model::self().isValid())
     return false;
+
+  m_FB.clear();
 
   for(int i=0; i<(int)Model::self().getObject()->numtriangles; ++i) {
     Vertex v1, v2, v3;

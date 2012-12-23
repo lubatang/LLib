@@ -37,6 +37,7 @@ public:
 
   vec3D& operator=(const vec4& pCopy);
   vec3D& operator=(const vec3D& pCopy);
+
 };
 
 //===----------------------------------------------------------------------===//

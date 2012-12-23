@@ -81,7 +81,9 @@ TEST_SRC = ${UNITTEST}/AlgebraTest.h \
 	${UNITTEST}/LineTest.h \
 	${UNITTEST}/LineTest.cpp \
 	${UNITTEST}/TriangleTest.h \
-	${UNITTEST}/TriangleTest.cpp
+	${UNITTEST}/TriangleTest.cpp \
+	${UNITTEST}/ProjectTest.h \
+	${UNITTEST}/ProjectTest.cpp
 
 SOURCE = $(SRC) $(TEST_SRC)
 lviewer_debug_SOURCES = $(SOURCE)

@@ -111,8 +111,6 @@ void drawFunc()
   }
 }
 
-
-
 void idle()
 {
   if(LViewer::flag['H'-'A'])

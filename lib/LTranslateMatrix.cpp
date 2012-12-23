@@ -18,7 +18,7 @@ void LTranslateMatrix::initialize(vec3 pos, vec3 targetPos, vec3 up)
   this->pos      =  pos;
   this->backDir  =  (pos - targetPos).normalize();
   this->upDir    =  up.normalize();
-  this->rightDir  =  (this->upDir ^ this->backDir).normalize();  //  X = Y cross Z
+  this->rightDir  =  CrossProduct(this->upDir, this->backDir).normalize();  //  X = Y cross Z
 
   for(int i=0; i<4; i++)
     for(int j=0; j<4; j++)
@@ -64,7 +64,7 @@ const mat4 LTranslateMatrix::getRotationMat4() const
 void LTranslateMatrix::moveOnSphere( double dX, double dY)
 {
   // ball tarcing
-  this->rightDir =  (this->upDir ^ this->backDir).normalize();
+  this->rightDir =  CrossProduct(this->upDir, this->backDir).normalize();
   this->backDir  = -1* (  this->sphereCenter - this->pos 
                    +  dY * this->upDir * this->moveSpeed
                    -  dX * this->rightDir* this->moveSpeed).normalize();
@@ -72,8 +72,8 @@ void LTranslateMatrix::moveOnSphere( double dX, double dY)
   double len = (this->sphereCenter - this->pos).length();
   this->pos = (this->sphereCenter + (this->backDir * len));
 
-  this->rightDir  =  (this->upDir ^ this->backDir).normalize();
-  this->upDir    =  (this->backDir ^ this->rightDir).normalize();
+  this->rightDir  =  CrossProduct(this->upDir, this->backDir).normalize();
+  this->upDir    =  CrossProduct(this->backDir, this->rightDir).normalize();
 }
 
 void LTranslateMatrix::moveView(double dX, double dY)
@@ -95,8 +95,8 @@ void LTranslateMatrix::moveView(double dX, double dY)
   this->backDir  =    cosPhi * cosTheta * this->backDir
                     +  sinPhi * cosTheta * this->rightDir
                     -  sinTheta * this->upDir;
-  this->rightDir  = (this->upDir ^ this->backDir).normalize();
-  this->upDir    = (this->backDir ^ this->rightDir).normalize();
+  this->rightDir  = CrossProduct(this->upDir, this->backDir).normalize();
+  this->upDir    = CrossProduct(this->backDir, this->rightDir).normalize();
 
   return;
 }

@@ -9,6 +9,7 @@
 #include "SpaceTest.h"
 #include <Triangle/Vertex.h>
 #include <Triangle/Vectors.h>
+#include <Triangle/Camera.h>
 
 #include <string>
 

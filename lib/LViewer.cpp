@@ -305,7 +305,7 @@ void renderTextOnScreenTop(char * text, bool isReset)
 //===----------------------------------------------------------------------===//
 // Static Initialization
 //===----------------------------------------------------------------------===//
-LTranslateMatrix LViewer::viewMatrix(vec3( 0, 250, 0), vec3( 0, 0, 0), vec3(1,0,0));
+LTranslateMatrix LViewer::viewMatrix(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0,1,0));
 LTranslateMatrix * LViewer::controlMatrix = &LViewer::viewMatrix;
 LTranslateMatrix * LViewer::currentViewMatrix = &LViewer::viewMatrix;
 
@@ -522,50 +522,50 @@ void _motion(int x, int y)
 
 void _mouse(int button, int state, int x, int y)
 {
-    // user defined keyboard function
-      if (LViewer::m_mouseFun != NULL)
-      {
-        if( FINISH == (*LViewer::m_mouseFun)(button, state, x, y))
-          return ;
-      }
+  // user defined keyboard function
+  if (LViewer::m_mouseFun != NULL)
+  {
+    if( FINISH == (*LViewer::m_mouseFun)(button, state, x, y))
+      return ;
+  }
 
 
-    //  double difX, difY;
+  //  double difX, difY;
 
+  LViewer::rotating = false;
+  if(button == 0 )        // mouse left key
+  {
+    if (state == KEYDOWN)      // left key down
+    {
       LViewer::rotating = false;
-      if(button == 0 )        // mouse left key
-      {
-        if (state == KEYDOWN)      // left key down
-        {
-          LViewer::rotating = false;
-          LViewer::prepreX = LViewer::preX = x;
-          LViewer::prepreY = LViewer::preY = y;
-          LViewer::mouseLKey = KEYDOWN;
-        }
-        else              // left key up
-        {
-          LViewer::rotating = true;
-          LViewer::mouseLKey = KEYUP;
-          LViewer::rotatingMouseKey = &LViewer::mouseLKey;
-        }
-      }
+      LViewer::prepreX = LViewer::preX = x;
+      LViewer::prepreY = LViewer::preY = y;
+      LViewer::mouseLKey = KEYDOWN;
+    }
+    else              // left key up
+    {
+      LViewer::rotating = true;
+      LViewer::mouseLKey = KEYUP;
+      LViewer::rotatingMouseKey = &LViewer::mouseLKey;
+    }
+  }
 
-      if (button == 1)          // mouse middle
-      {
-        if (state == KEYDOWN)      // middle key down
-        {
-          LViewer::rotating = false;
-          LViewer::prepreX = LViewer::preX = x;
-          LViewer::prepreY = LViewer::preY = y;
-          LViewer::mouseMKey = KEYDOWN;
-        }
-        else              // left key up
-        {
-          LViewer::rotating = true;
-          LViewer::mouseMKey = KEYUP;
-          LViewer::rotatingMouseKey = &LViewer::mouseMKey;
-        }
-      }
+  if (button == 1)          // mouse middle
+  {
+    if (state == KEYDOWN)      // middle key down
+    {
+      LViewer::rotating = false;
+      LViewer::prepreX = LViewer::preX = x;
+      LViewer::prepreY = LViewer::preY = y;
+      LViewer::mouseMKey = KEYDOWN;
+    }
+    else              // left key up
+    {
+      LViewer::rotating = true;
+      LViewer::mouseMKey = KEYUP;
+      LViewer::rotatingMouseKey = &LViewer::mouseMKey;
+    }
+  }
 
   if (button == 2)          // mouse right key
   {

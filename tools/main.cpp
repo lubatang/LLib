@@ -70,13 +70,13 @@ void render(const Camera& pCam, const LLight& lit, FrameBuffer* pFB, RENDER_MODE
   //   View    : Space
   //   Control : Painter
   Space space(800, 800, 800);
-  space.setOrigin(100, 100, 0);
+  space.setCamera(pCam);
   Painter painter(*pFB);
   bool solid = (pRenderMode == SOLID);
   static bool prev_solid = true;
   if (prev_solid != solid) {
-    pFB->clear();
     prev_solid = solid;
+    pFB->clear();
   }
   if (!painter.draw(space, Model::self(), solid)) {
     error("cannot draw the model");

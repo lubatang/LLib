@@ -7,6 +7,7 @@
 #define LUBA_VECTOR_3X1_H
 
 #include <iosfwd>
+#include <algorithm>
 
 namespace luba {
 
@@ -36,9 +37,19 @@ public:
   double  operator [] (unsigned int i) const;
   double& operator [] (unsigned int i);
 
+  double  x() const { return m_N[0]; }
+  double& x()       { return m_N[0]; }
+
+  double  y() const { return m_N[1]; }
+  double& y()       { return m_N[1]; }
+
+  double  z() const { return m_N[2]; }
+  double& z()       { return m_N[2]; }
+
   double length() const;
   vec3& normalize();
   vec3& homogenize();
+
   template<typename Action>
   vec3& apply() {
     m_N[0] = Action(m_N[0]);
@@ -54,26 +65,27 @@ protected:
 
 };
 
+vec3 operator + (const vec3& a, const vec3& b);
+vec3 operator - (const vec3& a, const vec3& b);
+double operator * (const vec3& a, const vec3& b);
+vec3 operator * (const vec3& a, double d);
+vec3 operator * (double d, const vec3& a);
+
+vec3 operator / (const vec3& a, double d);
+
+bool operator == (const vec3& a, const vec3& b);
+bool operator != (const vec3& a, const vec3& b);
+
+/// cross product
+vec3 CrossProduct(const vec3& a, const vec3& b);
+
 } // namespace luba
 
 namespace std {
 
-luba::vec3 operator + (const luba::vec3& a, const luba::vec3& b);
-luba::vec3 operator - (const luba::vec3& a, const luba::vec3& b);
-double operator * (const luba::vec3& a, const luba::vec3& b);
-luba::vec3 operator * (const luba::vec3& a, double d);
-luba::vec3 operator * (double d, const luba::vec3& a);
-
-/// operator ^ - cross product
-luba::vec3 operator ^ (const luba::vec3& a, const luba::vec3& b);
-
-luba::vec3 operator / (const luba::vec3& a, double d);
-
-bool operator == (const luba::vec3& a, const luba::vec3& b);
-bool operator != (const luba::vec3& a, const luba::vec3& b);
-
 ostream& operator << (ostream& pOStream, const luba::vec3& pVector);
 
+template<>
 void swap(luba::vec3& a, luba::vec3& b);
 
 } // namespace std
