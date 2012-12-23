@@ -73,6 +73,11 @@ vec3D::vec3D(double x, double y, double z)
 
 vec3D::vec3D(const vec3& v)
   : vec4(v[0], v[1], v[2], 1.0) {
+
+}
+
+vec3D::vec3D(const vec3& v, double w)
+  : vec4(v[0], v[1], v[2], w) {
 }
 
 vec3D& vec3D::operator=(const vec3D& pCopy)

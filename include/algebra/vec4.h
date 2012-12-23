@@ -25,6 +25,9 @@ public:
   vec4(const vec4& v);
 
   explicit vec4(double x, double y, double z, double w);
+
+  /// vec4 - constructor with vec3
+  /// @param d - the value of w
   explicit vec4(const vec3& v, double d);
 
   vec4 operator-() const;
