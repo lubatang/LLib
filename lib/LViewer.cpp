@@ -427,14 +427,6 @@ void _keyboard(unsigned char key, int x, int y)
     }
 
   }
-  else if ( key == 'u' || key == 'U' ) {
-    // This will change the position of camera.
-    LViewer::controlMatrix->move3DUpDown(1);
-  }
-  else if ( key == 'd' || key == 'D' ) {
-    // This will change the position of camera.
-    LViewer::controlMatrix->move3DUpDown(-1);
-  }
 
   // flag [A-Za-z]
   if ( (key - 'a'<32) && (key -'a' >=0)) {
@@ -656,8 +648,6 @@ void LViewer::init_gl(void)
   LViewer::flagN[0] = 1;
   LViewer::currentFlagN = 0;
 
-
-  printf("Use Mouse to handle direction.\nDirected Arrow and \'U\' \'D\' to move.\n");
 
 // init glew()
 #ifdef USE_GLEW
