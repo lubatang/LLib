@@ -1,9 +1,9 @@
-//===- algebra.cpp --------------------------------------------------------===//
+//===- Vectors.cpp --------------------------------------------------------===//
 //
 // Copyright (C), 2012-
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
-#include <algebra/algebra.h>
+#include <Triangle/Vectors.h>
 
 using namespace luba;
 using namespace std;

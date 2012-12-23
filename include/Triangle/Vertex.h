@@ -5,7 +5,7 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_VERTEX_H
 #define LUBA_VERTEX_H
-#include <algebra/algebra.h>
+#include <Triangle/Vectors.h>
 #include <Triangle/Color.h>
 
 namespace luba {

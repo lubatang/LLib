@@ -25,8 +25,6 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/algebra/mat3.cpp \
 	${INCDIR}/algebra/mat4.h \
 	${LIBDIR}/algebra/mat4.cpp \
-	${INCDIR}/algebra/algebra.h \
-	${LIBDIR}/algebra/algebra.cpp \
 	${INCDIR}/framework.h \
 	${LIBDIR}/framework.cpp \
 	${INCDIR}/GLM/glm.h \
@@ -66,6 +64,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/DrawTriangle.cpp \
 	${INCDIR}/Triangle/TriangleIterator.h \
 	${LIBDIR}/TriangleIterator.cpp \
+	${INCDIR}/Triangle/Vectors.h \
+	${LIBDIR}/Vectors.cpp \
 	${LIBDIR}/Painter.cpp \
 	${LIBDIR}/Model.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \

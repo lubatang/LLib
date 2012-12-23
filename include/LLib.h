@@ -17,7 +17,6 @@
 //#endif
 
 
-#include <algebra/algebra.h>
 #include <LViewer/LViewer.h>
 #include <LTranslateMatrix/LTranslateMatrix.h>
 

@@ -1,8 +1,10 @@
 #ifndef _LTRANSLATEDMATRIX_H_
 #define _LTRANSLATEDMATRIX_H_
 
-#include <algebra/algebra.h>
 #include <LGlobal/LGlobal.h>  // for PI
+#include <algebra/vec4.h>
+#include <algebra/mat4.h>
+#include <algebra/mat3.h>
 
 using namespace luba;
 

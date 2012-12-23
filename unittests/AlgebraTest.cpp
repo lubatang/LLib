@@ -8,7 +8,7 @@
 //===----------------------------------------------------------------------===//
 #include "AlgebraTest.h"
 #include <Triangle/Vertex.h>
-#include <algebra/algebra.h>
+#include <Triangle/Vectors.h>
 
 #include <string>
 #include <iostream>

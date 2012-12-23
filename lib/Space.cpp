@@ -4,7 +4,6 @@
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
 #include <Triangle/Space.h>
-#include <algebra/algebra.h>
 
 using namespace luba;
 

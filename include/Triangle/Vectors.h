@@ -1,10 +1,10 @@
-//===- algebra.h ----------------------------------------------------------===//
+//===- Vectors.h ----------------------------------------------------------===//
 //
 // copyright (c), 2012-
 // luba tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
-#ifndef LUBA_ALGEBRA_H
-#define LUBA_ALGEBRA_H
+#ifndef LUBA_VECTOR_ALGEBRA_H
+#define LUBA_VECTOR_ALGEBRA_H
 #include <algebra/vec2.h>
 #include <algebra/vec3.h>
 #include <algebra/vec4.h>

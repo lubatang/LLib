@@ -1,7 +1,6 @@
 #ifndef FRAMEWORK_H
 #define FRAMEWORK_H
 
-#include <algebra/algebra.h>
 #include <algebra/vec3.h>
 
 #include <stdio.h>

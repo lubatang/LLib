@@ -10,7 +10,7 @@
 #include <Triangle/Vertex.h>
 #include <Triangle/Space.h>
 #include <Triangle/DrawLine.h>
-#include <algebra/algebra.h>
+#include <Triangle/Vectors.h>
 
 #include <string>
 #include <iostream>
