@@ -14,19 +14,31 @@ class Stage;
 class EventRegistry
 {
 public:
+  typedef std::list<Stage*> StageList;
+  typedef StageList::iterator iterator;
+  typedef StageList::const_iterator const_iterator;
+
+public:
   static EventRegistry& self() {
     static EventRegistry instance;
     return instance;
   }
+
+  void record(Stage& pStage);
+
+  const_iterator begin() const { return m_StageList.begin(); }
+  iterator       begin()       { return m_StageList.begin(); }
+  const_iterator end  () const { return m_StageList.end(); }
+  iterator       end  ()       { return m_StageList.end(); }
+
+  unsigned int size() const { return m_StageList.size(); }
+  bool empty() const { return m_StageList.empty(); }
 
 private:
   EventRegistry();
   ~EventRegistry();
   EventRegistry(const EventRegistry& pER);
   EventRegistry& operator=(const EventRegistry& pER);
-
-private:
-  typedef std::list<Stage*> StageList;
 
 private:
   StageList m_StageList;
