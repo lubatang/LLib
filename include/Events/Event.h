@@ -13,7 +13,8 @@ class Event
 {
 public:
   enum Type {
-    KeyEvent
+    KeyEvent,
+    MouseEvent
   };
 
 public:
