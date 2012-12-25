@@ -1,10 +1,10 @@
-//===- Translation.h ------------------------------------------------------===//
+//===- Transformation.h ---------------------------------------------------===//
 //
 // Copyright (C), 2012-
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
-#ifndef LUBA_TRANSLATION_H
-#define LUBA_TRANSLATION_H
+#ifndef LUBA_TRANFORMATION_H
+#define LUBA_TRANFORMATION_H
 #include <iosfwd>
 #include <Events/Stage.h>
 #include <Events/KeyEvent.h>
@@ -14,17 +14,17 @@
 
 namespace luba {
 
-class Translation : public Stage
+class Transformation : public Stage
 {
 public:
-  Translation();
+  Transformation();
 
   void moveUp();
   void moveDown();
   void moveLeft();
   void moveRight();
 
-  const Translation& transform(Coord& pCoord) const;
+  const Transformation& transform(Coord& pCoord) const;
 
   void keyEvent(KeyEvent* pEvent);
   void mouseMoveEvent(MouseEvent* pEvent);
@@ -36,6 +36,7 @@ public:
 
 private:
   bool m_bActivated : 1;
+  bool m_bRotated : 1;
   int m_OrgX;
   int m_OrgY;
   mat4 m_T;
@@ -45,7 +46,7 @@ private:
 
 namespace std {
 
-std::ostream& operator << (std::ostream& s, const luba::Translation& pTranslation);
+std::ostream& operator << (std::ostream& s, const luba::Transformation& pTransformation);
 
 } // namespace std
 

@@ -1,47 +1,48 @@
-//===- Translation.cpp ----------------------------------------------------===//
+//===- Transformation.cpp ----------------------------------------------------===//
 //
 // Copyright (C), 2012-
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
-#include <Triangle/Translation.h>
+#include <Triangle/Transformation.h>
 #include <iostream>
 
 using namespace luba;
 
 //===----------------------------------------------------------------------===//
-// Translation
+// Transformation
 //===----------------------------------------------------------------------===//
-Translation::Translation()
-  : Stage("translation"), m_bActivated(false), m_OrgX(0), m_OrgY(0), m_T() {
+Transformation::Transformation()
+  : Stage("transformation"), m_bActivated(false), m_bRotated(false),
+    m_OrgX(0), m_OrgY(0), m_T() {
 }
 
-const Translation& Translation::transform(Coord& pCoord) const
+const Transformation& Transformation::transform(Coord& pCoord) const
 {
   pCoord = m_T * pCoord;
   return *this;
 }
 
-void Translation::moveRight()
+void Transformation::moveRight()
 {
   m_T[0][3] += 1;
 }
 
-void Translation::moveLeft()
+void Transformation::moveLeft()
 {
   m_T[0][3] -= 1;
 }
 
-void Translation::moveUp()
+void Transformation::moveUp()
 {
   m_T[1][3] += 1;
 }
 
-void Translation::moveDown()
+void Transformation::moveDown()
 {
   m_T[1][3] -= 1;
 }
 
-void Translation::keyEvent(KeyEvent* pEvent)
+void Transformation::keyEvent(KeyEvent* pEvent)
 {
   switch (pEvent->key()) {
     case KeyEvent::Keyt:
@@ -76,7 +77,7 @@ void Translation::keyEvent(KeyEvent* pEvent)
   }
 }
 
-void Translation::mouseMoveEvent(MouseEvent* pEvent)
+void Transformation::mouseMoveEvent(MouseEvent* pEvent)
 {
   if (m_bActivated) {
     if (MouseEvent::NoButton != pEvent->button()) { // mouse pressed
@@ -92,7 +93,7 @@ void Translation::mouseMoveEvent(MouseEvent* pEvent)
   }
 }
 
-void Translation::mousePressEvent(MouseEvent* pEvent)
+void Transformation::mousePressEvent(MouseEvent* pEvent)
 {
   if (m_bActivated) {
     m_OrgX = pEvent->x();
@@ -100,8 +101,8 @@ void Translation::mousePressEvent(MouseEvent* pEvent)
   }
 }
 
-std::ostream& std::operator << (std::ostream& s, const luba::Translation& pTranslation)
+std::ostream& std::operator << (std::ostream& s, const luba::Transformation& pTransformation)
 {
-  return s << pTranslation.matrix();
+  return s << pTransformation.matrix();
 }
 

@@ -68,8 +68,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/TriangleIterator.cpp \
 	${INCDIR}/Triangle/Vectors.h \
 	${LIBDIR}/Vectors.cpp \
-	${INCDIR}/Triangle/Translation.h \
-	${LIBDIR}/Translation.cpp \
+	${INCDIR}/Triangle/Transformation.h \
+	${LIBDIR}/Transformation.cpp \
 	${INCDIR}/Triangle/ManagedStatic.h \
 	${LIBDIR}/ManagedStatic.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \

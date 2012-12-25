@@ -14,7 +14,7 @@
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Color.h>
 #include <Triangle/ColorIterator.h>
-#include <Triangle/Translation.h>
+#include <Triangle/Transformation.h>
 #include <Triangle/ManagedStatic.h>
 
 #include <cmath>
@@ -25,7 +25,7 @@
 using namespace luba;
 using namespace std;
 
-static ManagedStatic<Translation> g_Trans;
+static ManagedStatic<Transformation> g_Trans;
 
 //===----------------------------------------------------------------------===//
 // Painter
