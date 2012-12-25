@@ -156,6 +156,7 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     return false;
 
   m_FB.clear();
+  g_Trans->setSpace(pSpace);
 
   for(int i=0; i<(int)Model::self().getObject()->numtriangles; ++i) {
     Vertex v1, v2, v3;

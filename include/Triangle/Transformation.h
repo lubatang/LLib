@@ -14,15 +14,18 @@
 
 namespace luba {
 
+class Space;
+
 class Transformation : public Stage
 {
 public:
   Transformation();
 
-  void moveUp();
-  void moveDown();
-  void moveLeft();
-  void moveRight();
+  void setSpace(const Space& pSpace) { m_pSpace = &pSpace; }
+
+  void zoom(double pS);
+  void move(double pX, double pY);
+  void rotate(double pR);
 
   const Transformation& transform(Coord& pCoord) const;
 
@@ -31,6 +34,7 @@ public:
   void mousePressEvent(MouseEvent* pEvent);
 
   bool active() const { return m_bActivated; }
+  bool rotated() const { return m_bRotated; }
 
   const mat4& matrix() const { return m_T; }
 
@@ -40,6 +44,8 @@ private:
   int m_OrgX;
   int m_OrgY;
   mat4 m_T;
+
+  const Space* m_pSpace;
 };
 
 } // namespace luba

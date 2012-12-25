@@ -23,8 +23,6 @@ bool g_isOutputPPM = false;
 
 LTranslateMatrix lightMatrix(vec3(100, 100, 0), vec3(0,0,0), vec3(0, 1, 0));
 
-
-
 void showHelp()
 {
   printf("======================================================\n");
