@@ -10,6 +10,7 @@
 namespace luba {
 
 class KeyEvent;
+class MouseEvent;
 
 class Stage
 {
@@ -19,6 +20,8 @@ public:
   virtual ~Stage();
 
   virtual void keyEvent(KeyEvent* pEvent) = 0;
+  virtual void mouseMoveEvent(MouseEvent* pEvent) = 0;
+  virtual void mousePressEvent(MouseEvent* pEvent) = 0;
 
 private:
   std::string m_Name;

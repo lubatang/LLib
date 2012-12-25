@@ -71,6 +71,7 @@ namespace LLib
         static LTranslateMatrix *controlMatrix;
         static LTranslateMatrix *currentViewMatrix;
         static LTranslateMatrix viewMatrix;
+        static LTranslateMatrix nullMatrix;
 
         static bool* isFlagRegistered;
         static int * flag;

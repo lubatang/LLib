@@ -309,6 +309,7 @@ void renderTextOnScreenTop(char * text, bool isReset)
 // Static Initialization
 //===----------------------------------------------------------------------===//
 LTranslateMatrix LViewer::viewMatrix(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0,1,0));
+LTranslateMatrix LViewer::nullMatrix;
 LTranslateMatrix * LViewer::controlMatrix = &LViewer::viewMatrix;
 LTranslateMatrix * LViewer::currentViewMatrix = &LViewer::viewMatrix;
 
@@ -455,16 +456,9 @@ void _keyboard(unsigned char key, int x, int y)
 
 void _specialKey(int key, int x, int y)
 {
-
-  if(key == GLUT_KEY_UP)
-    LViewer::controlMatrix->move3DFrontBack(1);
-  else if( key == GLUT_KEY_DOWN)
-    LViewer::controlMatrix->move3DFrontBack(-1);
-  else if( key == GLUT_KEY_LEFT)
-    LViewer::controlMatrix->move3DLeftRight(-1);
-  else if( key == GLUT_KEY_RIGHT)
-    LViewer::controlMatrix->move3DLeftRight(1);
-      
+  static luba::KeyEvent event;
+  event.setKey(key);
+  luba::EventRegistry::self().keyEvent(&event);
   // Refresh the Window
   glutPostRedisplay();
 
@@ -472,50 +466,38 @@ void _specialKey(int key, int x, int y)
 
 void _motion(int x, int y)
 {
-      // user defined keyboard function
-      if (LViewer::m_motionFun != NULL)
-      {
-        if( FINISH == (*LViewer::m_motionFun)( x, y))
-          return ;
-      }
+  // user defined keyboard function
+  if (LViewer::m_motionFun != NULL) {
+    if( FINISH == (*LViewer::m_motionFun)( x, y))
+      return ;
+  }
 
-      double difX, difY;
+  double difX, difY;
 
-      if (  LViewer::mouseLKey == KEYDOWN || 
-          LViewer::mouseRKey == KEYDOWN ||
-          LViewer::mouseMKey == KEYDOWN )      // 空間中遊走
-      {  
-        difX = -x + LViewer::preX;
-        difY = -y + LViewer::preY;
+  if ( LViewer::mouseLKey == KEYDOWN || 
+       LViewer::mouseRKey == KEYDOWN ||
+       LViewer::mouseMKey == KEYDOWN ) {  
+    difX = -x + LViewer::preX;
+    difY = -y + LViewer::preY;
 
-        LViewer::prepreX = LViewer::preX;
-        LViewer::prepreY = LViewer::preY;
+    LViewer::prepreX = LViewer::preX;
+    LViewer::prepreY = LViewer::preY;
 
-        LViewer::preX = x;
-        LViewer::preY = y;
+    LViewer::preX = x;
+    LViewer::preY = y;
+  }
 
-      }
+  if (LViewer::mouseMKey == KEYDOWN) {
+    LViewer::controlMatrix->move3D(difX, difY);
+  }
+  else if (LViewer::mouseLKey == KEYDOWN) {
+    LViewer::controlMatrix->moveView( difX, difY);
+  }
+  else if (LViewer::mouseRKey == KEYDOWN) {
+    LViewer::controlMatrix->moveOnSphere(difX, difY);
+  }
 
-      if (LViewer::mouseMKey == KEYDOWN)
-      {
-    //    printf("%lf %lf\n", difX, difY);
-        LViewer::controlMatrix->move3D(difX, difY);
-      }
-
-      else if (LViewer::mouseLKey == KEYDOWN)
-      {
-        LViewer::controlMatrix->moveView( difX, difY);
-      }
-
-      else if (LViewer::mouseRKey == KEYDOWN)    // ball tarcing
-      {
-        LViewer::controlMatrix->moveOnSphere(difX, difY);
-      }
-
-
-      glutPostRedisplay();
-
-      return;
+  glutPostRedisplay();
 }
 
 

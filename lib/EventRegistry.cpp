@@ -38,3 +38,19 @@ void EventRegistry::keyEvent(KeyEvent* pEvent)
   }
 }
 
+void EventRegistry::mousePressEvent(MouseEvent* pEvent)
+{
+  iterator stage, sEnd = end();
+  for (stage = begin(); stage != sEnd; ++stage) {
+    (*stage)->mousePressEvent(pEvent);
+  }
+}
+
+void EventRegistry::mouseMoveEvent(MouseEvent* pEvent)
+{
+  iterator stage, sEnd = end();
+  for (stage = begin(); stage != sEnd; ++stage) {
+    (*stage)->mouseMoveEvent(pEvent);
+  }
+}
+

@@ -32,10 +32,9 @@ void showHelp()
   printf("\tH/h: show help menu.\n");
   printf("\tV/v: set mouse to control the eye position\n");
   printf("\tL/l: set mouse to control the light position\n");
+  printf("\tT/t: set mouse to control the model position\n");
   printf("\tM/m: switch rendering mode.\n");
   printf("\tS/s: moving speed changing.\n");
-  printf("\tU/u: move up.\n");
-  printf("\tD/d: move down.\n");
   printf("\tO/o: Output current framebuffer.\n");
   printf("\tQ/q: Quit.\n");
   printf("======================================================\n");
@@ -131,7 +130,12 @@ void idle()
     LViewer::flag['V'-'A'] ^=1;
     printf("Controlling Eye.\n");
     LViewer::setCurrentControlMatrix(& LViewer::viewMatrix);
+  }
 
+  if (!LViewer::flag['T' - 'A']) {
+    LViewer::flag['T' - 'A'] ^= 1;
+    printf("Controlling Model.\n");
+    LViewer::setCurrentControlMatrix(& LViewer::nullMatrix);
   }
 
   if(!LViewer::flag['M'-'A'])

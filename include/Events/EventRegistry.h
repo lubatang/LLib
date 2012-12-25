@@ -11,6 +11,7 @@ namespace luba {
 
 class Stage;
 class KeyEvent;
+class MouseEvent;
 
 class EventRegistry
 {
@@ -35,9 +36,14 @@ public:
   iterator       end  ()       { return m_StageList.end(); }
 
   unsigned int size() const { return m_StageList.size(); }
+
   bool empty() const { return m_StageList.empty(); }
 
   void keyEvent(KeyEvent* pEvent);
+
+  void mousePressEvent(MouseEvent* pEvent);
+
+  void mouseMoveEvent(MouseEvent* pEvent);
 
 private:
   EventRegistry();

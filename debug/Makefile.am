@@ -68,6 +68,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/TriangleIterator.cpp \
 	${INCDIR}/Triangle/Vectors.h \
 	${LIBDIR}/Vectors.cpp \
+	${INCDIR}/Triangle/Translation.h \
+	${LIBDIR}/Translation.cpp \
 	${INCDIR}/Triangle/ManagedStatic.h \
 	${LIBDIR}/ManagedStatic.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \
@@ -78,6 +80,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/Event.cpp \
 	${INCDIR}/Events/KeyEvent.h \
 	${LIBDIR}/KeyEvent.cpp \
+	${INCDIR}/Events/MouseEvent.h \
+	${LIBDIR}/MouseEvent.cpp \
 	${INCDIR}/Events/EventRegistry.h \
 	${LIBDIR}/EventRegistry.cpp \
 	${INCDIR}/Support/Flags.h \

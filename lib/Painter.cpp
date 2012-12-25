@@ -14,6 +14,8 @@
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Color.h>
 #include <Triangle/ColorIterator.h>
+#include <Triangle/Translation.h>
+#include <Triangle/ManagedStatic.h>
 
 #include <cmath>
 #include <algorithm>
@@ -22,6 +24,8 @@
 
 using namespace luba;
 using namespace std;
+
+static ManagedStatic<Translation> g_Trans;
 
 //===----------------------------------------------------------------------===//
 // Painter
@@ -180,6 +184,10 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     pSpace.map(v1);
     pSpace.map(v2);
     pSpace.map(v3);
+
+    g_Trans->transform(v1.coord());
+    g_Trans->transform(v2.coord());
+    g_Trans->transform(v3.coord());
 
     Triangle tri(v1, v2, v3);
     Line l1(tri.v3(), tri.v2());
