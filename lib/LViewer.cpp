@@ -26,12 +26,16 @@
 #include <GL/glut.h>
 #endif
 
+#include <Triangle/ManagedStatic.h>
 #include <Events/Event.h>
 #include <Events/KeyEvent.h>
+#include <Events/MouseEvent.h>
 #include <Events/EventRegistry.h>
 
 using namespace LLib::Math;
 using namespace LLib::Viewer;
+
+static luba::ManagedStatic<luba::MouseEvent> g_MouseEvent;
 
 //===----------------------------------------------------------------------===//
 // function for rendering screen
@@ -464,14 +468,8 @@ void _specialKey(int key, int x, int y)
 
 }
 
-void _motion(int x, int y)
+void MoveEvent(int x, int y)
 {
-  // user defined keyboard function
-  if (LViewer::m_motionFun != NULL) {
-    if( FINISH == (*LViewer::m_motionFun)( x, y))
-      return ;
-  }
-
   double difX, difY;
 
   if ( LViewer::mouseLKey == KEYDOWN || 
@@ -500,6 +498,19 @@ void _motion(int x, int y)
   glutPostRedisplay();
 }
 
+void _motion(int x, int y)
+{
+  // user defined keyboard function
+  if (LViewer::m_motionFun != NULL) {
+    if( FINISH == (*LViewer::m_motionFun)( x, y))
+      return ;
+  }
+
+  g_MouseEvent->setCoord(x, y);
+  luba::EventRegistry::self().mouseMoveEvent(&*g_MouseEvent);
+  MoveEvent(x, y);
+}
+
 
 void _mouse(int button, int state, int x, int y)
 {
@@ -511,13 +522,17 @@ void _mouse(int button, int state, int x, int y)
   }
 
 
-  //  double difX, difY;
+  g_MouseEvent->reset();
+  g_MouseEvent->setCoord(x, y);
 
   LViewer::rotating = false;
   if(button == 0 )        // mouse left key
   {
+    g_MouseEvent->setButton(luba::MouseEvent::LeftButton);
+
     if (state == KEYDOWN)      // left key down
     {
+      luba::EventRegistry::self().mousePressEvent(&*g_MouseEvent);
       LViewer::rotating = false;
       LViewer::prepreX = LViewer::preX = x;
       LViewer::prepreY = LViewer::preY = y;
@@ -525,6 +540,7 @@ void _mouse(int button, int state, int x, int y)
     }
     else              // left key up
     {
+      luba::EventRegistry::self().mouseReleaseEvent(&*g_MouseEvent);
       LViewer::rotating = true;
       LViewer::mouseLKey = KEYUP;
       LViewer::rotatingMouseKey = &LViewer::mouseLKey;
@@ -533,8 +549,10 @@ void _mouse(int button, int state, int x, int y)
 
   if (button == 1)          // mouse middle
   {
+    g_MouseEvent->setButton(luba::MouseEvent::MidButton);
     if (state == KEYDOWN)      // middle key down
     {
+      luba::EventRegistry::self().mousePressEvent(&*g_MouseEvent);
       LViewer::rotating = false;
       LViewer::prepreX = LViewer::preX = x;
       LViewer::prepreY = LViewer::preY = y;
@@ -542,6 +560,7 @@ void _mouse(int button, int state, int x, int y)
     }
     else              // left key up
     {
+      luba::EventRegistry::self().mouseReleaseEvent(&*g_MouseEvent);
       LViewer::rotating = true;
       LViewer::mouseMKey = KEYUP;
       LViewer::rotatingMouseKey = &LViewer::mouseMKey;
@@ -550,8 +569,10 @@ void _mouse(int button, int state, int x, int y)
 
   if (button == 2)          // mouse right key
   {
+    g_MouseEvent->setButton(luba::MouseEvent::RightButton);
     if (state == KEYDOWN)      // right key down
     {
+      luba::EventRegistry::self().mousePressEvent(&*g_MouseEvent);
       LViewer::rotating = false;
       LViewer::prepreX = LViewer::preX = x;
       LViewer::prepreY = LViewer::preY = y;
@@ -559,6 +580,7 @@ void _mouse(int button, int state, int x, int y)
     }
     else              // right key up
     {
+      luba::EventRegistry::self().mouseReleaseEvent(&*g_MouseEvent);
       LViewer::rotating = true;
       LViewer::mouseRKey = KEYUP;
       LViewer::rotatingMouseKey = &LViewer::mouseRKey;
@@ -671,7 +693,7 @@ void LViewer::_idle()
     *LViewer::rotatingMouseKey = KEYDOWN;
     LViewer::preX = LViewer::prepreX;
     LViewer::preY = LViewer::prepreY;
-    _motion( x, y);
+    MoveEvent( x, y);
     *LViewer::rotatingMouseKey = KEYUP;
   }
   if (NULL != LViewer::m_idlef) {

@@ -38,6 +38,11 @@ public:
 
   void setButton(unsigned int pButton);
 
+  void reset() {
+    m_X = m_Y = 0;
+    m_Button = NoButton;
+  }
+
 private:
   int m_X;
   int m_Y;

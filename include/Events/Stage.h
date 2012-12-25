@@ -19,9 +19,10 @@ public:
   Stage(const std::string& pName);
   virtual ~Stage();
 
-  virtual void keyEvent(KeyEvent* pEvent) = 0;
-  virtual void mouseMoveEvent(MouseEvent* pEvent) = 0;
-  virtual void mousePressEvent(MouseEvent* pEvent) = 0;
+  virtual void keyEvent         (KeyEvent* pEvent)   { }
+  virtual void mouseMoveEvent   (MouseEvent* pEvent) { }
+  virtual void mousePressEvent  (MouseEvent* pEvent) { }
+  virtual void mouseReleaseEvent(MouseEvent* pEvent) { }
 
 private:
   std::string m_Name;

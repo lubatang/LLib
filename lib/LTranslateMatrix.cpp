@@ -78,7 +78,7 @@ void LTranslateMatrix::moveOnSphere( double dX, double dY)
 
 void LTranslateMatrix::moveView(double dX, double dY)
 {
-  static const double uu = 0.03;
+  const double uu = 0.03;
   double phi  = dX * uu;
   double theta  = dY * uu;
 

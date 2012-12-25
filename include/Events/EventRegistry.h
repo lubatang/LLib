@@ -43,6 +43,8 @@ public:
 
   void mousePressEvent(MouseEvent* pEvent);
 
+  void mouseReleaseEvent(MouseEvent* pEvent);
+
   void mouseMoveEvent(MouseEvent* pEvent);
 
 private:

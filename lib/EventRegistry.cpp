@@ -46,6 +46,14 @@ void EventRegistry::mousePressEvent(MouseEvent* pEvent)
   }
 }
 
+void EventRegistry::mouseReleaseEvent(MouseEvent* pEvent)
+{
+  iterator stage, sEnd = end();
+  for (stage = begin(); stage != sEnd; ++stage) {
+    (*stage)->mouseReleaseEvent(pEvent);
+  }
+}
+
 void EventRegistry::mouseMoveEvent(MouseEvent* pEvent)
 {
   iterator stage, sEnd = end();
