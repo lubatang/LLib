@@ -18,8 +18,31 @@ namespace luba {
 class MouseEvent : public Event
 {
 public:
+  enum Button {
+    NoButton    = 0x0,
+    LeftButton  = 0x1,
+    MidButton   = 0x2,
+    RightButton = 0x4
+  };
+
+public:
   MouseEvent();
   ~MouseEvent();
+
+  int x() const { return m_X; }
+  int y() const { return m_Y; }
+
+  void setCoord(int pX, int pY);
+
+  unsigned int button() const { return m_Button; }
+
+  void setButton(unsigned int pButton);
+
+private:
+  int m_X;
+  int m_Y;
+  unsigned int m_Button;
+
 };
 
 } // namespace of luba
