@@ -5,7 +5,9 @@
 //===----------------------------------------------------------------------===//
 #include <Triangle/Transformation.h>
 #include <Triangle/Space.h>
+#include <Triangle/Vectors.h>
 #include <iostream>
+#include <cmath>
 
 using namespace luba;
 
@@ -13,8 +15,9 @@ using namespace luba;
 // Transformation
 //===----------------------------------------------------------------------===//
 Transformation::Transformation()
-  : Stage("transformation"), m_bActivated(false), m_bRotated(false),
+  : Stage("transformation"), m_bActivated(false),
     m_OrgX(0), m_OrgY(0), m_T(),
+    m_State(MOVE),
     m_pSpace(NULL) {
 }
 
@@ -51,14 +54,30 @@ void Transformation::move(double pX, double pY)
 
 void Transformation::zoom(double pS)
 {
-  double scaling = 1.0 + pS / 40.0;
-  m_T[0][0] *= scaling;
-  m_T[1][1] *= scaling;
-  m_T[2][2] *= scaling;
+  double scale = 1.0 + pS / 40.0;
+  mat4 scaling;
+  scaling[0][0] = scale;
+  scaling[1][1] = scale;
+  scaling[2][2] = scale;
+  m_T = scaling * m_T;
 }
 
-void Transformation::rotate(double pR)
+void Transformation::rotate(double pX, double pY)
 {
+  double radianX = (pX * luba::PI) / 180.0;
+  mat4 rotationY;
+  rotationY[0][0] = cos(radianX);
+  rotationY[0][2] = sin(radianX);
+  rotationY[2][0] = -sin(radianX);
+  rotationY[2][2] = cos(radianX);
+
+  double radianY = (pY * luba::PI) / 180.0;
+  mat4 rotationX;
+  rotationX[1][1] = cos(radianY);
+  rotationX[1][2] = -sin(radianY);
+  rotationX[2][1] = sin(radianY);
+  rotationX[2][2] = cos(radianY);
+  m_T = (rotationX * rotationY) * m_T;
 }
 
 void Transformation::keyEvent(KeyEvent* pEvent)
@@ -70,43 +89,49 @@ void Transformation::keyEvent(KeyEvent* pEvent)
       break;
     }
     case KeyEvent::KeySpace: {
-      if (m_bActivated)
-        m_bRotated = !m_bRotated;
+      if (m_bActivated) {
+        ++m_State;
+        m_State %= STATES;
+      }
       break;
     }
     case KeyEvent::KeyLeft: {
       if (m_bActivated) {
-        if (m_bRotated)
-          rotate(-1);
-        else
-          move(-1, 0);
+        switch (m_State) {
+          case MOVE:   move(-1, 0);   break;
+          case ROTATE: rotate(-1, 0); break;
+          default: break;
+        }
       }
       break;
     }
     case KeyEvent::KeyRight: {
       if (m_bActivated) {
-        if (m_bRotated)
-          rotate(1);
-        else
-          move(1, 0);
+        switch (m_State) {
+          case MOVE:   move(1, 0);   break;
+          case ROTATE: rotate(1, 0); break;
+          default: break;
+        }
       }
       break;
     }
     case KeyEvent::KeyDown: {
       if (m_bActivated) {
-        if (m_bRotated)
-          zoom(-1);
-        else
-          move(0, -1);
+        switch (m_State) {
+          case MOVE:   move(0, -1);   break;
+          case ROTATE: rotate(0, -1); break;
+          case ZOOM:   zoom(-1); break;
+        }
       }
       break;
     }
     case KeyEvent::KeyUp: {
       if (m_bActivated) {
-        if (m_bRotated)
-          zoom(1);
-        else
-          move(0, 1);
+        switch (m_State) {
+          case MOVE:   move(0, 1);   break;
+          case ROTATE: rotate(0, 1); break;
+          case ZOOM:   zoom(1); break;
+        }
       }
       break;
     }
@@ -120,21 +145,27 @@ void Transformation::keyEvent(KeyEvent* pEvent)
 void Transformation::mouseMoveEvent(MouseEvent* pEvent)
 {
   if (m_bActivated) {
-    if (MouseEvent::NoButton != pEvent->button()) { // mouse pressed
-      double deltaX = pEvent->x() - m_OrgX;
-      double deltaY = pEvent->y() - m_OrgY;
+    double deltaX = pEvent->x() - m_OrgX;
+    double deltaY = pEvent->y() - m_OrgY;
 
-      if (m_bRotated) {
-        zoom(deltaY);
-        rotate(deltaX);
+    if (MouseEvent::NoButton != pEvent->button()) {
+      switch (m_State) {
+        case MOVE: {
+          move(deltaX, -deltaY);
+          break;
+        }
+        case ROTATE: {
+          rotate(deltaX, deltaY);
+          break;
+        }
+        case ZOOM: {
+          zoom(-deltaX);
+          break;
+        }
       }
-      else {
-        move(deltaX, -deltaY);
-      }
-
-      m_OrgX = pEvent->x();
-      m_OrgY = pEvent->y();
     }
+    m_OrgX = pEvent->x();
+    m_OrgY = pEvent->y();
   }
 }
 

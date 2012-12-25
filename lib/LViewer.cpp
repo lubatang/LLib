@@ -483,16 +483,8 @@ void MoveEvent(int x, int y)
 
     LViewer::preX = x;
     LViewer::preY = y;
-  }
 
-  if (LViewer::mouseMKey == KEYDOWN) {
-    LViewer::controlMatrix->move3D(difX, difY);
-  }
-  else if (LViewer::mouseLKey == KEYDOWN) {
-    LViewer::controlMatrix->moveView( difX, difY);
-  }
-  else if (LViewer::mouseRKey == KEYDOWN) {
-    LViewer::controlMatrix->moveOnSphere(difX, difY);
+    LViewer::controlMatrix->moveView(difX, difY);
   }
 
   glutPostRedisplay();
