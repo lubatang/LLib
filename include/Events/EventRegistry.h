@@ -10,6 +10,7 @@
 namespace luba {
 
 class Stage;
+class KeyEvent;
 
 class EventRegistry
 {
@@ -24,7 +25,9 @@ public:
     return instance;
   }
 
-  void record(Stage& pStage);
+  void record(Stage* pStage);
+
+  void remove(Stage* pStage);
 
   const_iterator begin() const { return m_StageList.begin(); }
   iterator       begin()       { return m_StageList.begin(); }
@@ -34,11 +37,13 @@ public:
   unsigned int size() const { return m_StageList.size(); }
   bool empty() const { return m_StageList.empty(); }
 
+  void keyEvent(KeyEvent* pEvent);
+
 private:
   EventRegistry();
   ~EventRegistry();
-  EventRegistry(const EventRegistry& pER);
-  EventRegistry& operator=(const EventRegistry& pER);
+  EventRegistry(const EventRegistry& pER);            ///< DO NOT IMPLEMENT
+  EventRegistry& operator=(const EventRegistry& pER); ///< DO NOT IMPLEMENT
 
 private:
   StageList m_StageList;
