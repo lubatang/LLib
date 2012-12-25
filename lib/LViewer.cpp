@@ -26,6 +26,9 @@
 #include <GL/glut.h>
 #endif
 
+#include <Events/Event.h>
+#include <Events/KeyEvent.h>
+#include <Events/EventRegistry.h>
 
 using namespace LLib::Math;
 using namespace LLib::Viewer;
@@ -442,6 +445,10 @@ void _keyboard(unsigned char key, int x, int y)
     LViewer::currentFlagN = key - '0';
     LViewer::flagN[key - '0'] = 1;
   }
+
+  static luba::KeyEvent event;
+  event.setKey(key);
+  luba::EventRegistry::self().keyEvent(&event);
 
   glutPostRedisplay();
 }

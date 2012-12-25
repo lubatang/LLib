@@ -74,6 +74,10 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/FrameBuffer.cpp \
 	${INCDIR}/Events/Stage.h \
 	${LIBDIR}/Stage.cpp \
+	${INCDIR}/Events/Event.h \
+	${LIBDIR}/Event.cpp \
+	${INCDIR}/Events/KeyEvent.h \
+	${LIBDIR}/KeyEvent.cpp \
 	${INCDIR}/Events/EventRegistry.h \
 	${LIBDIR}/EventRegistry.cpp \
 	${INCDIR}/Support/Flags.h \
