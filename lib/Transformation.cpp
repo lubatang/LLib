@@ -8,6 +8,7 @@
 #include <Triangle/Vectors.h>
 #include <iostream>
 #include <cmath>
+#include <cassert>
 
 using namespace luba;
 
@@ -23,6 +24,7 @@ Transformation::Transformation()
 
 const Transformation& Transformation::transform(Coord& pCoord) const
 {
+  assert(NULL != m_pSpace);
   if (NULL != m_pSpace) {
     double sX = m_pSpace->width()/2;
     double sY = m_pSpace->height()/2;
@@ -159,7 +161,7 @@ void Transformation::mouseMoveEvent(MouseEvent* pEvent)
           break;
         }
         case ZOOM: {
-          zoom(-deltaX);
+          zoom(-deltaY);
           break;
         }
       }
