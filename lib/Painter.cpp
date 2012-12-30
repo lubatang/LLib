@@ -15,6 +15,7 @@
 #include <Triangle/Color.h>
 #include <Triangle/ColorIterator.h>
 #include <Triangle/Transformation.h>
+#include <Triangle/Projection.h>
 #include <Triangle/ManagedStatic.h>
 
 #include <cmath>
@@ -23,9 +24,9 @@
 #include <iostream>
 
 using namespace luba;
-using namespace std;
 
 static ManagedStatic<Transformation> g_Trans;
+static ManagedStatic<Projection> g_Proj;
 
 //===----------------------------------------------------------------------===//
 // Painter
@@ -46,7 +47,6 @@ bool Painter::draw(const Line& pLine) const
 
   if (0 == drawer.distance())
     return true;
-
   DrawLine::const_iterator pixel, pEnd = drawer.end();
   for (pixel = drawer.begin(); pixel != pEnd; pixel.next()) {
     draw(*pixel);
@@ -150,13 +150,14 @@ bool Painter::draw(const Triangle& pTriangle) const
 }
 **/
 
-bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
+bool Painter::draw(const Space& pSpace, const Camera& pCamera, Model& pModel, bool pSolid) const
 {
   if (!Model::self().isValid())
     return false;
 
   m_FB.clear();
   g_Trans->setSpace(pSpace);
+  g_Proj->setDistance(pSpace.depth());
 
   for(int i=0; i<(int)Model::self().getObject()->numtriangles; ++i) {
     Vertex v1, v2, v3;
@@ -182,18 +183,36 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     converter.setConverter(v, n, fn, t);
     converter.getVertex(v3);
 
-    pSpace.map(v1);
-    pSpace.map(v2);
-    pSpace.map(v3);
+    mat4 matrix(pSpace.scale());
+    matrix = g_Trans->matrix() * matrix;
+    matrix = pCamera.matrix() * matrix;
 
-    g_Trans->transform(v1.coord());
-    g_Trans->transform(v2.coord());
-    g_Trans->transform(v3.coord());
+    //cerr << " org: " << v1.coord() << endl;
+    v1.coord() = matrix * v1.coord();
+    v2.coord() = matrix * v2.coord();
+    v3.coord() = matrix * v3.coord();
 
-    Triangle tri(v1, v2, v3);
+    //cerr << " camera: " << v1.coord() << endl;
+    Vertex p1(v1), p2(v2), p3(v3);
+    mat4 P = g_Proj->matrix();
+    p1.coord() = P * v1.coord();
+    p2.coord() = P * v2.coord();
+    p3.coord() = P * v3.coord();
+
+    //cerr << " proj: " << p1.coord() << endl;
+    p1.coord() /= p1.coord().w();
+    p2.coord() /= p2.coord().w();
+    p3.coord() /= p3.coord().w();
+
+    p1.coord() = pSpace.translate() * p1.coord();
+    p2.coord() = pSpace.translate() * p2.coord();
+    p3.coord() = pSpace.translate() * p3.coord();
+
+    Triangle tri(p1, p2, p3);
     Line l1(tri.v3(), tri.v2());
     Line l2(tri.v3(), tri.v1());
     Line l3(tri.v2(), tri.v1());
+
     draw(l1);
     draw(l2);
     draw(l3);

@@ -24,27 +24,7 @@ Transformation::Transformation()
 
 const Transformation& Transformation::transform(Coord& pCoord) const
 {
-  assert(NULL != m_pSpace);
-  if (NULL != m_pSpace) {
-    double sX = m_pSpace->width()/2;
-    double sY = m_pSpace->height()/2;
-    double sZ = m_pSpace->depth()/2;
-
-    mat4 affine;
-    affine[0][3] = -sX;
-    affine[1][3] = -sY;
-    affine[2][3] = -sZ;
-
-    mat4 reverse;
-    reverse[0][3] = sX;
-    reverse[1][3] = sY;
-    reverse[2][3] = sZ;
-
-    pCoord = (reverse* m_T * affine) * pCoord;
-  }
-  else
-    pCoord = m_T * pCoord;
-
+  pCoord = m_T * pCoord;
   return *this;
 }
 

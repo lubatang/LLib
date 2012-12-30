@@ -15,7 +15,8 @@ class Space
 public:
   Space(unsigned int pWidth, unsigned int pHeight, unsigned int pDepth);
 
-  void map(Vertex& pVertex) const;
+  mat4 scale() const;
+  mat4 translate() const;
 
   unsigned int width()  const { return m_Width; }
   unsigned int height() const { return m_Height; }
@@ -25,14 +26,10 @@ public:
   void setHeight(unsigned int pHeight) { m_Height = pHeight; }
   void setDepth(unsigned int pDepth)   { m_Depth = pDepth; }
 
-  void setCamera(const Camera& pCamera) { m_pCamera = &pCamera; }
-
 private:
   unsigned int m_Width;
   unsigned int m_Height;
   unsigned int m_Depth;
-
-  const Camera* m_pCamera;
 };
 
 } // namespace luba

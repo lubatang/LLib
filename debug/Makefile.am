@@ -70,6 +70,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/Vectors.cpp \
 	${INCDIR}/Triangle/Transformation.h \
 	${LIBDIR}/Transformation.cpp \
+	${INCDIR}/Triangle/Projection.h \
+	${LIBDIR}/Projection.cpp \
 	${INCDIR}/Triangle/ManagedStatic.h \
 	${LIBDIR}/ManagedStatic.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \

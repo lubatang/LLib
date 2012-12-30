@@ -77,10 +77,6 @@ namespace LLib
         static int * flag;
         static int * flagN;
       
-        static vec3 viewerPosition;
-        static vec3 viewerDirection;      // z
-        static vec3 viewerUpDirection;    // y
-        static vec3 viewerLeftDirection;  // x
         static vec3 ballTracingCenter;
         static vec3 modelCenter;
         static double seeda;

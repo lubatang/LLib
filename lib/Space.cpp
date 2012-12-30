@@ -11,17 +11,23 @@ using namespace luba;
 // Space
 //===----------------------------------------------------------------------===//
 Space::Space(unsigned int pWidth, unsigned int pHeight, unsigned int pDepth)
-  : m_Width(pWidth), m_Height(pHeight), m_Depth(pDepth), m_pCamera(NULL) {
+  : m_Width(pWidth), m_Height(pHeight), m_Depth(pDepth) {
 }
 
-void Space::map(Vertex& pVertex) const
+mat4 Space::scale() const
 {
-  scaling(pVertex.coord(), (double)m_Width/2, (double)m_Height/2, (double)m_Depth/2);
-  translate(pVertex.coord(), (double)(m_Width/2),
-                             (double)(m_Height/2),
-                             (double)(m_Depth/2));
-
-  if (NULL != m_pCamera)
-    m_pCamera->transform(pVertex.coord());
+  mat4 result( m_Width/2,      0.0,     0.0, 0.0,
+                   0.0, m_Height/2,     0.0, 0.0,
+                   0.0,      0.0, m_Depth/2, 0.0,
+                   0.0,      0.0,     0.0, 1.0);
+  return result;
 }
 
+mat4 Space::translate() const
+{
+  mat4 result(1.0, 0.0, 0.0, (double)m_Width/2 + 100,
+              0.0, 1.0, 0.0, (double)m_Height/2 + 100,
+              0.0, 0.0, 1.0, (double)m_Depth/2 + 100,
+              0.0, 0.0, 0.0, 1.0);
+  return result;
+}

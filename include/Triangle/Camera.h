@@ -34,8 +34,7 @@ public:
 
   mat4 rotate() const;
   mat4 translate() const;
-
-  const Camera& transform(Coord& pCoord) const;
+  mat4 matrix() const;
 
 private:
   vec3 m_Pos;

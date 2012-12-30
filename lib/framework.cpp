@@ -32,6 +32,7 @@ void showHelp()
   printf("\tL/l: set mouse to control the light position\n");
   printf("\tT/t: set mouse to control the model position\n");
   printf("\tM/m: switch rendering mode.\n");
+  printf("\tP/p: switch projection mode.\n");
   printf("\tS/s: moving speed changing.\n");
   printf("\tO/o: Output current framebuffer.\n");
   printf("\tQ/q: Quit.\n");
@@ -89,6 +90,7 @@ void dumpFramebufferAsPPM()
 
 void drawFunc()
 {  
+
   Camera cam(LViewer::viewMatrix.getPos3v(),
              LViewer::viewMatrix.getPos3v() + LViewer::viewMatrix.getViewDir3v(),
              LViewer::viewMatrix.getUpDir3v());
@@ -148,7 +150,6 @@ void idle()
     LViewer::flag['O'-'A'] ^=1;
     g_isOutputPPM = true;
   }
-
 
   glutPostRedisplay();
   return ;

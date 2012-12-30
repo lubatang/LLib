@@ -51,7 +51,8 @@ TEST_F(SpaceTest, map_test)
   v.y() = -0.5;
   v.z() = 0;
 
-  s.map(v);
+  v.coord() = s.scale() * v.coord();
+  v.coord() = s.translate() * v.coord();
 
   ASSERT_EQ(75, v.x());
   ASSERT_EQ(25, v.y());

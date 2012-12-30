@@ -8,12 +8,15 @@
 
 using namespace luba;
 
+#include <iostream>
+using namespace std;
 //===----------------------------------------------------------------------===//
 // Camera
 //===----------------------------------------------------------------------===//
 Camera::Camera(const vec3& pPos, const vec3& pTarget, const vec3& pUp)
-  : m_Pos(pPos), m_Target(pTarget), m_Up(pUp), m_VPN(pPos - pTarget)
+  : m_Pos(pPos), m_Target(pTarget), m_Up(pUp), m_VPN(pTarget - pPos)
 {
+  cerr << "Pos: " << m_Pos << "\tTarget: " << m_Target << "\tVPN: " << m_VPN << endl;
 }
 
 mat4 Camera::rotate() const
@@ -38,7 +41,7 @@ mat4 Camera::translate() const
               0.0, 0.0, 0.0, 1.0);
 }
 
-const Camera& Camera::transform(Coord& pCoord) const
+mat4 Camera::matrix() const
 {
   vec3 n(m_VPN);
   n.normalize();
@@ -46,13 +49,10 @@ const Camera& Camera::transform(Coord& pCoord) const
   vec3 u = CrossProduct(m_Up, m_VPN).normalize();
   vec3 v = CrossProduct(n, u);
 
-  mat4 R(u.x(), u.y(), u.z(), -m_Pos.x(),
-         v.x(), v.y(), v.z(), -m_Pos.y(),
-         n.x(), n.y(), n.z(), -m_Pos.z(),
-         0.0,     0.0,   0.0,        1.0);
-
-  pCoord = R * pCoord;
-  return *this;
+  return mat4(u.x(), u.y(), u.z(), -m_Pos.x(),
+              v.x(), v.y(), v.z(), -m_Pos.y(),
+              n.x(), n.y(), n.z(), -m_Pos.z(),
+              0.0,     0.0,   0.0,        1.0);
 }
 
 //===----------------------------------------------------------------------===//
@@ -60,6 +60,6 @@ const Camera& Camera::transform(Coord& pCoord) const
 //===----------------------------------------------------------------------===//
 std::ostream& std::operator << (std::ostream& s, const luba::Camera& pCamera)
 {
-  return s;
+  return s << pCamera.matrix();
 }
 

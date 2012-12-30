@@ -11,6 +11,7 @@ namespace luba {
 
 class FrameBuffer;
 class Space;
+class Camera;
 class Vertex;
 class Line;
 class Triangle;
@@ -22,7 +23,7 @@ class Painter
 public:
   explicit Painter(FrameBuffer& pFB);
 
-  bool draw(const Space& pSpace, Model& pModel, bool pSolid) const;
+  bool draw(const Space& pSpace, const Camera& pCam, Model& pModel, bool pSolid) const;
   bool draw(const Triangle& pTriangle) const;
   bool draw(const Line& pLine) const;
   bool draw(const Vertex& pVertex) const;

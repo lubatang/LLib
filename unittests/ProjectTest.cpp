@@ -49,11 +49,7 @@ TEST_F(ProjectTest, camera_test)
   vec3 VUP(0.0, 1.0, 0.0);
   Camera c(VRP, VPN, VUP);
 
-/**
   cerr << c.rotate() << endl;
   cerr << c.translate() << endl;
-
-  cerr << c.transform() << endl;
-**/
 }
 

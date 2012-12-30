@@ -312,7 +312,7 @@ void renderTextOnScreenTop(char * text, bool isReset)
 //===----------------------------------------------------------------------===//
 // Static Initialization
 //===----------------------------------------------------------------------===//
-LTranslateMatrix LViewer::viewMatrix(vec3(0, 0, 0), vec3(0, 0, -1), vec3(0,1,0));
+LTranslateMatrix LViewer::viewMatrix(vec3(0, 0, -400), vec3(0, 0, 0), vec3(0,1,0));
 LTranslateMatrix LViewer::nullMatrix;
 LTranslateMatrix * LViewer::controlMatrix = &LViewer::viewMatrix;
 LTranslateMatrix * LViewer::currentViewMatrix = &LViewer::viewMatrix;
@@ -331,10 +331,6 @@ int LViewer::win_id = 0;
 //GLUI * LViewer::gluiContext = NULL;
 
 
-vec3 LViewer::viewerPosition    = vec3( 0, 250, 0);    // vec3( 0, 0, -50);
-vec3 LViewer::viewerDirection    = vec3( 0, -1, 0);  // vec3( 0, 0, 1);  // z
-vec3 LViewer::viewerUpDirection    = vec3( 1, 0, 0);  // vec3( 0, 1, 0);  // y
-vec3 LViewer::viewerLeftDirection;              //  = vec3( 1, 0, 0);  // x
 vec3 LViewer::ballTracingCenter;
 vec3 LViewer::modelCenter      = vec3( 0, 0, 0);
 
@@ -604,8 +600,6 @@ void _renderScreen(void)
     // for FPS calculation end
     /*
       printf("viewer Postion: (%6.3lf, %6.3lf, %6.3lf) look at (%6.3lf, %6.3lf, %6.3lf)\n\tup (%6.3lf, %6.3lf, %6.3lf)\n", 
-            LViewer::viewerPosition[0] , LViewer::viewerPosition[1] , LViewer::viewerPosition[2],
-            LViewer::viewerDirection[0], LViewer::viewerDirection[1], LViewer::viewerDirection[2],
             LViewer::viewerUpDirection[0], LViewer::viewerUpDirection[1], LViewer::viewerUpDirection[2]
         );
     */
