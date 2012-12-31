@@ -26,10 +26,16 @@ public:
   void setHeight(unsigned int pHeight) { m_Height = pHeight; }
   void setDepth(unsigned int pDepth)   { m_Depth = pDepth; }
 
+  void setOrigin(unsigned int pX, unsigned int pY, unsigned int pZ);
+
 private:
   unsigned int m_Width;
   unsigned int m_Height;
   unsigned int m_Depth;
+
+  unsigned int m_OrgX;
+  unsigned int m_OrgY;
+  unsigned int m_OrgZ;
 };
 
 } // namespace luba

@@ -70,9 +70,27 @@ TEST_F(LineTest, draw_line_xyz)
   DrawLine::const_iterator pixel, pEnd = draw.end();
   unsigned int counter = 0;
   for (pixel = draw.begin(); pixel != pEnd; pixel.next()) {
-    // cerr << pixel->coord() << endl;
+    cerr << pixel->coord() << endl;
     ++counter;
   }
-  ASSERT_EQ(4, counter);
+  ASSERT_EQ(3, counter);
+  ASSERT_EQ(3, draw.distance());
 }
 
+TEST_F(LineTest, draw_line_xyz2)
+{
+  Vertex a, b;
+  a.setCoord(0, 0, 0);
+  b.setCoord(0, 16, 4); // steep on XY and XZ plane
+
+  DrawLine draw(a, b);
+
+  DrawLine::const_iterator pixel, pEnd = draw.end();
+  unsigned int counter = 0;
+  for (pixel = draw.begin(); pixel != pEnd; pixel.next()) {
+    cerr << pixel->coord() << endl;
+    ++counter;
+  }
+  ASSERT_EQ(16, counter);
+  ASSERT_EQ(16, draw.distance());
+}

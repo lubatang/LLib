@@ -15,7 +15,7 @@ using namespace luba;
 // DrawLine
 //===----------------------------------------------------------------------===//
 DrawLine::DrawLine()
-  : m_bSteepXY(false), m_bSteepXZ(false) {
+  : m_bSteepXY(false) {
 }
 
 DrawLine::DrawLine(const Vertex& pA, const Vertex& pB)
@@ -28,7 +28,6 @@ DrawLine& DrawLine::setTerminals(const Vertex& pA, const Vertex& pB)
   m_A = pA;
   m_B = pB;
   m_bSteepXY = false;
-  m_bSteepXZ = false;
 
   // Extended Bresenham's line algorithm
   // @ref http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm
@@ -42,37 +41,27 @@ DrawLine& DrawLine::setTerminals(const Vertex& pA, const Vertex& pB)
     std::swap(m_B.x(), m_B.y());
   }
 
-  m_bSteepXZ = (fabs(m_B.z()- m_A.z()) > fabs(m_B.x() - m_A.x()));
-
-  if(m_bSteepXZ) {
-    // if the line is steep on X-Z plane, exchange x-axis and z-axis
-    std::swap(m_A.x(), m_A.z());
-    std::swap(m_B.x(), m_B.z());
-  }
-
   m_DX = fabs(m_B.x() - m_A.x());
   m_DY = fabs(m_B.y() - m_A.y());
-  m_DZ = fabs(m_B.z() - m_A.z());
 
   m_XStep = (m_A.x() < m_B.x()) ? 1 : -1;
   m_YStep = (m_A.y() < m_B.y()) ? 1 : -1;
-  m_ZStep = (m_A.z() < m_B.z()) ? 1 : -1;
 
   return *this;
 }
 
 DrawLine::const_iterator DrawLine::begin() const
 {
-  return const_iterator(*this, m_DX/2.0f, m_DX/2.0f, m_A);
+  return const_iterator(*this, m_DX/2.0f, m_A);
 }
 
 DrawLine::const_iterator DrawLine::end() const
 {
-  return const_iterator(*this, m_DX/2.0f, m_DX/2.0f, m_B);
+  return const_iterator(*this, m_DX/2.0f, m_B);
 }
 
 unsigned int DrawLine::distance() const
 {
-  return abs(m_A.x() - m_B.x());
+  return m_DX;
 }
 

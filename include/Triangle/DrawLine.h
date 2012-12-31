@@ -11,7 +11,7 @@
 namespace luba {
 
 /** \class DrawLine
- *  \brief DrawLine is an action to draw a line on certain space.
+ *  \brief DrawLine is an action to draw a line on X-Y plane.
  */
 class DrawLine
 {
@@ -38,14 +38,11 @@ private:
 
   int m_XStep;
   int m_YStep;
-  int m_ZStep;
 
   float m_DX;
   float m_DY;
-  float m_DZ;
 
   bool m_bSteepXY : 1;
-  bool m_bSteepXZ : 1;
 
 };
 

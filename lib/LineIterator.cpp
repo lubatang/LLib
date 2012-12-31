@@ -37,34 +37,26 @@ unsigned int luba::operator-(const LineIterator& pA, const LineIterator& pB)
 // LineIterator
 //===----------------------------------------------------------------------===//
 LineIterator::LineIterator(const DrawLine& pDrawLine,
-                           float pErrorXY, float pErrorXZ,
+                           float pErrorXY,
                            const Vertex& pVertex)
-  : m_pDrawLine(&pDrawLine), m_ErrorXY(pErrorXY), m_ErrorXZ(pErrorXZ), m_Vertex(pVertex) {
+  : m_pDrawLine(&pDrawLine), m_ErrorXY(pErrorXY), m_Vertex(pVertex) {
   m_X = (unsigned int)pVertex.x();
   m_Y = (unsigned int)pVertex.y();
   m_Z = (unsigned int)pVertex.z();
 
-  if (m_pDrawLine->m_bSteepXZ) {
-    m_Vertex.setX(m_Z);
-    m_Vertex.setZ(m_X);
-  }
-
   if (m_pDrawLine->m_bSteepXY) {
     m_Vertex.setX(m_Y);
-    if (m_pDrawLine->m_bSteepXZ)
-      m_Vertex.setY(m_Z);
-    else
-      m_Vertex.setY(m_X);
+    m_Vertex.setY(m_X);
   }
 }
 
 LineIterator::LineIterator()
-  : m_pDrawLine(NULL), m_ErrorXY(0.0), m_ErrorXZ(0.0), m_X(0), m_Y(0), m_Z(0) {
+  : m_pDrawLine(NULL), m_ErrorXY(0.0), m_X(0), m_Y(0), m_Z(0) {
 }
 
 LineIterator::LineIterator(const LineIterator& pCopy)
   : m_pDrawLine(pCopy.m_pDrawLine),
-    m_ErrorXY(pCopy.m_ErrorXY), m_ErrorXZ(pCopy.m_ErrorXZ),
+    m_ErrorXY(pCopy.m_ErrorXY),
     m_X(pCopy.m_X), m_Y(pCopy.m_Y), m_Z(pCopy.m_Z), m_Vertex(pCopy.m_Vertex) {
 }
 
@@ -72,7 +64,6 @@ LineIterator& LineIterator::operator=(const LineIterator& pCopy)
 {
   m_pDrawLine = pCopy.m_pDrawLine;
   m_ErrorXY = pCopy.m_ErrorXY;
-  m_ErrorXZ = pCopy.m_ErrorXZ;
   m_X = pCopy.m_X;
   m_Y = pCopy.m_Y;
   m_Z = pCopy.m_Z;
@@ -83,32 +74,21 @@ LineIterator& LineIterator::operator=(const LineIterator& pCopy)
 LineIterator& LineIterator::next()
 {
   m_ErrorXY -= m_pDrawLine->m_DY;
-  m_ErrorXZ -= m_pDrawLine->m_DZ;
 
   if (m_ErrorXY < 0) {
     m_Y += m_pDrawLine->m_YStep;
     m_ErrorXY += m_pDrawLine->m_DX;
   }
 
-  if (m_ErrorXZ < 0) {
-    m_Z += m_pDrawLine->m_ZStep;
-    m_ErrorXZ += m_pDrawLine->m_DX;
-  }
-
   m_X += m_pDrawLine->m_XStep;
-
-  m_Vertex.setCoord(m_X, m_Y, m_Z);
-  if (m_pDrawLine->m_bSteepXZ) {
-    m_Vertex.setX(m_Z);
-    m_Vertex.setZ(m_X);
-  }
 
   if (m_pDrawLine->m_bSteepXY) {
     m_Vertex.setX(m_Y);
-    if (m_pDrawLine->m_bSteepXZ)
-      m_Vertex.setY(m_Z);
-    else
-      m_Vertex.setY(m_X);
+    m_Vertex.setY(m_X);
+  }
+  else {
+    m_Vertex.setX(m_X);
+    m_Vertex.setY(m_Y);
   }
 }
 

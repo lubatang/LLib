@@ -19,8 +19,7 @@ private:
   friend bool operator!=(const LineIterator& pX, const LineIterator& pY);
   friend unsigned int operator-(const LineIterator& pX, const LineIterator& pY);
 
-  LineIterator(const DrawLine& pDrawLine, float pErrorXY, float pErrorXZ,
-               const Vertex& pVertex);
+  LineIterator(const DrawLine& pDrawLine, float pErrorXY, const Vertex& pVertex);
 
 public:
   LineIterator();

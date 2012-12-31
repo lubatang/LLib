@@ -70,6 +70,7 @@ void render(const Camera& pCam, const LLight& lit, FrameBuffer* pFB, RENDER_MODE
   //   View    : Space
   //   Control : Painter
   Space space(800, 800, 800);
+  space.setOrigin(100, 100, 100);
   Painter painter(*pFB);
   bool solid = (pRenderMode == SOLID);
   static bool prev_solid = true;
