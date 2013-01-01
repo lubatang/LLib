@@ -8,15 +8,12 @@
 
 using namespace luba;
 
-#include <iostream>
-using namespace std;
 //===----------------------------------------------------------------------===//
 // Camera
 //===----------------------------------------------------------------------===//
 Camera::Camera(const vec3& pPos, const vec3& pTarget, const vec3& pUp)
   : m_Pos(pPos), m_Target(pTarget), m_Up(pUp), m_VPN(pTarget - pPos)
 {
-  cerr << "Pos: " << m_Pos << "\tTarget: " << m_Target << "\tVPN: " << m_VPN << endl;
 }
 
 mat4 Camera::rotate() const
