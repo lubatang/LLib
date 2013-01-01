@@ -62,6 +62,6 @@ DrawLine::const_iterator DrawLine::end() const
 
 unsigned int DrawLine::distance() const
 {
-  return m_DX;
+  return (unsigned int)(m_B.x()) - (unsigned int)(m_A.x());
 }
 
