@@ -48,6 +48,10 @@ LineIterator::LineIterator(const DrawLine& pDrawLine,
     m_Vertex.setX(m_Y);
     m_Vertex.setY(m_X);
   }
+  else {
+    m_Vertex.setX(m_X);
+    m_Vertex.setY(m_Y);
+  }
 }
 
 LineIterator::LineIterator()
@@ -90,6 +94,15 @@ LineIterator& LineIterator::next()
     m_Vertex.setX(m_X);
     m_Vertex.setY(m_Y);
   }
+  return *this;
+}
+
+template<class FUNCTION>
+LineIterator& LineIterator::next()
+{
+  next();
+  FUNCTION(m_Vertex);
+  return *this;
 }
 
 unsigned int LineIterator::x() const
@@ -100,11 +113,6 @@ unsigned int LineIterator::x() const
 unsigned int LineIterator::y() const
 {
   return m_Vertex.y();
-}
-
-unsigned int LineIterator::z() const
-{
-  return m_Vertex.z();
 }
 
 const Vertex& LineIterator::operator*() const

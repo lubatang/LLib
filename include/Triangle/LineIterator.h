@@ -29,9 +29,10 @@ public:
 
   unsigned int x() const;
   unsigned int y() const;
-  unsigned int z() const;
 
   LineIterator& next();
+
+  template<typename FUNCTION> LineIterator& next();
 
   const Vertex& operator*() const;
   Vertex& operator*();
