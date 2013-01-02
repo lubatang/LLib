@@ -27,6 +27,8 @@ public:
 
   void getColor(Color& pColor) const;
 
+  void getNorm(vec3& pNorm) const;
+
 private:
   Model& m_Model;
 

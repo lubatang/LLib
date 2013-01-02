@@ -49,3 +49,11 @@ Triangle::Triangle(const Vertex& pV1, const Vertex& pV2, const Vertex& pV3)
     std::swap(m_pV3, m_pV2);
   }
 }
+
+Triangle& Triangle::setNorm(double pX, double pY, double pZ)
+{
+  m_FacetNorm[0] = pX;
+  m_FacetNorm[1] = pY;
+  m_FacetNorm[2] = pZ;
+}
+

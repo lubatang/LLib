@@ -43,6 +43,15 @@ vec4::vec4(const vec3& v, double d)
   m_N[3] = d;
 }
 
+vec4::operator vec3() const
+{
+  vec3 result;
+  result[0] = m_N[0];
+  result[1] = m_N[1];
+  result[2] = m_N[2];
+  return result;
+}
+
 vec4 vec4::operator-() const
 {
   return vec4(-m_N[0], -m_N[1], -m_N[2], -m_N[3]);

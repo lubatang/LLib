@@ -26,6 +26,10 @@ public:
   const Color& color() const { return m_Color; }
   Color&       color()       { return m_Color; }
 
+  const vec3& norm() const { return m_Norm; }
+  vec3&       norm()       { return m_Norm; }
+  Vertex& setNorm(double pX, double pY, double pZ);
+
   // -----  accessors  ----- //
   double  x() const { return m_Coord[0]; }
   double& x()       { return m_Coord[0]; }
@@ -37,7 +41,7 @@ public:
 public:
   Coord m_Coord;
   Color m_Color;
-
+  vec3 m_Norm;
 };
 
 } // namespace of luba

@@ -18,3 +18,11 @@ Vertex& Vertex::setCoord(double pX, double pY, double pZ)
   return *this;
 }
 
+Vertex& Vertex::setNorm(double pX, double pY, double pZ)
+{
+  m_Norm[0] = pX;
+  m_Norm[1] = pY;
+  m_Norm[2] = pZ;
+  return *this;
+}
+

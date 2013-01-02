@@ -22,8 +22,6 @@
 #include <cassert>
 #include <algorithm>
 
-#include <iostream>
-
 using namespace luba;
 
 static ManagedStatic<Transformation> g_Trans;
@@ -73,8 +71,9 @@ bool Painter::draw(const Triangle& pTriangle) const
   const Vertex& v2 = pTriangle.v2();
   const Vertex& v3 = pTriangle.v3();
 
-  if ((v1.y() - v2.y()) < 1 && (v2.y() - v3.y()) < 1) {
-    // a horizontal line. v1.y must >= v2.y, and v2.y must >= v3.y
+   
+  if (int(v1.y()) == int(v3.y())) {
+    // a horizontal line
     return true;
   }
 
@@ -146,6 +145,9 @@ bool Painter::draw(const Triangle& pTriangle) const
         ++scan_y;
       }
     }
+    else {
+      drawHorizon(*up_edge.begin(), *up_edge.end());
+    }
     return true;
   }
   return true;
@@ -184,9 +186,24 @@ bool Painter::draw(const Space& pSpace, const Camera& pCamera, Model& pModel, bo
     converter.setConverter(v, n, fn, t);
     converter.getVertex(v3);
 
+    vec3D facet_norm;
+    facet_norm[0] = Model::self().getObject()->facetnorms[fn*3];
+    facet_norm[1] = Model::self().getObject()->facetnorms[fn*3 + 1];
+    facet_norm[2] = Model::self().getObject()->facetnorms[fn*3 + 2];
+    facet_norm[3] = 1.0;
+
     mat4 matrix(pSpace.scale());
     matrix = g_Trans->matrix() * matrix;
+    facet_norm = matrix * facet_norm;
+
     matrix = pCamera.matrix() * matrix;
+
+    double value = facet_norm * pCamera.vpn();
+    if (value > 0) { // back face culling
+      // because my eyes direction is (0, 0, 1), the dot product > 0 is 
+      // back face.
+      continue;
+    }
 
     v1.coord() = matrix * v1.coord();
     v2.coord() = matrix * v2.coord();

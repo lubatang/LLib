@@ -32,6 +32,7 @@ void ModelToVertex::getVertex(Vertex& pVertex) const
 {
   getCoord(pVertex.coord());
   getColor(pVertex.color());
+  //getNorm(pVertex.norm());
 }
 
 void ModelToVertex::getCoord(Coord& pCoord) const
@@ -49,5 +50,12 @@ void ModelToVertex::getColor(Color& pColor) const
   pColor.r = m_Model.getObject()->colors[m_VertexIdx*3];
   pColor.g = m_Model.getObject()->colors[m_VertexIdx*3 + 1];
   pColor.b = m_Model.getObject()->colors[m_VertexIdx*3 + 2];
+}
+
+void ModelToVertex::getNorm(vec3& pNorm) const
+{
+  pNorm[0] = m_Model.getObject()->normals[m_NormIdx*3];
+  pNorm[1] = m_Model.getObject()->normals[m_NormIdx*3 + 1];
+  pNorm[2] = m_Model.getObject()->normals[m_NormIdx*3 + 2];
 }
 
