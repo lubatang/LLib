@@ -27,6 +27,10 @@ public:
   const_iterator begin() const;
   const_iterator end() const;
 
+  const Vertex& v1() const { return m_A; }
+  const Vertex& v2() const { return m_B; }
+  const Vertex& v3() const { return m_C; }
+
 private:
   const Vertex& m_A;
   const Vertex& m_B;

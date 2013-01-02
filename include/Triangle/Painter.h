@@ -29,6 +29,9 @@ public:
   bool draw(const Vertex& pVertex) const;
 
 private:
+  bool drawHorizon(const Vertex& pLeft, const Vertex& pRight) const;
+
+private:
   FrameBuffer& m_FB;
 };
 

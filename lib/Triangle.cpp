@@ -18,33 +18,34 @@ Triangle::Triangle(const Vertex& pV1, const Vertex& pV2, const Vertex& pV3)
   v[2] = pV3.coord();
 
   // sort X from larger to smaller 
-  if (v[0][0] < v[1][0]) {
-    std::swap(v[0], v[1]);
-    std::swap(m_pV1, m_pV2);
+  if (v[2][0] > v[1][0]) {
+    std::swap(v[2], v[1]);
+    std::swap(m_pV3, m_pV2);
   }
 
-  if (v[0][0] < v[2][0]) {
-    std::swap(v[0], v[2]);
-    std::swap(m_pV1, m_pV3);
+  if (v[1][0] > v[0][0]) {
+    std::swap(v[1], v[0]);
+    std::swap(m_pV2, m_pV1);
   }
 
-  if (v[1][0] < v[2][0]) {
-    std::swap(v[1], v[2]);
-    std::swap(m_pV2, m_pV3);
+  if (v[2][0] > v[1][0]) {
+    std::swap(v[2], v[1]);
+    std::swap(m_pV3, m_pV2);
   }
 
   // sort Y from larger to smaller
-  if (v[0][1] < v[1][1]) {
-    std::swap(v[0], v[1]);
-    std::swap(m_pV1, m_pV2);
-  }
-  if (v[0][1] < v[2][1]) {
-    std::swap(v[0], v[2]);
-    std::swap(m_pV1, m_pV3);
+  if (v[2][1] > v[1][1]) {
+    std::swap(v[2], v[1]);
+    std::swap(m_pV3, m_pV2);
   }
 
-  if (v[1][1] < v[2][1]) {
-    std::swap(v[1], v[2]);
-    std::swap(m_pV2, m_pV3);
+  if (v[1][1] > v[0][1]) {
+    std::swap(v[1], v[0]);
+    std::swap(m_pV2, m_pV1);
+  }
+
+  if (v[2][1] > v[1][1]) {
+    std::swap(v[2], v[1]);
+    std::swap(m_pV3, m_pV2);
   }
 }

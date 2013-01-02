@@ -19,6 +19,7 @@
 #include <Triangle/ManagedStatic.h>
 
 #include <cmath>
+#include <cassert>
 #include <algorithm>
 
 #include <iostream>
@@ -55,22 +56,17 @@ bool Painter::draw(const Line& pLine) const
   return true;
 }
 
-bool Painter::draw(const Triangle& pTriangle) const
+bool Painter::drawHorizon(const Vertex& pLeft, const Vertex& pRight) const
 {
-  DrawTriangle drawer(pTriangle.v1(), pTriangle.v2(), pTriangle.v3());
-  if (!drawer.hasArea())
-    return true;
-
-  DrawTriangle::const_iterator horizon, hEnd = drawer.end();
-  for (horizon = drawer.begin(); horizon != hEnd; horizon.next()) {
-    DrawLine::const_iterator pixel, pEnd = horizon->end();
-    for (pixel = horizon->begin(); pixel != pEnd; pixel.next()) {
-      draw(*pixel);
-    }
+  assert(pLeft.y() == pRight.y());
+  DrawLine drawer(pLeft, pRight);
+  DrawLine::const_iterator pixel, pEnd = drawer.end();
+  for (pixel = drawer.begin(); pixel != pEnd; pixel.next()) {
+    draw(*pixel);
   }
+  return true;
 }
 
-/**
 bool Painter::draw(const Triangle& pTriangle) const
 {
   const Vertex& v1 = pTriangle.v1();
@@ -93,62 +89,67 @@ bool Painter::draw(const Triangle& pTriangle) const
   DrawLine long_edge(v3, v1);
   DrawLine down_edge(v3, v2);
   DrawLine up_edge(v2, v1);
-  if (dx2 > dx1) {
-    // v2 is in the right
-    // fill left-down side triangle
-    DrawLine::const_iterator left = long_edge.begin();
+
+  int scan_y = (int)v3.y();
+  if (dx2 > dx1) { ///< v2 is in the right
+    DrawLine::const_iterator left  = long_edge.begin();
     DrawLine::const_iterator right = down_edge.begin();
-    while (right != down_edge.end()) {
-      DrawLine horizon(*left, *right);
-      DrawLine::const_iterator pixel;
-      for (pixel = horizon.begin(); pixel != horizon.end(); pixel.next()) {
-        draw(*pixel);
+
+    if (down_edge.begin()->y() == down_edge.end()->y()) {
+      ++scan_y;
+      right = up_edge.begin();
+    }
+    else {
+      while (scan_y != down_edge.end()->y()) {
+        while (scan_y != left.y())
+          left.next();
+        while (scan_y != right.y())
+          right.next();
+        drawHorizon(*left, *right);
+        ++scan_y;
       }
-      left.next();
-      right.next();
+      right = up_edge.begin();
     }
 
-    // fill left-up side triangle
-    right = up_edge.begin();
-    while (right != up_edge.end()) {
-      DrawLine horizon(*left, *right);
-      DrawLine::const_iterator pixel;
-      for (pixel = horizon.begin(); pixel != horizon.end(); pixel.next()) {
-        draw(*pixel);
-      }
-      left.next();
-      right.next();
+    while (scan_y != long_edge.end()->y()) {
+      while (scan_y != left.y())
+        left.next();
+      while (scan_y != right.y())
+        right.next();
+      drawHorizon(*left, *right);
+      ++scan_y;
     }
+    return true;
   }
-  else {
-    // v2 is in the left
-    // fill right-down side triangle
-    DrawLine::const_iterator left = down_edge.begin();
+  else { ///< v2 is in the left
+    DrawLine::const_iterator left  = down_edge.begin();
     DrawLine::const_iterator right = long_edge.begin();
-    while (left != down_edge.end()) {
-      DrawLine horizon(*left, *right);
-      DrawLine::const_iterator pixel;
-      for (pixel = horizon.begin(); pixel != horizon.end(); pixel.next()) {
-        draw(*pixel);
-      }
-      left.next();
-      right.next();
+
+    while (scan_y != down_edge.end()->y()) {
+      while (scan_y != left.y())
+        left.next();
+      while (scan_y != right.y())
+        right.next();
+      drawHorizon(*left, *right);
+      ++scan_y;
     }
 
-    // fill the right-up side triangle
-    left = up_edge.begin();
-    while (left != up_edge.end()) {
-      DrawLine horizon(*left, *right);
-      DrawLine::const_iterator pixel;
-      for (pixel = horizon.begin(); pixel != horizon.end(); pixel.next()) {
-        draw(*pixel);
+    if (up_edge.begin().y() != up_edge.end().y()) {
+      left = up_edge.begin();
+
+      while (scan_y != long_edge.end()->y()) {
+        while (scan_y != left.y())
+          left.next();
+        while (scan_y != right.y())
+          right.next();
+        drawHorizon(*left, *right);
+        ++scan_y;
       }
-      left.next();
-      right.next();
     }
+    return true;
   }
+  return true;
 }
-**/
 
 bool Painter::draw(const Space& pSpace, const Camera& pCamera, Model& pModel, bool pSolid) const
 {
@@ -187,19 +188,16 @@ bool Painter::draw(const Space& pSpace, const Camera& pCamera, Model& pModel, bo
     matrix = g_Trans->matrix() * matrix;
     matrix = pCamera.matrix() * matrix;
 
-    //cerr << " org: " << v1.coord() << endl;
     v1.coord() = matrix * v1.coord();
     v2.coord() = matrix * v2.coord();
     v3.coord() = matrix * v3.coord();
 
-    //cerr << " camera: " << v1.coord() << endl;
     Vertex p1(v1), p2(v2), p3(v3);
     mat4 P = g_Proj->matrix();
     p1.coord() = P * v1.coord();
     p2.coord() = P * v2.coord();
     p3.coord() = P * v3.coord();
 
-    //cerr << " proj: " << p1.coord() << endl;
     p1.coord() /= p1.coord().w();
     p2.coord() /= p2.coord().w();
     p3.coord() /= p3.coord().w();

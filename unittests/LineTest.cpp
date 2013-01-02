@@ -88,9 +88,45 @@ TEST_F(LineTest, draw_line_xyz2)
   DrawLine::const_iterator pixel, pEnd = draw.end();
   unsigned int counter = 0;
   for (pixel = draw.begin(); pixel != pEnd; pixel.next()) {
-    cerr << pixel->coord() << endl;
     ++counter;
   }
   ASSERT_EQ(16, counter);
   ASSERT_EQ(16, draw.distance());
 }
+
+TEST_F(LineTest, draw_line_horizon)
+{
+  Vertex a, b;
+  a.setCoord(15.6, 3, 20);
+  b.setCoord(39.2, 3, 15);
+
+  DrawLine draw(a, b);
+  DrawLine::const_iterator pixel, pEnd = draw.end();
+
+  pixel = draw.begin();
+  ASSERT_EQ(15, pixel->x());
+  ASSERT_EQ(3, pixel->y());
+  ASSERT_EQ(24, draw.distance());
+  pixel.next();
+  pixel.next();
+  pixel.next();
+  ASSERT_EQ(18, pixel->x());
+  ASSERT_EQ(3, pixel->y());
+}
+
+TEST_F(LineTest, draw_line_min)
+{
+  Vertex a, b;
+  a.setCoord(0.1, 0, 0);
+  b.setCoord(0.5, 0, 0);
+
+  DrawLine draw(a, b);
+  ASSERT_EQ(0, draw.distance());
+
+  a.setCoord(0.9, 0, 0);
+  b.setCoord(1.1, 0, 0);
+  draw.setTerminals(a, b);
+  ASSERT_EQ(1, draw.distance());
+
+}
+

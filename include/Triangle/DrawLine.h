@@ -17,6 +17,7 @@ class DrawLine
 {
 public:
   friend class LineIterator;
+  friend class TriangleIterator;
   typedef LineIterator const_iterator;
 
 public:

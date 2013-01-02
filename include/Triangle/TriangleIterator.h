@@ -39,7 +39,8 @@ private:
   DrawLine m_Horizon;
   DrawLine::const_iterator m_Start;
   DrawLine::const_iterator m_Rear;
-
+  int m_Y;
+  bool m_bDrawingUp;
 };
 
 bool operator==(const luba::TriangleIterator& pX, const luba::TriangleIterator& pY);
