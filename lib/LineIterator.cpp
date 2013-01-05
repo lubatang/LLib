@@ -27,12 +27,6 @@ bool luba::operator!=(const LineIterator& pA, const LineIterator& pB)
   return !(pA == pB);
 }
 
-unsigned int luba::operator-(const LineIterator& pA, const LineIterator& pB)
-{
-  assert(pA.m_pDrawLine == pB.m_pDrawLine);
-  return abs(pA.m_X - pB.m_X);
-}
-
 //===----------------------------------------------------------------------===//
 // LineIterator
 //===----------------------------------------------------------------------===//
@@ -40,9 +34,9 @@ LineIterator::LineIterator(const DrawLine& pDrawLine,
                            float pErrorXY,
                            const Vertex& pVertex)
   : m_pDrawLine(&pDrawLine), m_ErrorXY(pErrorXY), m_Vertex(pVertex) {
-  m_X = (unsigned int)pVertex.x();
-  m_Y = (unsigned int)pVertex.y();
-  m_Z = (unsigned int)pVertex.z();
+  m_X = (int)pVertex.x();
+  m_Y = (int)pVertex.y();
+  m_Z = (int)pVertex.z();
 
   if (m_pDrawLine->m_bSteepXY) {
     m_Vertex.setX(m_Y);
@@ -105,12 +99,12 @@ LineIterator& LineIterator::next()
   return *this;
 }
 
-unsigned int LineIterator::x() const
+int LineIterator::x() const
 {
   return m_Vertex.x();
 }
 
-unsigned int LineIterator::y() const
+int LineIterator::y() const
 {
   return m_Vertex.y();
 }
