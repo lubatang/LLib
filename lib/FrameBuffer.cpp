@@ -38,9 +38,9 @@ void FrameBuffer::setColor(unsigned int pX, unsigned int pY, unsigned int pZ,
     size_t index = pX + pY*m_Width;
     if (pZ >= m_ZBuffer[index]) {
       Pixel round;
-      round.r = pColor.r * 127.5 + 127.5;
-      round.g = pColor.g * 127.5 + 127.5;
-      round.b = pColor.b * 127.5 + 127.5;
+      round.r = pColor.r() * 127.5 + 127.5;
+      round.g = pColor.g() * 127.5 + 127.5;
+      round.b = pColor.b() * 127.5 + 127.5;
       m_Pixels[index] = round;
       m_ZBuffer[index] = pZ;
     }

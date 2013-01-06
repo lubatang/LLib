@@ -13,7 +13,6 @@
 #include <Triangle/ModelToVertex.h>
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Color.h>
-#include <Triangle/ColorIterator.h>
 #include <Triangle/Transformation.h>
 #include <Triangle/Projection.h>
 #include <Triangle/ManagedStatic.h>
@@ -153,6 +152,9 @@ bool Painter::draw(const Triangle& pTriangle) const
   return true;
 }
 
+#include <iostream>
+using namespace std;
+
 bool Painter::draw(const Space& pSpace, const Camera& pCamera, Model& pModel, bool pSolid) const
 {
   if (!Model::self().isValid())
@@ -162,79 +164,89 @@ bool Painter::draw(const Space& pSpace, const Camera& pCamera, Model& pModel, bo
   g_Trans->setSpace(pSpace);
   g_Proj->setDistance(pSpace.depth());
 
-  for(int i=0; i<(int)Model::self().getObject()->numtriangles; ++i) {
-    Vertex v1, v2, v3;
-    ModelToVertex converter(Model::self());
+  GLMgroup* group = Model::self().getObject()->groups;
+  while (NULL != group) {
+    cerr << "name:      " << Model::self().getObject()->materials[group->material].name << endl;
+    cerr << "\tambient:   " << vec3D(Model::self().getObject()->materials[group->material].ambient) << endl;
+    cerr << "\tdiffuse:   " << vec3D(Model::self().getObject()->materials[group->material].diffuse) << endl;
+    cerr << "\tspecular:  " << vec3D(Model::self().getObject()->materials[group->material].specular) << endl;
+    cerr << "\tshininess: " << Model::self().getObject()->materials[group->material].shininess << endl;
 
-    int fn = Model::self().getObject()->triangles[i].findex;
+    for (int i=0; i<(int)group->numtriangles; ++i) {
+      Vertex v1, v2, v3;
+      ModelToVertex converter(Model::self());
 
-    int v  = Model::self().getObject()->triangles[i].vindices[0];
-    int n  = Model::self().getObject()->triangles[i].nindices[0];
-    int t  = Model::self().getObject()->triangles[i].tindices[0];
-    converter.setConverter(v, n, fn, t);
-    converter.getVertex(v1);
+      int fn = Model::self().getObject()->triangles[group->triangles[i]].findex;
 
-    v  = Model::self().getObject()->triangles[i].vindices[1];
-    n  = Model::self().getObject()->triangles[i].nindices[1];
-    t  = Model::self().getObject()->triangles[i].tindices[1];
-    converter.setConverter(v, n, fn, t);
-    converter.getVertex(v2);
+      int v  = Model::self().getObject()->triangles[group->triangles[i]].vindices[0];
+      int n  = Model::self().getObject()->triangles[group->triangles[i]].nindices[0];
+      int t  = Model::self().getObject()->triangles[group->triangles[i]].tindices[0];
+      converter.setConverter(v, n, fn, t);
+      converter.getVertex(v1);
 
-    v  = Model::self().getObject()->triangles[i].vindices[2];
-    n  = Model::self().getObject()->triangles[i].nindices[2];
-    t  = Model::self().getObject()->triangles[i].tindices[2];
-    converter.setConverter(v, n, fn, t);
-    converter.getVertex(v3);
+      v  = Model::self().getObject()->triangles[group->triangles[i]].vindices[1];
+      n  = Model::self().getObject()->triangles[group->triangles[i]].nindices[1];
+      t  = Model::self().getObject()->triangles[group->triangles[i]].tindices[1];
+      converter.setConverter(v, n, fn, t);
+      converter.getVertex(v2);
 
-    vec3D facet_norm;
-    facet_norm[0] = Model::self().getObject()->facetnorms[fn*3];
-    facet_norm[1] = Model::self().getObject()->facetnorms[fn*3 + 1];
-    facet_norm[2] = Model::self().getObject()->facetnorms[fn*3 + 2];
-    facet_norm[3] = 1.0;
+      v  = Model::self().getObject()->triangles[group->triangles[i]].vindices[2];
+      n  = Model::self().getObject()->triangles[group->triangles[i]].nindices[2];
+      t  = Model::self().getObject()->triangles[group->triangles[i]].tindices[2];
+      converter.setConverter(v, n, fn, t);
+      converter.getVertex(v3);
 
-    mat4 matrix(pSpace.scale());
-    matrix = g_Trans->matrix() * matrix;
-    facet_norm = matrix * facet_norm;
+      vec3D facet_norm;
+      facet_norm[0] = Model::self().getObject()->facetnorms[fn*3];
+      facet_norm[1] = Model::self().getObject()->facetnorms[fn*3 + 1];
+      facet_norm[2] = Model::self().getObject()->facetnorms[fn*3 + 2];
+      facet_norm[3] = 1.0;
 
-    matrix = pCamera.matrix() * matrix;
+      mat4 matrix(pSpace.scale());
+      matrix = g_Trans->matrix() * matrix;
+      facet_norm = matrix * facet_norm;
 
-    double value = facet_norm * pCamera.vpn();
-    if (value > 0) { // back face culling
-      // because my eyes direction is (0, 0, 1), the dot product > 0 is 
-      // back face.
-      continue;
+      matrix = pCamera.matrix() * matrix;
+
+      double value = facet_norm * pCamera.vpn();
+      if (value > 0) { // back face culling
+        // because my eyes direction is (0, 0, 1), the dot product > 0 is 
+        // back face.
+        continue;
+      }
+
+      v1.coord() = matrix * v1.coord();
+      v2.coord() = matrix * v2.coord();
+      v3.coord() = matrix * v3.coord();
+
+      Vertex p1(v1), p2(v2), p3(v3);
+      mat4 P = g_Proj->matrix();
+      p1.coord() = P * v1.coord();
+      p2.coord() = P * v2.coord();
+      p3.coord() = P * v3.coord();
+
+      p1.coord() /= p1.coord().w();
+      p2.coord() /= p2.coord().w();
+      p3.coord() /= p3.coord().w();
+
+      p1.coord() = pSpace.translate() * p1.coord();
+      p2.coord() = pSpace.translate() * p2.coord();
+      p3.coord() = pSpace.translate() * p3.coord();
+
+      Triangle tri(p1, p2, p3);
+      Line l1(tri.v3(), tri.v2());
+      Line l2(tri.v3(), tri.v1());
+      Line l3(tri.v2(), tri.v1());
+
+      draw(l1);
+      draw(l2);
+      draw(l3);
+
+      if (pSolid) {
+        draw(tri);
+      }
     }
-
-    v1.coord() = matrix * v1.coord();
-    v2.coord() = matrix * v2.coord();
-    v3.coord() = matrix * v3.coord();
-
-    Vertex p1(v1), p2(v2), p3(v3);
-    mat4 P = g_Proj->matrix();
-    p1.coord() = P * v1.coord();
-    p2.coord() = P * v2.coord();
-    p3.coord() = P * v3.coord();
-
-    p1.coord() /= p1.coord().w();
-    p2.coord() /= p2.coord().w();
-    p3.coord() /= p3.coord().w();
-
-    p1.coord() = pSpace.translate() * p1.coord();
-    p2.coord() = pSpace.translate() * p2.coord();
-    p3.coord() = pSpace.translate() * p3.coord();
-
-    Triangle tri(p1, p2, p3);
-    Line l1(tri.v3(), tri.v2());
-    Line l2(tri.v3(), tri.v1());
-    Line l3(tri.v2(), tri.v1());
-
-    draw(l1);
-    draw(l2);
-    draw(l3);
-
-    if (pSolid) {
-      draw(tri);
-    }
+    group = group->next;
   }
 
   return true;

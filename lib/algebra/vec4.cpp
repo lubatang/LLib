@@ -43,6 +43,13 @@ vec4::vec4(const vec3& v, double d)
   m_N[3] = d;
 }
 
+vec4::vec4(double d[4])
+{
+  m_N[0] = d[0];
+  m_N[1] = d[1];
+  m_N[2] = d[2];
+  m_N[3] = d[3];
+}
 vec4::operator vec3() const
 {
   vec3 result;

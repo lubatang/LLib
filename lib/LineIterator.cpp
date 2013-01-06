@@ -80,6 +80,8 @@ LineIterator& LineIterator::next()
 
   m_X += m_pDrawLine->m_XStep;
 
+  m_pDrawLine->dda(m_Vertex);
+
   if (m_pDrawLine->m_bSteepXY) {
     m_Vertex.setX(m_Y);
     m_Vertex.setY(m_X);
@@ -88,14 +90,6 @@ LineIterator& LineIterator::next()
     m_Vertex.setX(m_X);
     m_Vertex.setY(m_Y);
   }
-  return *this;
-}
-
-template<class FUNCTION>
-LineIterator& LineIterator::next()
-{
-  next();
-  FUNCTION(m_Vertex);
   return *this;
 }
 

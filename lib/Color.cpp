@@ -10,31 +10,23 @@ using namespace luba;
 //===----------------------------------------------------------------------===//
 // Color
 //===----------------------------------------------------------------------===//
+Color::Color()
+  : vec3(0.0, 0.0, 0.0) {
+}
+
+Color::Color(double pR, double pG, double pB)
+  : vec3(pR, pG, pB) {
+}
+
 Color::Color(const Color& pCopy)
-  : r(pCopy.r), g(pCopy.g), b(pCopy.b) {
+  : vec3(pCopy[0], pCopy[1], pCopy[2]) {
 }
 
 Color& Color::operator=(const Color& pCopy)
 {
-  r = pCopy.r;
-  g = pCopy.g;
-  b = pCopy.b;
-  return *this;
-}
-
-Color& Color::operator+=(const Color& pAddend)
-{
-  r += pAddend.r;
-  g += pAddend.g;
-  b += pAddend.b;
-  return *this;
-}
-
-Color& Color::operator-=(const Color& pAddend)
-{
-  r -= pAddend.r;
-  g -= pAddend.g;
-  b -= pAddend.b;
+  m_N[0] = pCopy[0];
+  m_N[1] = pCopy[1];
+  m_N[2] = pCopy[2];
   return *this;
 }
 

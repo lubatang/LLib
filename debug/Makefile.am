@@ -42,8 +42,6 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/Model.cpp \
 	${INCDIR}/Triangle/Color.h \
 	${LIBDIR}/Color.cpp \
-	${INCDIR}/Triangle/ColorIterator.h \
-	${LIBDIR}/ColorIterator.cpp \
 	${INCDIR}/Triangle/Vertex.h \
 	${LIBDIR}/Vertex.cpp \
 	${INCDIR}/Triangle/ModelToVertex.h \

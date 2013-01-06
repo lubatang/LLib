@@ -47,9 +47,9 @@ void ModelToVertex::getCoord(Coord& pCoord) const
 /// Original data is in the [-1, 1]. Linear interpolation to [0, 255]
 void ModelToVertex::getColor(Color& pColor) const
 {
-  pColor.r = m_Model.getObject()->colors[m_VertexIdx*3];
-  pColor.g = m_Model.getObject()->colors[m_VertexIdx*3 + 1];
-  pColor.b = m_Model.getObject()->colors[m_VertexIdx*3 + 2];
+  pColor[0] = m_Model.getObject()->colors[m_VertexIdx*3];
+  pColor[1] = m_Model.getObject()->colors[m_VertexIdx*3 + 1];
+  pColor[2] = m_Model.getObject()->colors[m_VertexIdx*3 + 2];
 }
 
 void ModelToVertex::getNorm(vec3& pNorm) const

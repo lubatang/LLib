@@ -30,6 +30,8 @@ public:
   /// @param d - the value of w
   explicit vec4(const vec3& v, double d);
 
+  explicit vec4(double pV[4]);
+
   operator vec3() const;
 
   vec4 operator-() const;

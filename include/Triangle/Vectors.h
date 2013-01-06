@@ -36,6 +36,7 @@ public:
   explicit vec3D(double x, double y, double z);
   explicit vec3D(const vec3& v);
   explicit vec3D(const vec3& v, double w);
+  vec3D(float pV[4]);
 
   vec3D& operator=(const vec4& pCopy);
   vec3D& operator=(const vec3D& pCopy);

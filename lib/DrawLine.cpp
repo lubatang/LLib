@@ -47,6 +47,12 @@ DrawLine& DrawLine::setTerminals(const Vertex& pA, const Vertex& pB)
   m_XStep = (m_A.x() < m_B.x()) ? 1 : -1;
   m_YStep = (m_A.y() < m_B.y()) ? 1 : -1;
 
+  unsigned int d = distance();
+  if (0 != d) {
+    m_DDA = (pB - pA)/distance();
+    m_DDA.x() = 0;
+    m_DDA.y() = 0;
+  }
   return *this;
 }
 
@@ -63,5 +69,10 @@ DrawLine::const_iterator DrawLine::end() const
 unsigned int DrawLine::distance() const
 {
   return (unsigned int)(m_B.x()) - (unsigned int)(m_A.x());
+}
+
+void DrawLine::dda(Vertex& pVertex) const
+{
+  pVertex += m_DDA;
 }
 

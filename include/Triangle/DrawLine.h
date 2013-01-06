@@ -34,8 +34,12 @@ public:
   unsigned int distance() const;
 
 private:
+  void dda(Vertex& pVertex) const;
+
+private:
   Vertex m_A;
   Vertex m_B;
+  Vertex m_DDA;
 
   int m_XStep;
   int m_YStep;

@@ -7,6 +7,7 @@
 #define LUBA_VERTEX_H
 #include <Triangle/Vectors.h>
 #include <Triangle/Color.h>
+#include <iosfwd>
 
 namespace luba {
 
@@ -14,6 +15,9 @@ typedef vec3D Coord;
 
 class Vertex
 {
+private:
+  friend Vertex operator-(const Vertex& pA, const Vertex& pB);
+
 public:
   const Coord& coord() const { return m_Coord; }
   Coord&       coord()       { return m_Coord; }
@@ -38,13 +42,30 @@ public:
   double  z() const { return m_Coord[2]; }
   double& z()       { return m_Coord[2]; }
 
+  // -----  operator ----- //
+  Vertex& operator+=(const Vertex& pOther);
+  Vertex& operator-=(const Vertex& pOther);
+
+  Vertex& operator*=(double pC);
+  Vertex& operator/=(double pC);
 public:
   Coord m_Coord;
   Color m_Color;
   vec3 m_Norm;
 };
 
+Vertex operator + (const Vertex& pA, const Vertex& pB);
+Vertex operator - (const Vertex& pA, const Vertex& pB);
+Vertex operator * (const Vertex& pA, double pC);
+Vertex operator / (const Vertex& pA, double pC);
+
 } // namespace of luba
+
+namespace std {
+
+ostream& operator << (ostream& pOStream, const luba::Vertex& pVertex);
+
+} // namespace of std
 
 #endif
 

@@ -31,8 +31,6 @@ public:
 
   LineIterator& next();
 
-  template<typename FUNCTION> LineIterator& next();
-
   const Vertex& operator*() const;
   Vertex& operator*();
 

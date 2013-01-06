@@ -80,6 +80,10 @@ vec3D::vec3D(const vec3& v, double w)
   : vec4(v[0], v[1], v[2], w) {
 }
 
+vec3D::vec3D(float pV[4])
+  : vec4(pV[0], pV[1], pV[2], pV[3]) {
+}
+
 vec3D& vec3D::operator=(const vec3D& pCopy)
 {
   m_N[0] = pCopy.m_N[0];
