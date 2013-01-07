@@ -10,13 +10,12 @@
       coordinate generation (spheremap and planar projections) + more.
   
 */
-
+#include <GLM/glm.h>
 #include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 #include <assert.h>
-#include <GLM/glm.h>
 
 #define T(x) (model->triangles[(x)])
 
@@ -208,7 +207,7 @@ glmFindMaterial(GLMmodel* model, char* name)
     
     /* didn't find the name, so print a warning and return the default
     material (0). */
-    printf("glmFindMaterial():  can't find material \"%s\".\n", name);
+    //printf("glmFindMaterial():  can't find material \"%s\".\n", name);
     i = 0;
     
 found:
@@ -261,7 +260,8 @@ glmReadMTL(GLMmodel* model, const char* name)
 
     file = fopen(filename, "r");
     if (!file) {
-        fprintf(stderr, "glmReadMTL() failed: can't open material file \"%s\".\n", filename);
+        //fprintf(stderr, "glmReadMTL() failed: can't open material file \"%s\".\n",
+        //   filename);
         exit(1);
     }
     free(filename);
@@ -323,6 +323,7 @@ glmReadMTL(GLMmodel* model, const char* name)
             sscanf(buf, "%s %s", buf, buf);
             nummaterials++;
             model->materials[nummaterials].name = strdup(buf);
+            model->materials[nummaterials].textureImageName[0] = '\0';
             break;
         case 'N':
             fscanf(file, "%f", &model->materials[nummaterials].shininess);
@@ -330,6 +331,13 @@ glmReadMTL(GLMmodel* model, const char* name)
             model->materials[nummaterials].shininess /= 1000.0;
             model->materials[nummaterials].shininess *= 128.0;
             break;
+        case 'i'://illum
+          fscanf(file, "%f", &model->materials[nummaterials].illum );
+          break;
+        case 'm'://map_Kd
+          fscanf(file, "%s", model->materials[nummaterials].textureImageName );
+          model->materials[nummaterials].textureID = -1;
+          break;
         case 'K':
             switch(buf[1]) {
             case 'd':
@@ -390,8 +398,6 @@ glmWriteMTL(GLMmodel* model, const char* modelpath, const char* mtllibname)
     /* open the file */
     file = fopen(filename, "w");
     if (!file) {
-        fprintf(stderr, "glmWriteMTL() failed: can't open file \"%s\".\n",
-            filename);
         exit(1);
     }
     free(filename);
@@ -434,6 +440,7 @@ glmFirstPass(GLMmodel* model, FILE* file)
     unsigned    v, n, t;
     char        buf[128];
 
+    /* make a default group */
     numvertices = numnormals = numtexcoords = numtriangles = 0;
     while(fscanf(file, "%s", buf) != EOF) {
         switch(buf[0]) {
@@ -459,7 +466,7 @@ glmFirstPass(GLMmodel* model, FILE* file)
                 numtexcoords++;
                 break;
             default:
-                printf("glmFirstPass(): Unknown token \"%s\".\n", buf);
+                //printf("glmFirstPass(): Unknown token \"%s\".\n", buf);
                 exit(1);
                 break;
             }
@@ -553,10 +560,10 @@ glmFirstPass(GLMmodel* model, FILE* file)
   /* allocate memory for the triangles in each group */
   group = model->groups;
   while(group) {
-      group->triangles = (GLuint*)malloc(sizeof(GLuint) * group->numtriangles);
-      group->numtriangles = 0;
-      group = group->next;
-  }
+    group->triangles = (GLuint*)malloc(sizeof(GLuint) * group->numtriangles);
+    group->numtriangles = 0;
+    group = group->next;
+  }  
 }
 
 /* glmSecondPass: second pass at a Wavefront OBJ file that gets all
@@ -1056,8 +1063,9 @@ glmVertexNormals(GLMmodel* model, GLfloat angle)
     /* calculate an average normal for this vertex by averaging the
         facet normal of every triangle this vertex is in */
         node = members[i];
-        if (!node)
-            fprintf(stderr, "glmVertexNormals(): vertex w/o a triangle\n");
+        if (!node){
+            //fprintf(stderr, "glmVertexNormals(): vertex w/o a triangle\n");
+        }
         average[0] = 0.0; average[1] = 0.0; average[2] = 0.0;
         avg = 0;
         while (node) {
@@ -1316,10 +1324,10 @@ GLMmodel* glmReadOBJ(const char* filename)
     /* open the file */
     file = fopen(filename, "r");
     if (!file) {
-      fprintf(stderr, "glmReadOBJ() failed: can't open data file \"%s\".\n",
-              filename);
-      system("pause");
-      exit(1);
+        //fprintf(stderr, "glmReadOBJ() failed: can't open data file \"%s\".\n",
+        //    filename);
+        system("pause");
+        exit(1);
     }
     
     /* allocate a new model */
@@ -1404,38 +1412,38 @@ GLvoid glmWriteOBJ(GLMmodel* model, const char* filename, GLuint mode)
 
     /* do a bit of warning */
     if (mode & GLM_FLAT && !model->facetnorms) {
-        printf("glmWriteOBJ() warning: flat normal output requested "
-            "with no facet normals defined.\n");
+       // printf("glmWriteOBJ() warning: flat normal output requested "
+       //    "with no facet normals defined.\n");
         mode &= ~GLM_FLAT;
     }
     if (mode & GLM_SMOOTH && !model->normals) {
-        printf("glmWriteOBJ() warning: smooth normal output requested "
-            "with no normals defined.\n");
+       // printf("glmWriteOBJ() warning: smooth normal output requested "
+       //    "with no normals defined.\n");
         mode &= ~GLM_SMOOTH;
     }
     if (mode & GLM_TEXTURE && !model->texcoords) {
-        printf("glmWriteOBJ() warning: texture coordinate output requested "
-            "with no texture coordinates defined.\n");
+       //printf("glmWriteOBJ() warning: texture coordinate output requested "
+       //    "with no texture coordinates defined.\n");
         mode &= ~GLM_TEXTURE;
     }
     if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-        printf("glmWriteOBJ() warning: flat normal output requested "
-            "and smooth normal output requested (using smooth).\n");
-        mode &= ~GLM_FLAT;
+       //printf("glmWriteOBJ() warning: flat normal output requested "
+       //    "and smooth normal output requested (using smooth).\n");
+       mode &= ~GLM_FLAT;
     }
     if (mode & GLM_COLOR && !model->materials) {
-        printf("glmWriteOBJ() warning: color output requested "
-            "with no colors (materials) defined.\n");
+        //printf("glmWriteOBJ() warning: color output requested "
+        //    "with no colors (materials) defined.\n");
         mode &= ~GLM_COLOR;
     }
     if (mode & GLM_MATERIAL && !model->materials) {
-        printf("glmWriteOBJ() warning: material output requested "
-            "with no materials defined.\n");
-        mode &= ~GLM_MATERIAL;
+       // printf("glmWriteOBJ() warning: material output requested "
+       //    "with no materials defined.\n");
+       mode &= ~GLM_MATERIAL;
     }
     if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-        printf("glmWriteOBJ() warning: color and material output requested "
-            "outputting only materials.\n");
+        //printf("glmWriteOBJ() warning: color and material output requested "
+        //   "outputting only materials.\n");
         mode &= ~GLM_COLOR;
     }
     
@@ -1443,8 +1451,8 @@ GLvoid glmWriteOBJ(GLMmodel* model, const char* filename, GLuint mode)
     /* open the file */
     file = fopen(filename, "w");
     if (!file) {
-        fprintf(stderr, "glmWriteOBJ() failed: can't open file \"%s\" to write.\n",
-            filename);
+        //fprintf(stderr, "glmWriteOBJ() failed: can't open file \"%s\" to write.\n",
+        //    filename);
         exit(1);
     }
     
@@ -1600,43 +1608,43 @@ glmDraw(GLMmodel* model, GLuint mode)
     
     /* do a bit of warning */
     if (mode & GLM_FLAT && !model->facetnorms) {
-        printf("glmDraw() warning: flat render mode requested "
-            "with no facet normals defined.\n");
-        mode &= ~GLM_FLAT;
+       // printf("glmDraw() warning: flat render mode requested "
+       //    "with no facet normals defined.\n");
+       mode &= ~GLM_FLAT;
     }
     if (mode & GLM_SMOOTH && !model->normals) {
-        printf("glmDraw() warning: smooth render mode requested "
-            "with no normals defined.\n");
-        mode &= ~GLM_SMOOTH;
+       // printf("glmDraw() warning: smooth render mode requested "
+       //     "with no normals defined.\n");
+       mode &= ~GLM_SMOOTH;
     }
     if (mode & GLM_TEXTURE && !model->texcoords) {
-        printf("glmDraw() warning: texture render mode requested "
-            "with no texture coordinates defined.\n");
-        mode &= ~GLM_TEXTURE;
+       // printf("glmDraw() warning: texture render mode requested "
+       //     "with no texture coordinates defined.\n");
+       mode &= ~GLM_TEXTURE;
     }
 
-  if (mode & GLM_TEXTURE)      //@RG
-    glEnable(GL_TEXTURE_2D);
+    if (mode & GLM_TEXTURE)      //@RG
+      glEnable(GL_TEXTURE_2D);
 
     if (mode & GLM_FLAT && mode & GLM_SMOOTH) {
-        printf("glmDraw() warning: flat render mode requested "
-            "and smooth render mode requested (using smooth).\n");
-        mode &= ~GLM_FLAT;
+       // printf("glmDraw() warning: flat render mode requested "
+       //   "and smooth render mode requested (using smooth).\n");
+       mode &= ~GLM_FLAT;
     }
     if (mode & GLM_COLOR && !model->materials) {
-        printf("glmDraw() warning: color render mode requested "
-            "with no materials defined.\n");
-        mode &= ~GLM_COLOR;
+       // printf("glmDraw() warning: color render mode requested "
+       //   "with no materials defined.\n");
+       mode &= ~GLM_COLOR;
     }
     if (mode & GLM_MATERIAL && !model->materials) {
-        printf("glmDraw() warning: material render mode requested "
-            "with no materials defined.\n");
-        mode &= ~GLM_MATERIAL;
+       // printf("glmDraw() warning: material render mode requested "
+       //    "with no materials defined.\n");
+       mode &= ~GLM_MATERIAL;
     }
     if (mode & GLM_COLOR && mode & GLM_MATERIAL) {
-        printf("glmDraw() warning: color and material render mode requested "
-            "using only material mode.\n");
-        mode &= ~GLM_COLOR;
+       //printf("glmDraw() warning: color and material render mode requested "
+       //    "using only material mode.\n");
+       mode &= ~GLM_COLOR;
     }
     if (mode & GLM_COLOR)
         glEnable(GL_COLOR_MATERIAL);
@@ -1662,9 +1670,9 @@ glmDraw(GLMmodel* model, GLuint mode)
             glColor3fv(material->diffuse);
         }
         if(mode & GLM_POINTS)
-      glBegin(GL_POINTS);
-    else 
-      glBegin(GL_TRIANGLES);
+          glBegin(GL_POINTS);
+        else 
+          glBegin(GL_TRIANGLES);
 
         for (i = 0; i < group->numtriangles; i++) {
             triangle = &T(group->triangles[i]);
@@ -1695,8 +1703,8 @@ glmDraw(GLMmodel* model, GLuint mode)
         
         group = group->next;
     }
-  if (mode & GLM_TEXTURE)      //@RG
-    glDisable(GL_TEXTURE_2D);
+    if (mode & GLM_TEXTURE)      //@RG
+      glDisable(GL_TEXTURE_2D);
 }
 
 /* glmList: Generates and returns a display list for the model using
@@ -1822,8 +1830,8 @@ glmReadPPM(const char* filename, int* width, int* height)
        correct magic cookie for a raw PPM file. */
     fgets(head, 70, fp);
     if (strncmp(head, "P6", 2)) {
-        fprintf(stderr, "%s: Not a raw PPM file\n", filename);
-        return NULL;
+      //fprintf(stderr, "%s: Not a raw PPM file\n", filename);
+      return NULL;
     }
     
     /* grab the three elements in the header (height, width, maxval). */

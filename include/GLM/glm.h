@@ -1,6 +1,5 @@
 #ifndef FRAMEWORK_GLM_H
 #define FRAMEWORK_GLM_H
-
 /*    
       glm.h
       Nate Robins, 1997, 2000
@@ -15,6 +14,7 @@
 	  Modified by Ramgopal R to accomodate point rendering.	
 
  */
+
 
 #ifdef __APPLE__
 #include <GLUT/glut.h>
@@ -45,6 +45,9 @@ typedef struct _GLMmaterial
   GLfloat specular[4];          /* specular component */
   GLfloat emmissive[4];         /* emmissive component */
   GLfloat shininess;            /* specular exponent */
+  GLfloat illum;
+  char textureImageName[128];
+  int textureID;
 } GLMmaterial;
 
 /* GLMtriangle: Structure that defines a triangle in a model.
@@ -282,6 +285,7 @@ glmWeld(GLMmodel* model, GLfloat epsilon);
  *
  */
 GLubyte* 
-glmReadPPM(const char* filename, int* width, int* height);
+glmReadPPM(const char*filename, int* width, int* height);
 
 #endif
+
