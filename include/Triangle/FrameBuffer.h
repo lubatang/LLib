@@ -34,7 +34,7 @@ public:
 
   void clear();
 
-  void setColor(unsigned int pX, unsigned int pY, unsigned int pZ, const Color &pColor);
+  void setColor(unsigned int pX, unsigned int pY, int pZ, const Color &pColor);
 
   const uint8_t* getUCharArray() const { return (const uint8_t*)m_Pixels; }
 
@@ -46,7 +46,7 @@ private:
 
 private:
   Pixel* m_Pixels;
-  uint32_t* m_ZBuffer;
+  int32_t* m_ZBuffer;
 
   unsigned int m_Width;
   unsigned int m_Height;

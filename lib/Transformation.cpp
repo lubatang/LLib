@@ -10,6 +10,7 @@
 #include <cmath>
 #include <cassert>
 
+using namespace std;
 using namespace luba;
 
 //===----------------------------------------------------------------------===//
@@ -17,15 +18,9 @@ using namespace luba;
 //===----------------------------------------------------------------------===//
 Transformation::Transformation()
   : Stage("transformation"), m_bActivated(false),
-    m_OrgX(0), m_OrgY(0), m_T(),
+    m_OrgX(0), m_OrgY(0), m_T(), m_S(), m_R(),
     m_State(MOVE),
     m_pSpace(NULL) {
-}
-
-const Transformation& Transformation::transform(Coord& pCoord) const
-{
-  pCoord = m_T * pCoord;
-  return *this;
 }
 
 void Transformation::move(double pX, double pY)
@@ -37,14 +32,12 @@ void Transformation::move(double pX, double pY)
 void Transformation::zoom(double pS)
 {
   double scale = 1.0 + pS / 40.0;
-  mat4 scaling;
-  scaling[0][0] = scale;
-  scaling[1][1] = scale;
-  scaling[2][2] = scale;
-  m_T = scaling * m_T;
+  m_S[0][0] *= scale;
+  m_S[1][1] *= scale;
+  m_S[2][2] *= scale;
 }
 
-void Transformation::rotate(double pX, double pY)
+void Transformation::roll(double pX, double pY)
 {
   double radianX = (pX * luba::PI) / 180.0;
   mat4 rotationY;
@@ -59,7 +52,7 @@ void Transformation::rotate(double pX, double pY)
   rotationX[1][2] = -sin(radianY);
   rotationX[2][1] = sin(radianY);
   rotationX[2][2] = cos(radianY);
-  m_T = (rotationX * rotationY) * m_T;
+  m_R = (rotationX * rotationY) * m_R;
 }
 
 void Transformation::keyEvent(KeyEvent* pEvent)
@@ -68,12 +61,28 @@ void Transformation::keyEvent(KeyEvent* pEvent)
     case KeyEvent::Keyt:
     case KeyEvent::KeyT: {
       m_bActivated = true;
+      m_State = MOVE;
+      cerr << "Controlling Model. (Press SPACE to change mouse modes)" << endl;
       break;
     }
     case KeyEvent::KeySpace: {
       if (m_bActivated) {
         ++m_State;
         m_State %= STATES;
+        switch (m_State) {
+          case MOVE: {
+            cerr << "Moving model's position" << endl;
+            break;
+          }
+          case ROTATE: {
+            cerr << "Rotating model" << endl;
+            break;
+          }
+          case ZOOM: {
+            cerr << "Scaling model" << endl;
+            break;
+          }
+        }
       }
       break;
     }
@@ -81,7 +90,7 @@ void Transformation::keyEvent(KeyEvent* pEvent)
       if (m_bActivated) {
         switch (m_State) {
           case MOVE:   move(-1, 0);   break;
-          case ROTATE: rotate(-1, 0); break;
+          case ROTATE: roll(-1, 0); break;
           default: break;
         }
       }
@@ -91,7 +100,7 @@ void Transformation::keyEvent(KeyEvent* pEvent)
       if (m_bActivated) {
         switch (m_State) {
           case MOVE:   move(1, 0);   break;
-          case ROTATE: rotate(1, 0); break;
+          case ROTATE: roll(1, 0); break;
           default: break;
         }
       }
@@ -101,7 +110,7 @@ void Transformation::keyEvent(KeyEvent* pEvent)
       if (m_bActivated) {
         switch (m_State) {
           case MOVE:   move(0, -1);   break;
-          case ROTATE: rotate(0, -1); break;
+          case ROTATE: roll(0, -1); break;
           case ZOOM:   zoom(-1); break;
         }
       }
@@ -111,7 +120,7 @@ void Transformation::keyEvent(KeyEvent* pEvent)
       if (m_bActivated) {
         switch (m_State) {
           case MOVE:   move(0, 1);   break;
-          case ROTATE: rotate(0, 1); break;
+          case ROTATE: roll(0, 1); break;
           case ZOOM:   zoom(1); break;
         }
       }
@@ -137,7 +146,7 @@ void Transformation::mouseMoveEvent(MouseEvent* pEvent)
           break;
         }
         case ROTATE: {
-          rotate(deltaX, deltaY);
+          roll(deltaX, deltaY);
           break;
         }
         case ZOOM: {
@@ -161,6 +170,6 @@ void Transformation::mousePressEvent(MouseEvent* pEvent)
 
 std::ostream& std::operator << (std::ostream& s, const luba::Transformation& pTransformation)
 {
-  return s << pTransformation.matrix();
+  return s << (pTransformation.trans() * pTransformation.scale() * pTransformation.rotate());
 }
 

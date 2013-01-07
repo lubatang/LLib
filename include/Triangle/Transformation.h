@@ -25,9 +25,7 @@ public:
 
   void zoom(double pS);
   void move(double pX, double pY);
-  void rotate(double pX, double pY);
-
-  const Transformation& transform(Coord& pCoord) const;
+  void roll(double pX, double pY);
 
   void keyEvent(KeyEvent* pEvent);
   void mouseMoveEvent(MouseEvent* pEvent);
@@ -36,7 +34,9 @@ public:
   bool active() const { return m_bActivated; }
   unsigned int state() const { return m_State; }
 
-  const mat4& matrix() const { return m_T; }
+  const mat4& trans() const { return m_T; }
+  const mat4& scale() const { return m_S; }
+  const mat4& rotate() const { return m_R; }
 
 private:
   enum State {
@@ -45,11 +45,14 @@ private:
     ZOOM   = 2,
     STATES = 3
   };
+
 private:
   bool m_bActivated : 1;
   int m_OrgX;
   int m_OrgY;
   mat4 m_T;
+  mat4 m_S;
+  mat4 m_R;
   unsigned int m_State;
   const Space* m_pSpace;
 };

@@ -1,4 +1,32 @@
 ========================
+ Execution Instructions
+========================
+  The simplest way to run this program is:
+
+  1. ./run.sh [Path of Test Directory]
+
+  For example: ./run.sh Color\ Models/"
+
+  When the program is running, there are keys to control the model:
+
+  - L/l: control the position of light.
+    When the light is under control, you can use SPACE key to switch the mouse
+    mode. There are three mouse modes:
+    1. Move   - move the position of light along to X- and Y-axis.
+    2. Rotate - rotate the position of light by the center of model.
+    3. Spot   - rotate the direction of light. This will affect spot light.
+
+  - T/t: control the position of model.
+    When the model is under control, you can use SPACE key to switch the mouse
+    mode. Like L/l, T/t has three mouse modes:
+    1. Move   - move the position of the model by X- and Y-axis.
+    2. Rotate - rotate the model by the center of model.
+    3. Scale  - scaling the model.
+
+  - V/v: control the position of eye.
+    Original behavior.
+
+========================
 Compilation Instructions
 ========================
   The simplest way to compile this package is:

@@ -19,7 +19,7 @@ class ModelToVertex
 public:
   ModelToVertex(Model& pModel);
 
-  void setConverter(size_t pVertex, size_t pColor, size_t m_Norm, size_t m_Text);
+  void setConverter(size_t pVertex, size_t m_Norm, size_t m_Text);
 
   void getVertex(Vertex& pVertex) const;
 
@@ -27,13 +27,12 @@ public:
 
   void getColor(Color& pColor) const;
 
-  void getNorm(vec3& pNorm) const;
+  void getNorm(vec3D& pNorm) const;
 
 private:
   Model& m_Model;
 
   size_t m_VertexIdx;
-  size_t m_ColorIdx;
   size_t m_NormIdx;
   size_t m_TextureIdx;
 };

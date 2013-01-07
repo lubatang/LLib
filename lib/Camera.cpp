@@ -40,16 +40,7 @@ mat4 Camera::translate() const
 
 mat4 Camera::matrix() const
 {
-  vec3 n(m_VPN);
-  n.normalize();
-
-  vec3 u = CrossProduct(m_Up, m_VPN).normalize();
-  vec3 v = CrossProduct(n, u);
-
-  return mat4(u.x(), u.y(), u.z(), -m_Pos.x(),
-              v.x(), v.y(), v.z(), -m_Pos.y(),
-              n.x(), n.y(), n.z(), -m_Pos.z(),
-              0.0,     0.0,   0.0,        1.0);
+  return (rotate() * translate());
 }
 
 //===----------------------------------------------------------------------===//

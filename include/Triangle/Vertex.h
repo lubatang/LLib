@@ -30,8 +30,8 @@ public:
   const Color& color() const { return m_Color; }
   Color&       color()       { return m_Color; }
 
-  const vec3& norm() const { return m_Norm; }
-  vec3&       norm()       { return m_Norm; }
+  const vec3D& norm() const { return m_Norm; }
+  vec3D&       norm()       { return m_Norm; }
   Vertex& setNorm(double pX, double pY, double pZ);
 
   // -----  accessors  ----- //
@@ -41,6 +41,8 @@ public:
   double& y()       { return m_Coord[1]; }
   double  z() const { return m_Coord[2]; }
   double& z()       { return m_Coord[2]; }
+  double  w() const { return m_Coord[3]; }
+  double& w()       { return m_Coord[3]; }
 
   // -----  operator ----- //
   Vertex& operator+=(const Vertex& pOther);
@@ -51,7 +53,7 @@ public:
 public:
   Coord m_Coord;
   Color m_Color;
-  vec3 m_Norm;
+  vec3D m_Norm;
 };
 
 Vertex operator + (const Vertex& pA, const Vertex& pB);

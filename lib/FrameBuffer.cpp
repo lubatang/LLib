@@ -12,6 +12,7 @@
 
 using namespace luba;
 
+const int32_t MAXZ = 0;
 //===----------------------------------------------------------------------===//
 // FrameBuffer
 //===----------------------------------------------------------------------===//
@@ -22,8 +23,8 @@ FrameBuffer::FrameBuffer(unsigned int pWidth, unsigned int pHeight)
   m_Pixels = (Pixel*)malloc(sizeof(Pixel)*size);
   memset(m_Pixels, 0u, size*sizeof(Pixel));
 
-  m_ZBuffer = (unsigned int*)malloc(sizeof(unsigned int)*size);
-  memset(m_ZBuffer, 0u, size*sizeof(unsigned int));
+  m_ZBuffer = (int32_t*)malloc(sizeof(int32_t)*size);
+  memset(m_ZBuffer, MAXZ, size*sizeof(int32_t));
 }
 
 FrameBuffer::~FrameBuffer()
@@ -31,12 +32,12 @@ FrameBuffer::~FrameBuffer()
   free(m_Pixels);
 }
 
-void FrameBuffer::setColor(unsigned int pX, unsigned int pY, unsigned int pZ,
+void FrameBuffer::setColor(unsigned int pX, unsigned int pY, int pZ,
                            const Color &pColor)
 {
   if(isValidCoord(pX, pY)) {
     size_t index = pX + pY*m_Width;
-    if (pZ >= m_ZBuffer[index]) {
+    if (pZ > m_ZBuffer[index]) {
       Pixel round;
       round.r = pColor.r() * 127.5 + 127.5;
       round.g = pColor.g() * 127.5 + 127.5;
@@ -50,7 +51,7 @@ void FrameBuffer::setColor(unsigned int pX, unsigned int pY, unsigned int pZ,
 void FrameBuffer::clear()
 {
   memset(m_Pixels, 0u, m_Width*m_Height*sizeof(Pixel));
-  memset(m_ZBuffer, 0u, m_Width*m_Height*sizeof(unsigned int));
+  memset(m_ZBuffer, MAXZ, m_Width*m_Height*sizeof(int32_t));
 }
 
 bool FrameBuffer::saveAsPPM(FileHandle& pFile) const

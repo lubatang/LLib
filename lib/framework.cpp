@@ -3,6 +3,7 @@
 #include <framework.h>
 #include <Triangle/FrameBuffer.h>
 #include <Support/FileHandle.h>
+#include <Triangle/ManagedStatic.h>
 
 using LLib::Viewer::LViewer;
 using LLib::Math::LTranslateMatrix;
@@ -16,12 +17,10 @@ static InitFuncType initFunc = NULL;
 FrameBuffer *colorBuff = NULL;
 unsigned int texID = 0;
 RENDER_MODE renderMode = WIRE;
-
+static ManagedStatic<Light> g_Light;
 
 bool g_isOutputPPM = false;
 
-
-LTranslateMatrix lightMatrix(vec3(100, 100, 0), vec3(0,0,0), vec3(0, 1, 0));
 
 void showHelp()
 {
@@ -95,10 +94,8 @@ void drawFunc()
              LViewer::viewMatrix.getPos3v() + LViewer::viewMatrix.getViewDir3v(),
              LViewer::viewMatrix.getUpDir3v());
 
-  const LLight lit(lightMatrix.getPos3v());
-
   if(renderFunc && colorBuff) {
-    (*renderFunc)(cam, lit, colorBuff, renderMode);
+    (*renderFunc)(cam, *g_Light, colorBuff, renderMode);
 
     updateTex();
     LLib::Viewer::renderTextureOnScreenTop(texID, 0, 1, 0, 1);
@@ -121,8 +118,7 @@ void idle()
   if(!LViewer::flag['L'-'A'])
   {
     LViewer::flag['L'-'A'] ^=1;
-    printf("Controlling Light.\n");
-    LViewer::setCurrentControlMatrix(& lightMatrix);
+    LViewer::setCurrentControlMatrix(& LViewer::nullMatrix);
   }
 
   if(!LViewer::flag['V'-'A'])

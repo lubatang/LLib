@@ -313,6 +313,7 @@ void renderTextOnScreenTop(char * text, bool isReset)
 // Static Initialization
 //===----------------------------------------------------------------------===//
 LTranslateMatrix LViewer::viewMatrix(vec3(0, 0, -400), vec3(0, 0, 0), vec3(0,1,0));
+
 LTranslateMatrix LViewer::nullMatrix;
 LTranslateMatrix * LViewer::controlMatrix = &LViewer::viewMatrix;
 LTranslateMatrix * LViewer::currentViewMatrix = &LViewer::viewMatrix;

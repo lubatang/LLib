@@ -8,6 +8,8 @@
 
 #include <cmath>
 #include <algorithm>
+#include <iostream>
+using namespace std;
 
 using namespace luba;
 

@@ -9,6 +9,7 @@
 #include <cmath>
 #include <cassert>
 
+using namespace std;
 using namespace luba;
 
 //===----------------------------------------------------------------------===//
@@ -25,8 +26,6 @@ const Projection& Projection::transform(Coord& pCoord) const
   return *this;
 }
 
-#include <iostream>
-using namespace std;
 void Projection::keyEvent(KeyEvent* pEvent)
 {
   switch (pEvent->key()) {
@@ -34,19 +33,14 @@ void Projection::keyEvent(KeyEvent* pEvent)
     case KeyEvent::KeyP: {
       ++m_Mode;
       m_Mode %= NumOfMode;
-      cerr << "projection mode is ";
       if (Parallel == m_Mode) {
-        cerr << "parallel" << endl;
         m_P[3][2] = 0.0;
+        cerr << "Parallel Projection" << endl;
       }
       else {
-        cerr << "perspective" << endl;
-        m_P[3][2] = (1/m_Distance);
+        m_P[3][2] = 1/m_Distance;
+        cerr << "Perspective Projection" << endl;
       }
-
-      cerr << "  distance=" << m_Distance << endl;
-
-      cerr << m_P << endl;
 
       break;
     }

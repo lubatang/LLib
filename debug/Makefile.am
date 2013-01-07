@@ -44,6 +44,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/Color.cpp \
 	${INCDIR}/Triangle/Vertex.h \
 	${LIBDIR}/Vertex.cpp \
+	${INCDIR}/Triangle/Material.h \
+	${LIBDIR}/Material.cpp \
 	${INCDIR}/Triangle/ModelToVertex.h \
 	${LIBDIR}/ModelToVertex.cpp \
 	${INCDIR}/Triangle/Line.h \
@@ -54,6 +56,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/Space.cpp \
 	${INCDIR}/Triangle/Camera.h \
 	${LIBDIR}/Camera.cpp \
+	${INCDIR}/Triangle/Light.h \
+	${LIBDIR}/Light.cpp \
 	${INCDIR}/Triangle/DrawLine.h \
 	${LIBDIR}/DrawLine.cpp \
 	${INCDIR}/Triangle/LineIterator.h \

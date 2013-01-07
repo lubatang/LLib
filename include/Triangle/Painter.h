@@ -12,6 +12,8 @@ namespace luba {
 class FrameBuffer;
 class Space;
 class Camera;
+class Light;
+class Material;
 class Vertex;
 class Line;
 class Triangle;
@@ -21,18 +23,22 @@ class Color;
 class Painter
 {
 public:
-  explicit Painter(FrameBuffer& pFB);
+  explicit Painter(FrameBuffer& pFB, const Camera& pCamera, const Light& pLight);
 
-  bool draw(const Space& pSpace, const Camera& pCam, Model& pModel, bool pSolid) const;
-  bool draw(const Triangle& pTriangle) const;
-  bool draw(const Line& pLine) const;
-  bool draw(const Vertex& pVertex) const;
+  bool draw(const Space& pSpace, Model& pModel, bool pSolid) const;
+
+  bool draw(const Triangle& pTriangle, const Material& pMaterial) const;
+  bool draw(const Line& pLine, const Material& pMaterial) const;
+  bool draw(const Vertex& pVertex, const Material& pMaterial) const;
 
 private:
-  bool drawHorizon(const Vertex& pLeft, const Vertex& pRight) const;
+  bool drawHorizon(const Vertex& pLeft, const Vertex& pRight,
+                   const Material& pMaterial) const;
 
 private:
   FrameBuffer& m_FB;
+  const Camera& m_Camera;
+  const Light& m_Light;
 };
 
 } // end of namespace luba

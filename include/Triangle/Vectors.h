@@ -34,6 +34,7 @@ public:
   vec3D(const vec3D& v);
 
   explicit vec3D(double x, double y, double z);
+  explicit vec3D(double x, double y, double z, double w);
   explicit vec3D(const vec3& v);
   explicit vec3D(const vec3& v, double w);
   vec3D(float pV[4]);
@@ -54,6 +55,8 @@ void translate(vec2D& pOrig, const vec2& pOffset);
 void translate(vec3D& pVector, double pX, double pY, double pZ);
 
 void scaling(vec3D& pVector, double pX, double pY, double pZ);
+
+vec3D CoefProd(const vec3D& pX, const vec3D& pY);
 
 } // namespace of luba
 

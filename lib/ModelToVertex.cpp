@@ -14,16 +14,14 @@ using namespace luba;
 //===----------------------------------------------------------------------===//
 ModelToVertex::ModelToVertex(Model& pModel)
   : m_Model(pModel),
-    m_VertexIdx(0), m_ColorIdx(0), m_NormIdx(0), m_TextureIdx(0) {
+    m_VertexIdx(0), m_NormIdx(0), m_TextureIdx(0) {
 }
 
 void ModelToVertex::setConverter(size_t pVertex,
-                                 size_t pColor,
                                  size_t pNorm,
                                  size_t pText)
 {
   m_VertexIdx = pVertex;
-  m_ColorIdx = pColor;
   m_NormIdx = pNorm;
   m_TextureIdx = pText;
 }
@@ -32,7 +30,7 @@ void ModelToVertex::getVertex(Vertex& pVertex) const
 {
   getCoord(pVertex.coord());
   getColor(pVertex.color());
-  //getNorm(pVertex.norm());
+  getNorm(pVertex.norm());
 }
 
 void ModelToVertex::getCoord(Coord& pCoord) const
@@ -52,7 +50,7 @@ void ModelToVertex::getColor(Color& pColor) const
   pColor[2] = m_Model.getObject()->colors[m_VertexIdx*3 + 2];
 }
 
-void ModelToVertex::getNorm(vec3& pNorm) const
+void ModelToVertex::getNorm(vec3D& pNorm) const
 {
   pNorm[0] = m_Model.getObject()->normals[m_NormIdx*3];
   pNorm[1] = m_Model.getObject()->normals[m_NormIdx*3 + 1];

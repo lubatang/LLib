@@ -71,6 +71,10 @@ vec3D::vec3D(double x, double y, double z)
  : vec4(x, y, z, 1.0) {
 }
 
+vec3D::vec3D(double x, double y, double z, double w)
+ : vec4(x, y, z, w) {
+}
+
 vec3D::vec3D(const vec3& v)
   : vec4(v[0], v[1], v[2], 1.0) {
 
@@ -124,6 +128,16 @@ void luba::scaling(vec3D& pVector, double pX, double pY, double pZ)
          0.0, 0.0, 0.0, 1.0);
 
   pVector = S * pVector;
+}
+
+vec3D luba::CoefProd(const vec3D& pX, const vec3D& pY)
+{
+  vec3D result(pX);
+  result[0] *= pY[0];
+  result[1] *= pY[1];
+  result[2] *= pY[2];
+  result[3] *= pY[3];
+  return result;
 }
 
 /**

@@ -35,7 +35,7 @@ mat4 Space::translate() const
 {
   mat4 result(1.0, 0.0, 0.0, (double)m_Width/2  + m_OrgX,
               0.0, 1.0, 0.0, (double)m_Height/2 + m_OrgY,
-              0.0, 0.0, 1.0, (double)m_Depth/2  + m_OrgZ,
+              0.0, 0.0, 1.0, (double)m_Depth/2 + m_OrgZ,
               0.0, 0.0, 0.0, 1.0);
   return result;
 }
