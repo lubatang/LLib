@@ -78,6 +78,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/ManagedStatic.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \
 	${LIBDIR}/FrameBuffer.cpp \
+	${INCDIR}/Triangle/Image.h \
+	${LIBDIR}/Image.cpp \
 	${INCDIR}/Events/Stage.h \
 	${LIBDIR}/Stage.cpp \
 	${INCDIR}/Events/Event.h \
