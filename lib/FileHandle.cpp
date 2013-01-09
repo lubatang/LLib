@@ -35,6 +35,8 @@
 
 using namespace luba;
 
+#include <iostream>
+using namespace std;
 //===----------------------------------------------------------------------===//
 // FileHandle
 //===----------------------------------------------------------------------===//
@@ -58,10 +60,12 @@ inline static int oflag(FileHandle::OpenMode pMode)
   if (FileHandle::Unknown == pMode)
     return result;
 
-  if (FileHandle::ReadWrite == (pMode & FileHandle::ReadWrite))
+  if (FileHandle::ReadWrite == (pMode & FileHandle::ReadWrite)) {
     result |= O_RDWR;
-  else if (FileHandle::ReadOnly == (pMode & FileHandle::ReadOnly))
+  }
+  else if (FileHandle::ReadOnly == (pMode & FileHandle::ReadOnly)) {
     result |= O_RDONLY;
+  }
   else if (FileHandle::WriteOnly == (pMode & FileHandle::WriteOnly))
     result |= O_WRONLY;
 
@@ -99,9 +103,9 @@ bool FileHandle::open(const std::string& pPath,
 
   m_OpenMode = pMode;
   if (System == pPerm)
-    m_Handler = open(pPath.c_str(), oflag(pMode));
+    m_Handler = ::open(pPath.c_str(), oflag(pMode));
   else
-    m_Handler = open(pPath.c_str(), oflag(pMode), (int)pPerm);
+    m_Handler = ::open(pPath.c_str(), oflag(pMode), (int)pPerm);
 
   m_Path = pPath;
   if (-1 == m_Handler) {

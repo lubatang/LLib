@@ -1,43 +1,37 @@
-#ifndef TA_IMAGE_H
-#define TA_IMAGE_H
+//===- Image.h ------------------------------------------------------------===//
+//
+// copyright (c), 2012-
+// luba tang <lubatang@gmail.com>
+//===----------------------------------------------------------------------===//
+#ifndef LUBA_IMAGE_H
+#define LUBA_IMAGE_H
 
+#include <Triangle/Color.h>
 #include <vector>
-#include <stdio.h>
 #include <string>
+
+namespace luba {
 
 class Image
 {
 public:
-  class PixelColor
-  {
-  public:
-    PixelColor() {
-      this->color[0] = this->color[1] = this->color[2] = 0.0f;
-    }
-
-    float color[3];
-  };
-
-public:
-  Image();
-  virtual ~Image();
-    
-  std::vector<PixelColor> data;
-
-  //the width and the height of the image
-  int width;
-  int height;
-
   //read the image and store it at the data
-  bool read(const char* pFileName);
-    
-  //modify here
-  //-------------------------------------------------------------------------
-  //get the pixel color at (u,v)
-  //u,v are between 0.0 and 1.0
-  //....
-  //-------------------------------------------------------------------------
+  bool read(const std::string& pFileName);
+
+  unsigned int width()  const { return m_Width;  }
+  unsigned int height() const { return m_Height; }
+
+private:
+  typedef std::vector<Color> ColorList;
+
+private:
+  unsigned int m_Width;
+  unsigned int m_Height;
+
+  ColorList m_Data;
 };
+
+} // namespace of luba
 
 #endif
 

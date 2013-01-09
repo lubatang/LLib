@@ -6,11 +6,11 @@ LIBDIR=${TOPLEVEL}/lib
 INCDIR=${TOPLEVEL}/include/
 UNITTEST=${TOPLEVEL}/unittests
 
-AM_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(TOOLDIR) -I/usr/X11R6/include -I$(TOPLEVEL)/utils/gtest/include
+AM_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(TOOLDIR) -I/usr/X11R6/include -I$(TOPLEVEL)/utils/gtest/include -DTOPDIR=\"${abs_top_srcdir}\"
 
 bin_PROGRAMS = lviewer.debug
 
-lviewer_debug_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(TOOLDIR) -I/usr/X11R6/include -I$(TOPLEVEL)/utils/gtest/include
+lviewer_debug_CPPFLAGS = -g -O1 -I$(TOPLEVEL)/include -I$(BUILDTOP)/include -I$(TOOLDIR) -I/usr/X11R6/include -I$(TOPLEVEL)/utils/gtest/include -DTOPDIR=\"${abs_top_srcdir}\"
 
 lviewer_debug_LDFLAGS = -lglut -lGLU -lGL -L/usr/X11R6/lib/ -lXext -lX11 -L$(BUILDTOP)/utils/gtest/lib -lgtest
 
@@ -98,6 +98,8 @@ TEST_SRC = ${UNITTEST}/AlgebraTest.h \
 	${UNITTEST}/AlgebraTest.cpp \
 	${UNITTEST}/SpaceTest.h \
 	${UNITTEST}/SpaceTest.cpp \
+	${UNITTEST}/ImageTest.h \
+	${UNITTEST}/ImageTest.cpp \
 	${UNITTEST}/LineTest.h \
 	${UNITTEST}/LineTest.cpp \
 	${UNITTEST}/TriangleTest.h \
