@@ -5,6 +5,7 @@
 //===----------------------------------------------------------------------===//
 #ifndef LUBA_MODEL_H
 #define LUBA_MODEL_H
+#include <Triangle/Image.h>
 #include <GLM/glm.h>
 #include <Support/FileHandle.h>
 #include <string>
@@ -30,8 +31,12 @@ public:
 
   Object* getObject();
 
+  const TextureBuffer& getTextures() const { return m_TextureBuffer; }
+  TextureBuffer&       getTextures()       { return m_TextureBuffer; }
+
 private:
   void LazyInitializeObject();
+  void InitializeTextureBuffer();
 
 private:
   Model();
@@ -42,6 +47,7 @@ private:
 private:
   static std::string m_File;
   Object* m_pObject;
+  TextureBuffer m_TextureBuffer;
 };
 
 } // namespace of luba

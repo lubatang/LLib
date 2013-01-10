@@ -21,6 +21,8 @@ bool Image::read(const std::string& pFileName)
   if (NULL == file)
     return false;
 
+  m_Name = pFileName;
+
   //read the Image information
   fscanf(file, "%*s");
   fscanf(file, "%d %d", &m_Width, &m_Height);

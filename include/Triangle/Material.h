@@ -11,11 +11,14 @@ namespace luba {
 
 class Model;
 class vec3D;
+class Image;
 
 class Material
 {
 public:
   Material(Model& pModel, unsigned int pIdx);
+
+  ~Material();
 
   std::string name() const;
 
@@ -33,9 +36,17 @@ public:
 
   double shininess() const;
 
+  const Image* image() const { return m_pImage; }
+  Image*       image()       { return m_pImage; }
+
+  bool hasImage() const { return (NULL != m_pImage); }
+
+  void setImage(Image& pImage) { m_pImage = &pImage; }
+
 private:
   Model& m_Model;
   unsigned int m_Idx;
+  Image* m_pImage;
 };
 
 } // namespace of luba

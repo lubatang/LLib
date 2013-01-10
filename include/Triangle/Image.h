@@ -20,6 +20,7 @@ public:
 
   unsigned int width()  const { return m_Width;  }
   unsigned int height() const { return m_Height; }
+  const std::string& name() const { return m_Name; }
 
 private:
   typedef std::vector<Color> ColorList;
@@ -27,9 +28,12 @@ private:
 private:
   unsigned int m_Width;
   unsigned int m_Height;
+  std::string m_Name;
 
   ColorList m_Data;
 };
+
+typedef std::vector<Image> TextureBuffer;
 
 } // namespace of luba
 

@@ -18,6 +18,7 @@
 #include <Triangle/Transformation.h>
 #include <Triangle/Projection.h>
 #include <Triangle/ManagedStatic.h>
+#include <Triangle/Image.h>
 
 #include <cmath>
 #include <cassert>
@@ -40,6 +41,8 @@ Painter::Painter(FrameBuffer& pFB, const Camera& pCamera, const Light& pLight)
 
 bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
 {
+  /// Lighting formula
+  ///  L = ambient + att * spot * [ ambient + diffuse + specular ]
   double distance = vec3D(m_Light.position() - pVertex.coord()).length();
   double att = 1 / (m_Light.getKC() +
                     m_Light.getKL() * distance +
@@ -79,6 +82,16 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
   specular *= (specular_coef * att * spot);
 
   Color color(ambient + diffuse + specular);
+
+  if (color.r() > 1.0)
+    color.r() = 1.0;
+
+  if (color.g() > 1.0)
+    color.g() = 1.0;
+
+  if (color.b() > 1.0)
+    color.b() = 1.0;
+
   m_FB.setColor(pVertex.x(), pVertex.y(), pVertex.z(), color);
   return true;
 }
@@ -204,9 +217,11 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
   m_FB.clear();
   g_Trans->setSpace(pSpace);
   g_Proj->setDistance(1200);
+
   GLMgroup* group = Model::self().getObject()->groups;
   while (NULL != group) {
     Material material(Model::self(), group->material);
+
     for (int i=0; i<(int)group->numtriangles; ++i) {
       Vertex v1, v2, v3;
       ModelToVertex converter(Model::self());

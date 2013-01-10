@@ -7,6 +7,7 @@
 #include <Triangle/Triangle.h>
 #include <Triangle/FrameBuffer.h>
 #include <Triangle/Line.h>
+#include <Triangle/Image.h>
 
 using namespace luba;
 
@@ -41,6 +42,7 @@ void Model::LazyInitializeObject()
   if (NULL == m_pObject) {
     if (!m_File.empty()) {
       m_pObject = glmReadOBJ(m_File.c_str());
+      InitializeTextureBuffer();
     }
   }
 }
@@ -49,5 +51,27 @@ Model::Object* Model::getObject()
 {
   LazyInitializeObject();
   return m_pObject;
+}
+
+void Model::InitializeTextureBuffer()
+{
+  if (m_pObject->nummaterials < 2)
+    return;
+
+  m_TextureBuffer.reserve(m_pObject->nummaterials);
+
+  for (unsigned int i = 1; i < m_pObject->nummaterials; ++i) {
+    std::string path(m_pObject->materials[i].textureImageName);
+    if (path.empty())
+      continue;
+
+    unsigned int id = m_TextureBuffer.size();
+    Image image;
+    if (!image.read(path))
+      continue;
+
+    m_TextureBuffer.push_back(image);
+    m_pObject->materials[i].textureID = id;
+  }
 }
 

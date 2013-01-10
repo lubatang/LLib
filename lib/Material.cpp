@@ -6,6 +6,7 @@
 #include <Triangle/Material.h>
 #include <Triangle/Model.h>
 #include <Triangle/Vectors.h>
+#include <Triangle/Image.h>
 
 #include <cassert>
 
@@ -15,7 +16,14 @@ using namespace luba;
 // Material
 //===----------------------------------------------------------------------===//
 Material::Material(Model& pModel, unsigned int pIdx)
-  : m_Model(pModel), m_Idx(pIdx) {
+  : m_Model(pModel), m_Idx(pIdx), m_pImage(NULL) {
+
+  unsigned int idx = m_Model.getObject()->materials[m_Idx].textureID;
+  m_pImage = &pModel.getTextures().at(idx);
+}
+
+Material::~Material()
+{
 }
 
 std::string Material::name() const
