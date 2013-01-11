@@ -70,7 +70,6 @@ TEST_F(LineTest, draw_line_xyz)
   DrawLine::const_iterator pixel, pEnd = draw.end();
   unsigned int counter = 0;
   for (pixel = draw.begin(); pixel != pEnd; pixel.next()) {
-    cerr << pixel->coord() << endl;
     ++counter;
   }
   ASSERT_EQ(3, counter);

@@ -200,8 +200,6 @@ TEST_F(TriangleTest, order_test)
 
   Triangle t1(v1, v2, v3);
   Triangle t2(v2, v1, v3);
-cerr << t1.v1().coord() << t1.v2().coord() << t1.v3().coord() << endl;
-cerr << t2.v1().coord() << t2.v2().coord() << t2.v3().coord() << endl;
   ASSERT_TRUE(t1.v1().coord() == t2.v1().coord());
   ASSERT_TRUE(t1.v2().coord() == t2.v2().coord());
   ASSERT_TRUE(t1.v3().coord() == t2.v3().coord());
@@ -226,16 +224,13 @@ TEST_F(TriangleTest, raster)
   const Vertex& v2 = pTriangle.v2();
   const Vertex& v3 = pTriangle.v3();
 
-cerr << "v1: " << v1.coord() << endl;
-cerr << "v2: " << v2.coord() << endl;
-cerr << "v3: " << v3.coord() << endl;
   if ((v1.y() - v2.y()) < 1 && (v2.y() - v3.y()) < 1) {
-    cerr << "a horizontal line. v1.y must >= v2.y, and v2.y must >= v3.y" << endl;
+    //cerr << "a horizontal line. v1.y must >= v2.y, and v2.y must >= v3.y" << endl;
     return;
   }
 
   if (fabs(v1.x() - v2.x()) < 1 && fabs(v2.x() - v3.x()) < 1) {
-    cerr << "a vertical line." << endl;
+    //cerr << "a vertical line." << endl;
     return;
   }
 
@@ -248,84 +243,84 @@ cerr << "v3: " << v3.coord() << endl;
 
   int scan_y = (int)v3.y();
 /// Print All
-  cerr << "Long: " << long_edge.begin()->coord() << " to " << long_edge.end()->coord() << endl;
+  //cerr << "Long: " << long_edge.begin()->coord() << " to " << long_edge.end()->coord() << endl;
   DrawLine::const_iterator pixel, pEnd = long_edge.end();
   for (pixel = long_edge.begin(); pixel != pEnd; pixel.next()) {
-    cerr << "  " << pixel->coord() << endl;
+    //cerr << "  " << pixel->coord() << endl;
   }
-  cerr << "Down: " << down_edge.begin()->coord() << " to " << down_edge.end()->coord() << endl;
+  //cerr << "Down: " << down_edge.begin()->coord() << " to " << down_edge.end()->coord() << endl;
   pEnd = down_edge.end();
   for (pixel = down_edge.begin(); pixel != pEnd; pixel.next()) {
-    cerr << "  " << pixel->coord() << endl;
+    //cerr << "  " << pixel->coord() << endl;
   }
-  cerr << "Up  : " << up_edge.begin()->coord()   << " to " << up_edge.end()->coord()   << endl;
+  //cerr << "Up  : " << up_edge.begin()->coord()   << " to " << up_edge.end()->coord()   << endl;
   pEnd = up_edge.end();
   for (pixel = up_edge.begin(); pixel != pEnd; pixel.next()) {
-    cerr << "  " << pixel->coord() << endl;
+    //cerr << "  " << pixel->coord() << endl;
   }
 ///
   if (dx2 > dx1) { ///< v2 is in the right
-    cerr << "v2 is in the right" << endl;
+    //cerr << "v2 is in the right" << endl;
     DrawLine::const_iterator left  = long_edge.begin();
     DrawLine::const_iterator right = down_edge.begin();
 
     if (down_edge.begin()->y() == down_edge.end()->y()) {
-      cerr << "down is horizon" << endl;
+      //cerr << "down is horizon" << endl;
       ++scan_y;
       right = up_edge.begin();
     }
     else {
-      cerr << "down triangle" << endl;
+      //cerr << "down triangle" << endl;
       while (scan_y != down_edge.end()->y()) {
         while (scan_y != left.y())
           left.next();
         while (scan_y != right.y())
           right.next();
-        cerr << "\thorizon from " << left->coord() << " to " << right->coord() << endl;
+        //cerr << "\thorizon from " << left->coord() << " to " << right->coord() << endl;
         ++scan_y;
       }
       right = up_edge.begin();
     }
 
-    cerr << "up triangle" << endl;
+    //cerr << "up triangle" << endl;
     while (scan_y != long_edge.end()->y()) {
       while (scan_y != left.y())
         left.next();
       while (scan_y != right.y())
         right.next();
-      cerr << "\thorizon from " << left->coord() << " to " << right->coord() << endl;
+      //cerr << "\thorizon from " << left->coord() << " to " << right->coord() << endl;
       ++scan_y;
     }
   }
   else { ///< v2 is in the left
-    cerr << "v2 is in the left" << endl;
+    //cerr << "v2 is in the left" << endl;
     DrawLine::const_iterator left  = down_edge.begin();
     DrawLine::const_iterator right = long_edge.begin();
 
-    cerr << "down triangle" << endl;
+    //cerr << "down triangle" << endl;
     while (scan_y != down_edge.end()->y()) {
       while (scan_y != left.y())
         left.next();
       while (scan_y != right.y())
         right.next();
-      cerr << "\thorizon from " << left->coord() << " to " << right->coord() << endl;
+      //cerr << "\thorizon from " << left->coord() << " to " << right->coord() << endl;
       ++scan_y;
     }
 
     if (up_edge.begin().y() == up_edge.end().y()) {
-      cerr << "up is horizon" << endl;
+      //cerr << "up is horizon" << endl;
       return;
     }
     else {
       left = up_edge.begin();
 
-      cerr << "up triangle" << endl;
+      //cerr << "up triangle" << endl;
       while (scan_y != long_edge.end()->y()) {
         while (scan_y != left.y())
           left.next();
         while (scan_y != right.y())
           right.next();
-        cerr << "\thorizon from " << left->coord() << " to " << right->coord() << endl;
+        //cerr << "\thorizon from " << left->coord() << " to " << right->coord() << endl;
         ++scan_y;
       }
     }

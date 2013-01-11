@@ -83,6 +83,11 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
 
   Color color(ambient + diffuse + specular);
 
+  /// Affine textire
+  /// @{
+  Color emission = pMaterial.image()->getColor(pVertex.x()/1000.0, pVertex.y()/1000.0);
+ color += emission;
+  /// @}
   if (color.r() > 1.0)
     color.r() = 1.0;
 
@@ -258,9 +263,8 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       facet_norm = g_Trans->rotate() * facet_norm;
       double value = facet_norm * m_Camera.vpn();
 
-      if (value < 0) { // back face culling
-        // because my eyes direction is (0, 0, 1), the dot product > 0 is 
-        // back face.
+      if (value < 0) {
+        // back face culling
         continue;
       }
       /// @}

@@ -15,6 +15,10 @@ namespace luba {
 class Image
 {
 public:
+  Image();
+
+  ~Image();
+
   //read the image and store it at the data
   bool read(const std::string& pFileName);
 
@@ -22,8 +26,11 @@ public:
   unsigned int height() const { return m_Height; }
   const std::string& name() const { return m_Name; }
 
+  const Color& getColor(double pU, double pV) const;
+  Color&       getColor(double pU, double pV);
+
 private:
-  typedef std::vector<Color> ColorList;
+  typedef Color* ColorList;
 
 private:
   unsigned int m_Width;
