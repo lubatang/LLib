@@ -7,6 +7,7 @@
 #define LUBA_VERTEX_H
 #include <Triangle/Vectors.h>
 #include <Triangle/Color.h>
+#include <algebra/vec2.h>
 #include <iosfwd>
 
 namespace luba {
@@ -34,6 +35,10 @@ public:
   vec3D&       norm()       { return m_Norm; }
   Vertex& setNorm(double pX, double pY, double pZ);
 
+  const vec2& texture() const { return m_Texture; }
+  vec2&       texture()       { return m_Texture; }
+  Vertex& setTexture(double pU, double pV);
+
   // -----  accessors  ----- //
   double  x() const { return m_Coord[0]; }
   double& x()       { return m_Coord[0]; }
@@ -54,6 +59,7 @@ public:
   Coord m_Coord;
   Color m_Color;
   vec3D m_Norm;
+  vec2  m_Texture;
 };
 
 Vertex operator + (const Vertex& pA, const Vertex& pB);

@@ -24,9 +24,6 @@ Image::Image()
 Image::~Image()
 {
   if (NULL != m_Data) {
-    for (unsigned int i = 0; i < m_Width*m_Height; ++i) {
-      m_Data[i].~Color();
-    }
     free(m_Data);
   }
 }
@@ -51,8 +48,7 @@ bool Image::read(const std::string& pFileName)
 
   for(int i = m_Height-1; i >= 0; --i ) {
     for(unsigned int j = 0; j < m_Width; ++j ) {
-      Color* color = m_Data + i*m_Width + j;
-      new (color) Color();
+      Color* color = new (&m_Data[ i*m_Width + j]) Color();
       for(unsigned int k = 0; k < 3; ++k ) {
         int tmp;
         fscanf(file, "%d", &tmp );
@@ -70,7 +66,9 @@ const Color& Image::getColor(double pU, double pV) const
   assert(pU <= 1.0 && pV <= 1.0 && "Either pU or pV is out of range");
   unsigned int x = pU*(double)(m_Width - 1);
   unsigned int y = pV*(double)(m_Height - 1);
-  return *(m_Data + x*m_Width + y);
+
+  assert((y*m_Width+ x) <= (m_Height*m_Width));
+  return m_Data[y*m_Width+ x];
 }
 
 Color& Image::getColor(double pU, double pV)
@@ -78,5 +76,6 @@ Color& Image::getColor(double pU, double pV)
   assert(pU <= 1.0 && pV <= 1.0 && "Either pU or pV is out of range");
   unsigned int x = pU*(double)(m_Width - 1);
   unsigned int y = pV*(double)(m_Height - 1);
-  return *(m_Data + x*m_Width + y);
+  assert((y*m_Width+ x) <= (m_Height*m_Width));
+  return m_Data[ y*m_Width+ x];
 }

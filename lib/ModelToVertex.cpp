@@ -31,6 +31,7 @@ void ModelToVertex::getVertex(Vertex& pVertex) const
   getCoord(pVertex.coord());
   getColor(pVertex.color());
   getNorm(pVertex.norm());
+  getTexture(pVertex.texture());
 }
 
 void ModelToVertex::getCoord(Coord& pCoord) const
@@ -55,5 +56,11 @@ void ModelToVertex::getNorm(vec3D& pNorm) const
   pNorm[0] = m_Model.getObject()->normals[m_NormIdx*3];
   pNorm[1] = m_Model.getObject()->normals[m_NormIdx*3 + 1];
   pNorm[2] = m_Model.getObject()->normals[m_NormIdx*3 + 2];
+}
+
+void ModelToVertex::getTexture(vec2& pText) const
+{
+  pText[0] = m_Model.getObject()->texcoords[m_TextureIdx*2];
+  pText[1] = m_Model.getObject()->texcoords[m_TextureIdx*2 + 1];
 }
 

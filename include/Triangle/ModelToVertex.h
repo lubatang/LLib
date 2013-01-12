@@ -29,6 +29,8 @@ public:
 
   void getNorm(vec3D& pNorm) const;
 
+  void getTexture(vec2& pTexture) const;
+
 private:
   Model& m_Model;
 

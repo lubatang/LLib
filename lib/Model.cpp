@@ -58,20 +58,17 @@ void Model::InitializeTextureBuffer()
   if (m_pObject->nummaterials < 2)
     return;
 
-  m_TextureBuffer.reserve(m_pObject->nummaterials);
+  m_TextureBuffer.resize(m_pObject->nummaterials);
 
   for (unsigned int i = 1; i < m_pObject->nummaterials; ++i) {
     std::string path(m_pObject->materials[i].textureImageName);
     if (path.empty())
       continue;
 
-    unsigned int id = m_TextureBuffer.size();
-    Image image;
-    if (!image.read(path))
+    if (!m_TextureBuffer[i].read(path))
       continue;
 
-    m_TextureBuffer.push_back(image);
-    m_pObject->materials[i].textureID = id;
+    m_pObject->materials[i].textureID = i;
   }
 }
 

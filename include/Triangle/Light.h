@@ -25,6 +25,7 @@ public:
   const vec3D& position() const { return m_Position; }
   vec3D&       position()       { return m_Position; }
 
+  bool isActive() const { return m_bActive; }
   void setDirection(vec3& pDir);
 
   const vec3D& direction() const { return m_Direction; }

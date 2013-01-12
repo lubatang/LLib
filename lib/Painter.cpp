@@ -41,53 +41,63 @@ Painter::Painter(FrameBuffer& pFB, const Camera& pCamera, const Light& pLight)
 
 bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
 {
-  /// Lighting formula
-  ///  L = ambient + att * spot * [ ambient + diffuse + specular ]
-  double distance = vec3D(m_Light.position() - pVertex.coord()).length();
-  double att = 1 / (m_Light.getKC() +
-                    m_Light.getKL() * distance +
-                    m_Light.getKQ() * distance * distance);
+  if (pVertex.x() > m_FB.getWidth() || pVertex.y() > m_FB.getHeight())
+    return true;
 
-  vec3D L(m_Light.position() - pVertex.coord());
-  L.normalize();
-
-  vec3D D(m_Light.direction());
-  D.normalize();
-  double spot = pow((-L * D), m_Light.getSpotExpo());
-
-  vec3D ambient(CoefProd(pMaterial.ambient(), m_Light.ambient()));
-  ambient *= (1.0 + (att * spot));
-
-  vec3 N(pVertex.norm());
-  N.normalize();
-
-  double diffuse_coef = L * N;
-  if (diffuse_coef < 0)
-    diffuse_coef = 0.0;
-
-  vec3D diffuse(CoefProd(m_Light.diffuse(), pMaterial.diffuse()));
-  diffuse *= (diffuse_coef * att * spot);
-
-  vec3D V(vec3D(m_Camera.position()) - pVertex.coord()); 
-  V.normalize();
-
-  vec3D H(L + V);
-  H.normalize();
-
-  double poweree = H * N;
-  if (poweree < 0.0)
-    poweree = 0.0;
-  double specular_coef = pow(poweree, pMaterial.shininess());
-  vec3D specular(CoefProd(m_Light.specular(), pMaterial.specular()));
-  specular *= (specular_coef * att * spot);
-
-  Color color(ambient + diffuse + specular);
+  if (pVertex.x() < 0 || pVertex.y() < 0)
+    return true;
 
   /// Affine textire
   /// @{
-  Color emission = pMaterial.image()->getColor(pVertex.x()/1000.0, pVertex.y()/1000.0);
- color += emission;
+  Color color(pMaterial.image()->getColor(pVertex.texture().x(), pVertex.texture().y()));
   /// @}
+
+  /// Lighting
+  /// @{
+  if (m_Light.isActive()) {
+    /// Lighting formula
+    ///  L = ambient + att * spot * [ ambient + diffuse + specular ]
+    double distance = vec3D(m_Light.position() - pVertex.coord()).length();
+    double att = 1 / (m_Light.getKC() +
+                      m_Light.getKL() * distance +
+                      m_Light.getKQ() * distance * distance);
+  
+    vec3D L(m_Light.position() - pVertex.coord());
+    L.normalize();
+  
+    vec3D D(m_Light.direction());
+    D.normalize();
+    double spot = pow((-L * D), m_Light.getSpotExpo());
+  
+    vec3D ambient(CoefProd(pMaterial.ambient(), m_Light.ambient()));
+    ambient *= (1.0 + (att * spot));
+  
+    vec3 N(pVertex.norm());
+    N.normalize();
+  
+    double diffuse_coef = L * N;
+    if (diffuse_coef < 0)
+      diffuse_coef = 0.0;
+  
+    vec3D diffuse(CoefProd(m_Light.diffuse(), pMaterial.diffuse()));
+    diffuse *= (diffuse_coef * att * spot);
+  
+    vec3D V(vec3D(m_Camera.position()) - pVertex.coord()); 
+    V.normalize();
+  
+    vec3D H(L + V);
+    H.normalize();
+  
+    double poweree = H * N;
+    if (poweree < 0.0)
+      poweree = 0.0;
+    double specular_coef = pow(poweree, pMaterial.shininess());
+    vec3D specular(CoefProd(m_Light.specular(), pMaterial.specular()));
+    specular *= (specular_coef * att * spot);
+    color += (ambient + diffuse + specular);
+  }
+  /// }@
+
   if (color.r() > 1.0)
     color.r() = 1.0;
 
@@ -107,6 +117,7 @@ bool Painter::draw(const Line& pLine, const Material& pMaterial) const
 
   if (0 == drawer.distance())
     return true;
+
   DrawLine::const_iterator pixel, pEnd = drawer.end();
   for (pixel = drawer.begin(); pixel != pEnd; pixel.next()) {
     draw(*pixel, pMaterial);

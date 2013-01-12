@@ -29,6 +29,12 @@ public:
   vec2& operator *= ( double d );
   vec2& operator /= ( double d );
 
+  const double& x() const { return m_N[0]; }
+  double        x()       { return m_N[0]; }
+
+  const double& y() const { return m_N[1]; }
+  double        y()       { return m_N[1]; }
+
   double  operator[] (unsigned int idx) const;
   double& operator[] (unsigned int idx);
 

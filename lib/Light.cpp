@@ -90,9 +90,15 @@ void Light::keyEvent(KeyEvent* pEvent)
   switch (pEvent->key()) {
     case KeyEvent::Keyl:
     case KeyEvent::KeyL: {
-      m_bActive = true;
-      m_State = MOVE;
+      m_bActive = !m_bActive;
       cerr << "Controlling Light. (Press SPACE to change mouse modes)" << endl;
+      if (m_bActive) {
+        cerr << "  Light on" << endl;
+        m_State = MOVE;
+      }
+      else
+        cerr << "  Light off" << endl;
+
       break;
     }
     case KeyEvent::KeySpace: {
