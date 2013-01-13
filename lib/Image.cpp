@@ -14,6 +14,13 @@ using namespace luba;
 #include <iostream>
 using namespace std;
 
+Image::Wrap Image::g_Wrap = Image::Repeat;
+
+void Image::setWrap(Wrap pWrap)
+{
+  g_Wrap = pWrap;
+}
+
 //===----------------------------------------------------------------------===//
 // Image
 //===----------------------------------------------------------------------===//
@@ -63,7 +70,25 @@ bool Image::read(const std::string& pFileName)
 
 const Color& Image::getColor(double pU, double pV) const
 {
-  assert(pU <= 1.0 && pV <= 1.0 && "Either pU or pV is out of range");
+  switch(g_Wrap) {
+    case Repeat: {
+      if (pU > 1.0) pU -= 1.0;
+      if (pU < 0.0) pU += 1.0;
+      if (pV > 1.0) pV -= 1.0;
+      if (pV < 0.0) pV += 1.0;
+      break;
+    }
+    case Clamp: {
+      if (pU > 1.0) pU = 1.0;
+      if (pU < 0.0) pU = 0.0;
+      if (pV > 1.0) pV = 1.0;
+      if (pV < 0.0) pV = 0.0;
+      break;
+    }
+  }
+
+  assert(pU >= 0.0 && pU <= 1.0 && pV >= 0.0 && pV <= 1.0 &&
+         "Either pU or pV is out of range");
   unsigned int x = pU*(double)(m_Width - 1);
   unsigned int y = pV*(double)(m_Height - 1);
 
@@ -73,7 +98,25 @@ const Color& Image::getColor(double pU, double pV) const
 
 Color& Image::getColor(double pU, double pV)
 {
-  assert(pU <= 1.0 && pV <= 1.0 && "Either pU or pV is out of range");
+  switch(g_Wrap) {
+    case Repeat: {
+      if (pU > 1.0) pU -= 1.0;
+      if (pU < 0.0) pU += 1.0;
+      if (pV > 1.0) pV -= 1.0;
+      if (pV < 0.0) pV += 1.0;
+      break;
+    }
+    case Clamp: {
+      if (pU > 1.0) pU = 1.0;
+      if (pU < 0.0) pU = 0.0;
+      if (pV > 1.0) pV = 1.0;
+      if (pV < 0.0) pV = 0.0;
+      break;
+    }
+  }
+
+  assert(pU >= 0.0 && pU <= 1.0 && pV >= 0.0 && pV <= 1.0 &&
+         "Either pU or pV is out of range");
   unsigned int x = pU*(double)(m_Width - 1);
   unsigned int y = pV*(double)(m_Height - 1);
   assert((y*m_Width+ x) <= (m_Height*m_Width));

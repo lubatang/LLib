@@ -15,6 +15,12 @@ namespace luba {
 class Image
 {
 public:
+  enum Wrap {
+    Repeat,
+    Clamp
+  };
+
+public:
   Image();
 
   ~Image();
@@ -29,6 +35,11 @@ public:
   const Color& getColor(double pU, double pV) const;
   Color&       getColor(double pU, double pV);
 
+  static void setWrap(Wrap pWrap);
+  static Wrap wrap() { return g_Wrap; }
+  static bool isRepeat() { return (Repeat == g_Wrap); }
+  static bool isClamp()  { return (Clamp == g_Wrap); }
+
 private:
   typedef Color* ColorList;
 
@@ -38,6 +49,8 @@ private:
   std::string m_Name;
 
   ColorList m_Data;
+
+  static Wrap g_Wrap;
 };
 
 typedef std::vector<Image> TextureBuffer;
