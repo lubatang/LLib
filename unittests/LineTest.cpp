@@ -11,6 +11,7 @@
 #include <Triangle/Space.h>
 #include <Triangle/DrawLine.h>
 #include <Triangle/Vectors.h>
+#include <Triangle/Image.h>
 
 #include <string>
 #include <iostream>
@@ -127,5 +128,27 @@ TEST_F(LineTest, draw_line_min)
   draw.setTerminals(a, b);
   ASSERT_EQ(1, draw.distance());
 
+}
+
+TEST_F(LineTest, draw_affine_texture)
+{
+  Vertex a, b;
+  a.setCoord(500, 1065.69, 900);
+  a.setTexture(0, 0);
+  b.setCoord(1065.69, 500, 900);
+  b.setTexture(1, 0);
+
+  std::string path(TOPDIR);
+  path += "/data/ppm/checker.ppm";
+  Image image;
+  ASSERT_TRUE(image.read(path));
+
+  DrawLine line(b, a);
+  DrawLine::const_iterator pixel, pEnd = line.end();
+  for (pixel = line.begin(); pixel != pEnd; pixel.next()) {
+    cerr << pixel->coord();
+    cerr << "\tCoord: " << image.getX(pixel->texture().x()) << ", " << image.getY(pixel->texture().y());
+    cerr << "\tcolor=" << image.getColor(pixel->texture().x(), pixel->texture().y()) << endl;
+  }
 }
 
