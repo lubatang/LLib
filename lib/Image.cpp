@@ -68,57 +68,56 @@ bool Image::read(const std::string& pFileName)
   return true;
 }
 
-const Color& Image::getColor(double pU, double pV) const
+unsigned int Image::getX(double pU) const
 {
   switch(g_Wrap) {
     case Repeat: {
       if (pU > 1.0) pU -= 1.0;
       if (pU < 0.0) pU += 1.0;
-      if (pV > 1.0) pV -= 1.0;
-      if (pV < 0.0) pV += 1.0;
       break;
     }
     case Clamp: {
       if (pU > 1.0) pU = 1.0;
       if (pU < 0.0) pU = 0.0;
+      break;
+    }
+  }
+
+  assert(pU >= 0.0 && pU <= 1.0 && "Either pU or pV is out of range");
+  return (unsigned int)(pU*(double)(m_Width - 1));
+}
+
+unsigned int Image::getY(double pV) const
+{
+  switch(g_Wrap) {
+    case Repeat: {
+      if (pV > 1.0) pV -= 1.0;
+      if (pV < 0.0) pV += 1.0;
+      break;
+    }
+    case Clamp: {
       if (pV > 1.0) pV = 1.0;
       if (pV < 0.0) pV = 0.0;
       break;
     }
   }
 
-  assert(pU >= 0.0 && pU <= 1.0 && pV >= 0.0 && pV <= 1.0 &&
-         "Either pU or pV is out of range");
-  unsigned int x = pU*(double)(m_Width - 1);
-  unsigned int y = pV*(double)(m_Height - 1);
+  assert(pV >= 0.0 && pV <= 1.0 && "Either pU or pV is out of range");
+  return (unsigned int)(pV*(double)(m_Height - 1));
+}
 
+const Color& Image::getColor(double pU, double pV) const
+{
+  unsigned int x = getX(pU);
+  unsigned int y = getY(pV);
   assert((y*m_Width+ x) <= (m_Height*m_Width));
   return m_Data[y*m_Width+ x];
 }
 
 Color& Image::getColor(double pU, double pV)
 {
-  switch(g_Wrap) {
-    case Repeat: {
-      if (pU > 1.0) pU -= 1.0;
-      if (pU < 0.0) pU += 1.0;
-      if (pV > 1.0) pV -= 1.0;
-      if (pV < 0.0) pV += 1.0;
-      break;
-    }
-    case Clamp: {
-      if (pU > 1.0) pU = 1.0;
-      if (pU < 0.0) pU = 0.0;
-      if (pV > 1.0) pV = 1.0;
-      if (pV < 0.0) pV = 0.0;
-      break;
-    }
-  }
-
-  assert(pU >= 0.0 && pU <= 1.0 && pV >= 0.0 && pV <= 1.0 &&
-         "Either pU or pV is out of range");
-  unsigned int x = pU*(double)(m_Width - 1);
-  unsigned int y = pV*(double)(m_Height - 1);
+  unsigned int x = getX(pU);
+  unsigned int y = getY(pV);
   assert((y*m_Width+ x) <= (m_Height*m_Width));
   return m_Data[ y*m_Width+ x];
 }

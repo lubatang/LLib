@@ -35,6 +35,9 @@ public:
   const Color& getColor(double pU, double pV) const;
   Color&       getColor(double pU, double pV);
 
+  unsigned int getX(double pU) const;
+  unsigned int getY(double pV) const;
+
   static void setWrap(Wrap pWrap);
   static Wrap wrap() { return g_Wrap; }
   static bool isRepeat() { return (Repeat == g_Wrap); }
