@@ -7,7 +7,9 @@
 #include <Triangle/Space.h>
 
 #include <cmath>
+#include <cstdlib>
 #include <algorithm>
+
 #include <iostream>
 using namespace std;
 
@@ -70,7 +72,7 @@ DrawLine::const_iterator DrawLine::end() const
 
 unsigned int DrawLine::distance() const
 {
-  return (unsigned int)(m_B.x()) - (unsigned int)(m_A.x());
+  return ::abs((int)(m_B.x()) - (int)(m_A.x()));
 }
 
 void DrawLine::dda(Vertex& pVertex) const
