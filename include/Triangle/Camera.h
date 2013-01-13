@@ -20,28 +20,23 @@ public:
   /// @param pVUP [in] The view up vector
   Camera(const vec3& pVRP, const vec3& pVPN, const vec3& pVUP);
 
-  const vec3& position() const { return m_Pos; }
-  vec3&       position()       { return m_Pos; }
-
-  const vec3& target() const { return m_Target; }
-  vec3&       target()       { return m_Target; }
-
-  const vec3& up() const { return m_Up; }
-  vec3&       up()       { return m_Up; }
-
   const vec3& vpn() const { return m_VPN; }
   vec3&       vpn()       { return m_VPN; }
+
+  const vec3& position() const { return m_VRP; }
+  vec3&       position()       { return m_VRP; }
+
+  const vec3& up() const { return m_VUP; }
+  vec3&       up()       { return m_VUP; }
 
   mat4 rotate() const;
   mat4 translate() const;
   mat4 matrix() const;
 
 private:
-  vec3 m_Pos;
-  vec3 m_Target;
-  vec3 m_Up;
-
+  vec3 m_VRP;
   vec3 m_VPN;
+  vec3 m_VUP;
 };
 
 } // namespace of luba

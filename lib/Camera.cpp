@@ -8,11 +8,13 @@
 
 using namespace luba;
 
+#include <iostream>
+using namespace std;
 //===----------------------------------------------------------------------===//
 // Camera
 //===----------------------------------------------------------------------===//
-Camera::Camera(const vec3& pPos, const vec3& pTarget, const vec3& pUp)
-  : m_Pos(pPos), m_Target(pTarget), m_Up(pUp), m_VPN(pTarget - pPos)
+Camera::Camera(const vec3& pVRP, const vec3& pVPN, const vec3& pVUP)
+  : m_VRP(pVRP), m_VPN(pVPN), m_VUP(pVUP)
 {
 }
 
@@ -21,7 +23,7 @@ mat4 Camera::rotate() const
   vec3 n(m_VPN);
   n.normalize();
 
-  vec3 u = CrossProduct(m_Up, m_VPN).normalize();
+  vec3 u = CrossProduct(m_VUP, m_VPN).normalize();
   vec3 v = CrossProduct(n, u);
 
   return mat4(u.x(), u.y(), u.z(), 0.0,
@@ -32,9 +34,9 @@ mat4 Camera::rotate() const
 
 mat4 Camera::translate() const
 {
-  return mat4(1.0, 0.0, 0.0, -m_Pos.x(),
-              0.0, 1.0, 0.0, -m_Pos.y(),
-              0.0, 0.0, 1.0, -m_Pos.z(),
+  return mat4(1.0, 0.0, 0.0, -m_VRP.x(),
+              0.0, 1.0, 0.0, -m_VRP.y(),
+              0.0, 0.0, 1.0, -m_VRP.z(),
               0.0, 0.0, 0.0, 1.0);
 }
 

@@ -91,7 +91,7 @@ void drawFunc()
 {  
 
   Camera cam(LViewer::viewMatrix.getPos3v(),
-             LViewer::viewMatrix.getPos3v() + LViewer::viewMatrix.getViewDir3v(),
+             LViewer::viewMatrix.getViewDir3v(),
              LViewer::viewMatrix.getUpDir3v());
 
   if(renderFunc && colorBuff) {

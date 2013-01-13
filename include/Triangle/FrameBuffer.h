@@ -6,6 +6,7 @@
 #ifndef LUBA_FRAME_BUFFER_H
 #define LUBA_FRAME_BUFFER_H
 #include <stdint.h>
+#include <vector>
 
 namespace luba {
 
@@ -45,8 +46,11 @@ private:
   {  return (x < m_Width && y < m_Height);}
 
 private:
+  typedef std::vector<int> ZBuffer;
+
+private:
   Pixel* m_Pixels;
-  int32_t* m_ZBuffer;
+  ZBuffer m_ZBuffer;
 
   unsigned int m_Width;
   unsigned int m_Height;
