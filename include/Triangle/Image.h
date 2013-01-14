@@ -56,8 +56,6 @@ private:
   static Wrap g_Wrap;
 };
 
-typedef std::vector<Image> TextureBuffer;
-
 } // namespace of luba
 
 #endif

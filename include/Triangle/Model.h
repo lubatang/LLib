@@ -9,6 +9,7 @@
 #include <GLM/glm.h>
 #include <Support/FileHandle.h>
 #include <string>
+#include <vector>
 
 namespace luba {
 
@@ -18,6 +19,7 @@ class Model
 {
 public:
   typedef GLMmodel Object;
+  typedef std::vector<Image*> ImageList;
 
 public:
   static Model& self() {
@@ -31,8 +33,8 @@ public:
 
   Object* getObject();
 
-  const TextureBuffer& getTextures() const { return m_TextureBuffer; }
-  TextureBuffer&       getTextures()       { return m_TextureBuffer; }
+  const ImageList& images() const { return m_ImageList; }
+  ImageList&       images()       { return m_ImageList; }
 
 private:
   void LazyInitializeObject();
@@ -47,7 +49,7 @@ private:
 private:
   static std::string m_File;
   Object* m_pObject;
-  TextureBuffer m_TextureBuffer;
+  ImageList m_ImageList;
 };
 
 } // namespace of luba

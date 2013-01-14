@@ -9,19 +9,36 @@
 #include <Triangle/Image.h>
 
 #include <cassert>
+#include <iostream>
 
 using namespace luba;
-
-#include <iostream>
 using namespace std;
+
 //===----------------------------------------------------------------------===//
 // Material
 //===----------------------------------------------------------------------===//
 Material::Material(Model& pModel, unsigned int pIdx)
   : m_Model(pModel), m_Idx(pIdx), m_pImage(NULL) {
 
-  unsigned int idx = m_Model.getObject()->materials[m_Idx].textureID;
-  m_pImage = &pModel.getTextures().at(idx);
+  int idx = m_Model.getObject()->materials[pIdx].textureID;
+
+  if (-1 != idx) {
+    try {
+      m_pImage = pModel.images().at(idx);
+    }
+    catch (...) {
+      cerr << "Fatal error: require a texture that is out of range.\n"
+           << "require index: " << idx << "\n"
+           << "textures:\n";
+      unsigned int count = 0;
+      Model::ImageList::const_iterator text, tEnd = pModel.images().end();
+      for (text = pModel.images().begin(); text != tEnd; ++text) {
+        cerr << "  #" << count << "\t" << (*text)->name() << endl;
+        ++count;
+      }
+      exit(1);
+    }
+  }
 }
 
 Material::~Material()

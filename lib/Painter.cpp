@@ -49,7 +49,9 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
 
   /// Affine textire
   /// @{
-  Color color(pMaterial.image()->getColor(pVertex.texture().x(), pVertex.texture().y()));
+  Color color;
+  if (pMaterial.hasImage())
+    color = pMaterial.image()->getColor(pVertex.texture().x(), pVertex.texture().y());
   /// @}
 
   /// Lighting
@@ -225,6 +227,55 @@ bool Painter::draw(const Triangle& pTriangle, const Material& pMaterial) const
   return true;
 }
 
+#ifdef LUBA_DEBUG
+static unsigned int counter = 0;
+
+#endif
+
+static inline void start_model()
+{
+#ifdef LUBA_DEBUG
+  if (0 == counter) {
+    cerr << "<model>" << endl;
+  }
+#endif
+}
+
+static inline void end_model()
+{
+#ifdef LUBA_DEBUG
+  if (0 == counter) {
+    cerr << "</model>" << endl;
+    ++counter;
+  }
+#endif
+}
+
+static inline void print_vertex(const Vertex& pVertex, const std::string& pName)
+{
+#ifdef LUBA_DEBUG
+  if (0 == counter) {
+    cerr << "  <vertex name=" << pName << "\">" << endl;
+    cerr << "     coord:   " << pVertex.coord() << endl;
+    cerr << "     texture: " << pVertex.texture() << endl;
+    cerr << "  </vertex>" << endl;
+  }
+#endif
+}
+
+static inline void print_triangle(int i, const Vertex& pV1, const Vertex& pV2, const Vertex& pV3)
+{
+#ifdef LUBA_DEBUG
+  if (0 == counter) {
+    cerr << "  <triangle id=" << i << ">" << endl;
+      print_vertex(pV1, "v1");
+      print_vertex(pV2, "v2");
+      print_vertex(pV3, "v3");
+    cerr << "  </triangle>" << endl;
+  }
+#endif
+}
+
 bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
 {
   if (!Model::self().isValid())
@@ -234,6 +285,7 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
   g_Trans->setSpace(pSpace);
   g_Proj->setDistance(1200);
 
+  start_model();
   GLMgroup* group = Model::self().getObject()->groups;
   while (NULL != group) {
     Material material(Model::self(), group->material);
@@ -270,11 +322,11 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       facet_norm[0] = Model::self().getObject()->facetnorms[fn*3];
       facet_norm[1] = Model::self().getObject()->facetnorms[fn*3 + 1];
       facet_norm[2] = Model::self().getObject()->facetnorms[fn*3 + 2];
+      facet_norm[3] = 0;
 
       facet_norm = g_Trans->rotate() * facet_norm;
       double value = facet_norm * m_Camera.vpn();
-
-      if (value < 0) {
+      if (value > 0) {
         // back face culling
         continue;
       }
@@ -316,6 +368,8 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       /// @}
 
       Triangle tri(v1, v2, v3);
+      print_triangle(i, tri.v1(), tri.v2(), tri.v3());
+
       Line l1(tri.v3(), tri.v2());
       Line l2(tri.v3(), tri.v1());
       Line l3(tri.v2(), tri.v1());
@@ -330,7 +384,7 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
     }
     group = group->next;
   }
-
+  end_model();
   return true;
 }
 

@@ -24,6 +24,10 @@ Model::Model()
 Model::~Model()
 {
   glmDelete(m_pObject);
+  ImageList::iterator image, iEnd = m_ImageList.end();
+  for (image = m_ImageList.begin(); image != iEnd; ++image) {
+    delete *image;
+  }
 }
 
 void Model::Initialize(int pArgc, char* pArgv[], const std::string& pFile)
@@ -55,20 +59,26 @@ Model::Object* Model::getObject()
 
 void Model::InitializeTextureBuffer()
 {
-  if (m_pObject->nummaterials < 2)
+  m_pObject->materials[0].textureID = -1;
+  if (m_pObject->nummaterials == 1)
     return;
-
-  m_TextureBuffer.resize(m_pObject->nummaterials);
 
   for (unsigned int i = 1; i < m_pObject->nummaterials; ++i) {
     std::string path(m_pObject->materials[i].textureImageName);
-    if (path.empty())
+    if (path.empty()) {
+      m_pObject->materials[i].textureID = -1;
       continue;
+    }
 
-    if (!m_TextureBuffer[i].read(path))
-      continue;
-
-    m_pObject->materials[i].textureID = i;
+    Image* image = new Image();
+    if (!image->read(path)) {
+      delete image;
+      m_pObject->materials[i].textureID = -1;
+    }
+    else {
+      m_pObject->materials[i].textureID = m_ImageList.size();
+      m_ImageList.push_back(image);
+    }
   }
 }
 
