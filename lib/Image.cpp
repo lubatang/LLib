@@ -72,8 +72,8 @@ unsigned int Image::getX(double pU) const
 {
   switch(g_Wrap) {
     case Repeat: {
-      if (pU > 1.0) pU -= 1.0;
-      if (pU < 0.0) pU += 1.0;
+      while(pU > 1.0) pU -= 1.0;
+      while(pU < 0.0) pU += 1.0;
       break;
     }
     case Clamp: {
@@ -83,7 +83,7 @@ unsigned int Image::getX(double pU) const
     }
   }
 
-  assert(pU >= 0.0 && pU <= 1.0 && "Either pU or pV is out of range");
+  assert(pU >= 0.0 && pU <= 1.0 && "pU is out of range");
   return (unsigned int)(pU*(double)(m_Width - 1));
 }
 
@@ -91,8 +91,8 @@ unsigned int Image::getY(double pV) const
 {
   switch(g_Wrap) {
     case Repeat: {
-      if (pV > 1.0) pV -= 1.0;
-      if (pV < 0.0) pV += 1.0;
+      while(pV > 1.0) pV -= 1.0;
+      while(pV < 0.0) pV += 1.0;
       break;
     }
     case Clamp: {
@@ -102,7 +102,7 @@ unsigned int Image::getY(double pV) const
     }
   }
 
-  assert(pV >= 0.0 && pV <= 1.0 && "Either pU or pV is out of range");
+  assert(pV >= 0.0 && pV <= 1.0 && "pV is out of range");
   return (unsigned int)(pV*(double)(m_Height - 1));
 }
 
