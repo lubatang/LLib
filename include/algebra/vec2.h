@@ -6,6 +6,7 @@
 #ifndef LUBA_VECTOR_2X1_H
 #define LUBA_VECTOR_2X1_H
 
+#include <algorithm>
 #include <iosfwd>
 
 namespace luba {
@@ -30,10 +31,10 @@ public:
   vec2& operator /= ( double d );
 
   const double& x() const { return m_N[0]; }
-  double        x()       { return m_N[0]; }
+  double&       x()       { return m_N[0]; }
 
   const double& y() const { return m_N[1]; }
-  double        y()       { return m_N[1]; }
+  double&       y()       { return m_N[1]; }
 
   double  operator[] (unsigned int idx) const;
   double& operator[] (unsigned int idx);
@@ -60,24 +61,26 @@ private:
 
 };
 
+vec2 operator + (const vec2& a, const vec2& b);
+vec2 operator - (const vec2& a, const vec2& b);
+double operator * (const vec2& a, const vec2& b);
+vec2 operator * (const vec2& a, double d);
+vec2 operator * (double d, const vec2& a);
+
+vec2 operator / (const vec2& a, double d);
+
+bool operator == (const vec2& a, const vec2& b);
+bool operator != (const vec2& a, const vec2& b);
+
+vec2 min(const vec2& a, const vec2& b);
+vec2 max(const vec2& a, const vec2& b);
+
 } // namespace luba
 
 namespace std {
 
-luba::vec2 operator + (const luba::vec2& a, const luba::vec2& b);
-luba::vec2 operator - (const luba::vec2& a, const luba::vec2& b);
-double operator * (const luba::vec2& a, const luba::vec2& b);
-luba::vec2 operator * (const luba::vec2& a, double d);
-luba::vec2 operator * (double d, const luba::vec2& a);
-
-luba::vec2 operator / (const luba::vec2& a, double d);
-
-bool operator == (const luba::vec2& a, const luba::vec2& b);
-bool operator != (const luba::vec2& a, const luba::vec2& b);
-
+template<>
 void swap(luba::vec2& a, luba::vec2& b);
-luba::vec2 min(const luba::vec2& a, const luba::vec2& b);
-luba::vec2 max(const luba::vec2& a, const luba::vec2& b);
 
 std::ostream& operator << (std::ostream& s, const luba::vec2& v);
 

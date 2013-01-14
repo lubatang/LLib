@@ -105,45 +105,45 @@ vec2& vec2::operator /= ( const double d )
 //===----------------------------------------------------------------------===//
 // binary operators
 //===----------------------------------------------------------------------===//
-vec2 std::operator + (const vec2& a, const vec2& b)
+vec2 luba::operator + (const vec2& a, const vec2& b)
 {
   vec2 result(a);
   result += b;
   return result;
 }
 
-vec2 std::operator - (const vec2& a, const vec2& b)
+vec2 luba::operator - (const vec2& a, const vec2& b)
 {
   vec2 result(a);
   result -= b;
   return result;
 }
 
-double std::operator * (const vec2& a, const vec2& b)
+double luba::operator * (const vec2& a, const vec2& b)
 {
   return (a[0]*b[0] + a[1]*b[1]);
 }
 
-vec2 std::operator * (const vec2& a, const double d)
+vec2 luba::operator * (const vec2& a, const double d)
 {
   return vec2(d*a[0], d*a[1]);
 }
 
-vec2 std::operator * (double d, const vec2& a)
+vec2 luba::operator * (double d, const vec2& a)
 { return a*d; }
 
-vec2 std::operator / (const vec2& a, double d)
+vec2 luba::operator / (const vec2& a, double d)
 {
   double d_inv = 1./d;
   return vec2(a[0]*d_inv, a[1]*d_inv);
 }
 
-bool std::operator == (const vec2& a, const vec2& b)
+bool luba::operator == (const vec2& a, const vec2& b)
 {
   return (a[0] == b[0]) && (a[1] == b[1]);
 }
 
-bool std::operator != (const vec2& a, const vec2& b)
+bool luba::operator != (const vec2& a, const vec2& b)
 {
   return !(a == b);
 }
@@ -153,6 +153,7 @@ std::ostream& std::operator << (std::ostream& s, const vec2& v)
   return s << "<" << v[0] << ", " << v[1] << ">";
 }
 
+template<>
 void std::swap(vec2& a, vec2& b)
 {
   vec2 tmp(a);
