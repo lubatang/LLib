@@ -100,14 +100,12 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
   }
   /// }@
 
-  if (color.r() > 1.0)
-    color.r() = 1.0;
-
-  if (color.g() > 1.0)
-    color.g() = 1.0;
-
-  if (color.b() > 1.0)
-    color.b() = 1.0;
+  if (color.r() > 1.0) color.r() = 1.0;
+  if (color.r() < -1.0) color.r() = -1.0;
+  if (color.g() > 1.0) color.g() = 1.0;
+  if (color.g() < -1.0) color.g() = -1.0;
+  if (color.b() > 1.0) color.b() = 1.0;
+  if (color.b() < -1.0) color.b() = -1.0;
 
   m_FB.setColor(pVertex.x(), pVertex.y(), pVertex.z(), color);
   return true;
