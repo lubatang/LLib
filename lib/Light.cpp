@@ -18,7 +18,7 @@ using namespace luba;
 // Light
 //===----------------------------------------------------------------------===//
 Light::Light()
-  : Stage("light"), m_bActive(false), m_OrgX(0), m_OrgY(0),
+  : Stage("light"), m_bActive(false), m_bTurnOn(true), m_OrgX(0), m_OrgY(0),
     m_Position(1000, 1000, 1000, 0),
     m_Ambient(0.1, 0.1, 0.1, 1.0),
     m_Diffuse(2.0, 2.0, 2.0, 1.0),
@@ -90,14 +90,15 @@ void Light::keyEvent(KeyEvent* pEvent)
   switch (pEvent->key()) {
     case KeyEvent::Keyl:
     case KeyEvent::KeyL: {
-      m_bActive = !m_bActive;
+      m_bActive = true;
       cerr << "Controlling Light. (Press SPACE to change mouse modes)" << endl;
-      if (m_bActive) {
+      if (TURNOFF != m_State) {
         cerr << "  Light on" << endl;
         m_State = MOVE;
       }
-      else
+      else {
         cerr << "  Light off" << endl;
+      }
 
       break;
     }
@@ -116,6 +117,10 @@ void Light::keyEvent(KeyEvent* pEvent)
           }
           case SPOT: {
             cerr << "Adjust light direction (for spot light)" << endl;
+            break;
+          }
+          case TURNOFF: {
+            cerr << "Turn off light" << endl;
             break;
           }
         }
@@ -150,6 +155,7 @@ void Light::keyEvent(KeyEvent* pEvent)
           case MOVE:   move(0, -1); break;
           case ROTATE: roll(0, -1); break;
           case SPOT:   spot(0, -1); break;
+          default: break;
         }
       }
       break;
@@ -157,9 +163,10 @@ void Light::keyEvent(KeyEvent* pEvent)
     case KeyEvent::KeyUp: {
       if (m_bActive) {
         switch (m_State) {
-          case MOVE:   move(0, 1);   break;
+          case MOVE:   move(0, 1); break;
           case ROTATE: roll(0, 1); break;
           case SPOT:   spot(0, 1); break;
+          default: break;
         }
       }
       break;
@@ -189,6 +196,9 @@ void Light::mouseMoveEvent(MouseEvent* pEvent)
         }
         case SPOT: {
           spot(deltaX, deltaY);
+          break;
+        }
+        default: {
           break;
         }
       }

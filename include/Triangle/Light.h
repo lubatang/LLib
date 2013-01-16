@@ -25,7 +25,7 @@ public:
   const vec3D& position() const { return m_Position; }
   vec3D&       position()       { return m_Position; }
 
-  bool isActive() const { return m_bActive; }
+  bool isTurnOn() const { return (TURNOFF != m_State); }
   void setDirection(vec3& pDir);
 
   const vec3D& direction() const { return m_Direction; }
@@ -61,10 +61,11 @@ public:
 
 private:
   enum State {
-    MOVE   = 0,
-    ROTATE = 1,
-    SPOT   = 2,
-    STATES = 3
+    MOVE    = 0,
+    ROTATE  = 1,
+    SPOT    = 2,
+    TURNOFF = 3,
+    STATES  = 4
   };
 
 
@@ -83,6 +84,7 @@ private:
   double m_SpotExpo;
 
   bool m_bActive;
+  bool m_bTurnOn;
 
   int m_OrgX;
   int m_OrgY;

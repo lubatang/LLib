@@ -56,7 +56,7 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
 
   /// Lighting
   /// @{
-  if (m_Light.isActive()) {
+  if (m_Light.isTurnOn()) {
     /// Lighting formula
     ///  L = ambient + att * spot * [ ambient + diffuse + specular ]
     double distance = vec3D(m_Light.position() - pVertex.coord()).length();
