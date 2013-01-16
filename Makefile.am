@@ -5,3 +5,5 @@ AUTOMAKE_OPTIONS = foreign
 SUBDIRS = utils debug
 
 EXTRA_DIST = ./autogen.sh ./data/bunnyC.obj ./README ./INSTALL ./AUTHORS ./run.sh
+
+dist_bin_SCRIPTS = ./run.sh
