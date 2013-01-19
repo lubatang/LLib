@@ -313,7 +313,7 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       converter.getVertex(v3);
       /// @}
 
-      /// backface culling
+      /// calculate facet normal
       /// @{
       vec3D facet_norm;
       int fn = Model::self().getObject()->triangles[group->triangles[i]].findex;
@@ -323,8 +323,15 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       facet_norm[3] = 0;
 
       facet_norm = g_Trans->rotate() * facet_norm;
+      /// @}
+
+      /// back face culling
+      /// @{
       double value = facet_norm * m_Camera.vpn();
-      if (value > 0) {
+
+      // heuristic algorithm
+      double threshold = (Projection::Parallel == g_Proj->mode())?0.0: 0.2;
+      if (value > threshold) {
         // back face culling
         continue;
       }
