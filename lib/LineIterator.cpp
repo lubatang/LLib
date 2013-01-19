@@ -33,7 +33,8 @@ bool luba::operator!=(const LineIterator& pA, const LineIterator& pB)
 LineIterator::LineIterator(const DrawLine& pDrawLine,
                            float pErrorXY,
                            const Vertex& pVertex)
-  : m_pDrawLine(&pDrawLine), m_ErrorXY(pErrorXY), m_Vertex(pVertex) {
+  : m_pDrawLine(&pDrawLine), m_ErrorXY(pErrorXY), m_Vertex(pVertex),
+    m_Count(0) {
   m_X = (int)pVertex.x();
   m_Y = (int)pVertex.y();
   m_Z = (int)pVertex.z();
@@ -49,13 +50,14 @@ LineIterator::LineIterator(const DrawLine& pDrawLine,
 }
 
 LineIterator::LineIterator()
-  : m_pDrawLine(NULL), m_ErrorXY(0.0), m_X(0), m_Y(0), m_Z(0) {
+  : m_pDrawLine(NULL), m_ErrorXY(0.0), m_X(0), m_Y(0), m_Z(0), m_Count(0) {
 }
 
 LineIterator::LineIterator(const LineIterator& pCopy)
   : m_pDrawLine(pCopy.m_pDrawLine),
     m_ErrorXY(pCopy.m_ErrorXY),
-    m_X(pCopy.m_X), m_Y(pCopy.m_Y), m_Z(pCopy.m_Z), m_Vertex(pCopy.m_Vertex) {
+    m_X(pCopy.m_X), m_Y(pCopy.m_Y), m_Z(pCopy.m_Z), m_Vertex(pCopy.m_Vertex),
+    m_Count(0) {
 }
 
 LineIterator& LineIterator::operator=(const LineIterator& pCopy)
@@ -66,6 +68,7 @@ LineIterator& LineIterator::operator=(const LineIterator& pCopy)
   m_Y = pCopy.m_Y;
   m_Z = pCopy.m_Z;
   m_Vertex = pCopy.m_Vertex;
+  m_Count = 0;
   return *this;
 }
 
@@ -81,6 +84,8 @@ LineIterator& LineIterator::next()
   m_X += m_pDrawLine->m_XStep;
 
   m_pDrawLine->dda(m_Vertex);
+  m_pDrawLine->texture(m_Vertex, m_Count);
+  ++m_Count;
 
   if (m_pDrawLine->m_bSteepXY) {
     m_Vertex.setX(m_Y);

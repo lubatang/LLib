@@ -49,6 +49,11 @@ public:
   double  w() const { return m_Coord[3]; }
   double& w()       { return m_Coord[3]; }
 
+  double  u() const { return m_Texture[0]; }
+  double& u()       { return m_Texture[0]; }
+  double  v() const { return m_Texture[1]; }
+  double& v()       { return m_Texture[1]; }
+
   // -----  operator ----- //
   Vertex& operator+=(const Vertex& pOther);
   Vertex& operator-=(const Vertex& pOther);

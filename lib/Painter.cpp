@@ -351,6 +351,10 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       p2.coord() = g_Proj->matrix() * p2.coord();
       p3.coord() = g_Proj->matrix() * p3.coord();
 
+      double p1w = p1.w();
+      double p2w = p2.w();
+      double p3w = p3.w();
+
       p1.coord() /= p1.w();
       p2.coord() /= p2.w();
       p3.coord() /= p3.w();
@@ -362,6 +366,10 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       v1.coord() = pSpace.translate() * p1.coord();
       v2.coord() = pSpace.translate() * p2.coord();
       v3.coord() = pSpace.translate() * p3.coord();
+
+      v1.w() = p1w;
+      v2.w() = p2w;
+      v3.w() = p3w;
 
       /// @}
 

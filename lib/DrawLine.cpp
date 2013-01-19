@@ -32,6 +32,8 @@ DrawLine& DrawLine::setTerminals(const Vertex& pA, const Vertex& pB)
   m_A = pA;
   m_B = pB;
   m_bSteepXY = false;
+  m_AUZ = m_AVZ = m_BUZ = m_BVZ = 0.0;
+
 
   // Extended Bresenham's line algorithm
   // @ref http://rosettacode.org/wiki/Bitmap/Bresenham's_line_algorithm
@@ -56,6 +58,12 @@ DrawLine& DrawLine::setTerminals(const Vertex& pA, const Vertex& pB)
     m_DDA = (pB - pA)/distance();
     m_DDA.x() = 0;
     m_DDA.y() = 0;
+
+    m_AUZ = m_A.u()/m_A.w();
+    m_AVZ = m_A.v()/m_A.w();
+    m_BUZ = m_B.u()/m_B.w();
+    m_BVZ = m_B.v()/m_B.w();
+
   }
   return *this;
 }
@@ -78,5 +86,17 @@ unsigned int DrawLine::distance() const
 void DrawLine::dda(Vertex& pVertex) const
 {
   pVertex += m_DDA;
+}
+
+void DrawLine::texture(Vertex& pVertex, unsigned int pCount) const
+{
+  double alpha = (double)pCount/(double)distance();
+  double base = (1.0 - alpha)/m_A.w() + alpha/m_B.w();
+
+  double u = ((1.0 - alpha) * m_AUZ + alpha*m_BUZ) / base;
+  double v = ((1.0 - alpha) * m_AVZ + alpha*m_BVZ) / base;
+
+  pVertex.u() = u;
+  pVertex.v() = v;
 }
 

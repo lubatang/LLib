@@ -45,6 +45,7 @@ private:
   int m_Y;
   int m_Z;
   Vertex m_Vertex;
+  unsigned int m_Count;
 };
 
 bool operator==(const luba::LineIterator& pX, const luba::LineIterator& pY);

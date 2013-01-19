@@ -35,6 +35,7 @@ public:
 
 private:
   void dda(Vertex& pVertex) const;
+  void texture(Vertex& pVertex, unsigned int pCount) const;
 
 private:
   Vertex m_A;
@@ -48,6 +49,11 @@ private:
   float m_DY;
 
   bool m_bSteepXY : 1;
+
+  double m_AUZ;
+  double m_BUZ;
+  double m_AVZ;
+  double m_BVZ;
 
 };
 
