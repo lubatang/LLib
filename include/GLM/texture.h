@@ -1,5 +1,5 @@
-//#ifndef __TGA_HEADER__
-//#define __TGA_HEADER__
+#ifndef __TGA_HEADER__
+#define __TGA_HEADER__
 
 //#include "MainHeader.h"
 //#include "TextureHeader.h"
@@ -13,9 +13,10 @@
 #else
 #include <GL/glut.h>
 #endif
-//#include "gl.h"
 
 #include <math.h>
+
+namespace GLM {
 
 typedef	struct									
 {
@@ -48,4 +49,7 @@ typedef struct
 bool LoadTGA(Texture * texture, const char * filename);
 bool LoadCompressedTGA(Texture * texture, const char * filename, FILE * fTGA);
 bool LoadUncompressedTGA(Texture * texture, const char * filename, FILE * fTGA);
-//#endif
+
+} // namespace of GLM
+
+#endif

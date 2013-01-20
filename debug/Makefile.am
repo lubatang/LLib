@@ -30,7 +30,7 @@ SRC =	${TOOLDIR}/main.cpp \
 	${INCDIR}/GLM/glm.h \
 	${LIBDIR}/GLM/glm.cpp \
 	${INCDIR}/GLM/texture.h \
-	${LIBDIR}/GLM/texture.cpp \
+	${LIBDIR}/GLM/glm_texture.cpp \
 	${LIBDIR}/GLM/glmimg.cpp \
 	${INCDIR}/LLib.h \
 	${INCDIR}/LGlobal/LGlobal.h \
@@ -76,6 +76,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/Triangle/Projection.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \
 	${LIBDIR}/Triangle/FrameBuffer.cpp \
+	${INCDIR}/Triangle/Texture.h \
+	${LIBDIR}/Triangle/Texture.cpp \
 	${INCDIR}/Triangle/Image.h \
 	${LIBDIR}/Triangle/Image.cpp \
 	${INCDIR}/Events/Stage.h \
@@ -105,7 +107,9 @@ TEST_SRC = ${UNITTEST}/AlgebraTest.h \
 	${UNITTEST}/TriangleTest.h \
 	${UNITTEST}/TriangleTest.cpp \
 	${UNITTEST}/ProjectTest.h \
-	${UNITTEST}/ProjectTest.cpp
+	${UNITTEST}/ProjectTest.cpp \
+	${UNITTEST}/TextureTest.h \
+	${UNITTEST}/TextureTest.cpp
 
 SOURCE = $(SRC) $(TEST_SRC)
 lviewer_debug_SOURCES = $(SOURCE)

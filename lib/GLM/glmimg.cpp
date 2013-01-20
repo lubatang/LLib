@@ -17,6 +17,8 @@
 
 static GLint gl_max_texture_size;
 
+using namespace GLM;
+
 GLuint glmLoadTexture(char *filename, GLboolean alpha, GLboolean repeat, GLboolean filtering, GLboolean mipmaps, GLfloat *texcoordwidth, GLfloat *texcoordheight)
 {
   GLuint tex;

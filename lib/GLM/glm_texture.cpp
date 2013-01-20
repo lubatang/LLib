@@ -2,13 +2,15 @@
 #include <stdio.h>
 #include <cstring>
 
-TGAHeader tgaheader;                  // TGA header
-TGA tga;                        // TGA image data
+using namespace GLM;
+
+GLM::TGAHeader tgaheader;                  // TGA header
+GLM::TGA tga;                        // TGA image data
 
 GLubyte uTGAcompare[12] = {0,0,2,0,0,0,0,0,0,0,0,0};  // Uncompressed TGA Header
 GLubyte cTGAcompare[12] = {0,0,10,0,0,0,0,0,0,0,0,0};  // Compressed TGA Header  
 
-bool LoadTGA(Texture * texture, const char* filename)        // Load a TGA file
+bool GLM::LoadTGA(Texture * texture, const char* filename)        // Load a TGA file
 {
   FILE * fTGA;                        // File pointer to texture file
   fTGA = fopen(filename, "rb");                // Open file for reading
@@ -36,7 +38,7 @@ bool LoadTGA(Texture * texture, const char* filename)        // Load a TGA file
   }
   else if(memcmp(cTGAcompare, &tgaheader, sizeof(tgaheader)) == 0)    // See if header matches the predefined header of
   {                                    // an RLE compressed TGA image
-    LoadCompressedTGA(texture, filename, fTGA);              // If so, jump to Compressed TGA loading code
+    GLM::LoadCompressedTGA(texture, filename, fTGA);              // If so, jump to Compressed TGA loading code
   }
   else                                  // If header matches neither type
   {
@@ -47,7 +49,7 @@ bool LoadTGA(Texture * texture, const char* filename)        // Load a TGA file
   return true;                              // All went well, continue on
 }
 
-bool LoadUncompressedTGA(Texture * texture, const char* filename, FILE * fTGA)  // Load an uncompressed TGA (note, much of this code is based on NeHe's 
+bool GLM::LoadUncompressedTGA(Texture * texture, const char* filename, FILE * fTGA)  // Load an uncompressed TGA (note, much of this code is based on NeHe's 
 {                                      // TGA Loading code nehe.gamedev.net)
   if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)          // Read TGA header
   {                    
@@ -114,7 +116,7 @@ bool LoadUncompressedTGA(Texture * texture, const char* filename, FILE * fTGA)  
   return true;                              // Return success
 }
 
-bool LoadCompressedTGA(Texture * texture, const char * filename, FILE * fTGA)    // Load COMPRESSED TGAs
+bool GLM::LoadCompressedTGA(Texture * texture, const char * filename, FILE * fTGA)    // Load COMPRESSED TGAs
 { 
   if(fread(tga.header, sizeof(tga.header), 1, fTGA) == 0)          // Attempt to read header
   {
