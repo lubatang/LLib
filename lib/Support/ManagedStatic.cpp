@@ -3,7 +3,7 @@
 // Copyright (C), 2012-
 // Luba Tang <lubatang@gmail.com>
 //===----------------------------------------------------------------------===//
-#include <Triangle/ManagedStatic.h>
+#include <Support/ManagedStatic.h>
 
 #include <cassert>
 

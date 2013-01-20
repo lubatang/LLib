@@ -3,7 +3,7 @@
 #include <framework.h>
 #include <Triangle/FrameBuffer.h>
 #include <Support/FileHandle.h>
-#include <Triangle/ManagedStatic.h>
+#include <Support/ManagedStatic.h>
 
 using LLib::Viewer::LViewer;
 using LLib::Math::LTranslateMatrix;

@@ -26,7 +26,7 @@
 #include <GL/glut.h>
 #endif
 
-#include <Triangle/ManagedStatic.h>
+#include <Support/ManagedStatic.h>
 #include <Events/Event.h>
 #include <Events/KeyEvent.h>
 #include <Events/MouseEvent.h>

@@ -17,8 +17,8 @@
 #include <Triangle/Color.h>
 #include <Triangle/Transformation.h>
 #include <Triangle/Projection.h>
-#include <Triangle/ManagedStatic.h>
 #include <Triangle/Image.h>
+#include <Support/ManagedStatic.h>
 
 #include <cmath>
 #include <cassert>

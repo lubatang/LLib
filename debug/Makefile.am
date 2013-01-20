@@ -39,60 +39,60 @@ SRC =	${TOOLDIR}/main.cpp \
 	${INCDIR}/LViewer/LViewer.h \
 	${LIBDIR}/LViewer.cpp \
 	${INCDIR}/Triangle/Model.h \
-	${LIBDIR}/Model.cpp \
+	${LIBDIR}/Triangle/Model.cpp \
 	${INCDIR}/Triangle/Color.h \
-	${LIBDIR}/Color.cpp \
+	${LIBDIR}/Triangle/Color.cpp \
 	${INCDIR}/Triangle/Vertex.h \
-	${LIBDIR}/Vertex.cpp \
+	${LIBDIR}/Triangle/Vertex.cpp \
 	${INCDIR}/Triangle/Material.h \
-	${LIBDIR}/Material.cpp \
+	${LIBDIR}/Triangle/Material.cpp \
 	${INCDIR}/Triangle/ModelToVertex.h \
-	${LIBDIR}/ModelToVertex.cpp \
+	${LIBDIR}/Triangle/ModelToVertex.cpp \
 	${INCDIR}/Triangle/Line.h \
-	${LIBDIR}/Line.cpp \
+	${LIBDIR}/Triangle/Line.cpp \
 	${INCDIR}/Triangle/Triangle.h \
-	${LIBDIR}/Triangle.cpp \
+	${LIBDIR}/Triangle/Triangle.cpp \
 	${INCDIR}/Triangle/Space.h \
-	${LIBDIR}/Space.cpp \
+	${LIBDIR}/Triangle/Space.cpp \
 	${INCDIR}/Triangle/Camera.h \
-	${LIBDIR}/Camera.cpp \
+	${LIBDIR}/Triangle/Camera.cpp \
 	${INCDIR}/Triangle/Light.h \
-	${LIBDIR}/Light.cpp \
+	${LIBDIR}/Triangle/Light.cpp \
 	${INCDIR}/Triangle/DrawLine.h \
-	${LIBDIR}/DrawLine.cpp \
+	${LIBDIR}/Triangle/DrawLine.cpp \
 	${INCDIR}/Triangle/LineIterator.h \
-	${LIBDIR}/LineIterator.cpp \
+	${LIBDIR}/Triangle/LineIterator.cpp \
 	${INCDIR}/Triangle/Painter.h \
-	${LIBDIR}/Painter.cpp \
+	${LIBDIR}/Triangle/Painter.cpp \
 	${INCDIR}/Triangle/DrawTriangle.h \
-	${LIBDIR}/DrawTriangle.cpp \
+	${LIBDIR}/Triangle/DrawTriangle.cpp \
 	${INCDIR}/Triangle/TriangleIterator.h \
-	${LIBDIR}/TriangleIterator.cpp \
+	${LIBDIR}/Triangle/TriangleIterator.cpp \
 	${INCDIR}/Triangle/Vectors.h \
-	${LIBDIR}/Vectors.cpp \
+	${LIBDIR}/Triangle/Vectors.cpp \
 	${INCDIR}/Triangle/Transformation.h \
-	${LIBDIR}/Transformation.cpp \
+	${LIBDIR}/Triangle/Transformation.cpp \
 	${INCDIR}/Triangle/Projection.h \
-	${LIBDIR}/Projection.cpp \
-	${INCDIR}/Triangle/ManagedStatic.h \
-	${LIBDIR}/ManagedStatic.cpp \
+	${LIBDIR}/Triangle/Projection.cpp \
 	${INCDIR}/Triangle/FrameBuffer.h \
-	${LIBDIR}/FrameBuffer.cpp \
+	${LIBDIR}/Triangle/FrameBuffer.cpp \
 	${INCDIR}/Triangle/Image.h \
-	${LIBDIR}/Image.cpp \
+	${LIBDIR}/Triangle/Image.cpp \
 	${INCDIR}/Events/Stage.h \
-	${LIBDIR}/Stage.cpp \
+	${LIBDIR}/Events/Stage.cpp \
 	${INCDIR}/Events/Event.h \
-	${LIBDIR}/Event.cpp \
+	${LIBDIR}/Events/Event.cpp \
 	${INCDIR}/Events/KeyEvent.h \
-	${LIBDIR}/KeyEvent.cpp \
+	${LIBDIR}/Events/KeyEvent.cpp \
 	${INCDIR}/Events/MouseEvent.h \
-	${LIBDIR}/MouseEvent.cpp \
+	${LIBDIR}/Events/MouseEvent.cpp \
 	${INCDIR}/Events/EventRegistry.h \
-	${LIBDIR}/EventRegistry.cpp \
+	${LIBDIR}/Events/EventRegistry.cpp \
+	${INCDIR}/Support/ManagedStatic.h \
+	${LIBDIR}/Support/ManagedStatic.cpp \
 	${INCDIR}/Support/Flags.h \
 	${INCDIR}/Support/FileHandle.h \
-	${LIBDIR}/FileHandle.cpp
+	${LIBDIR}/Support/FileHandle.cpp
 
 TEST_SRC = ${UNITTEST}/AlgebraTest.h \
 	${UNITTEST}/AlgebraTest.cpp \
