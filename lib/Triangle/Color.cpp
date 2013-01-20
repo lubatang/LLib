@@ -64,3 +64,18 @@ Color& Color::operator+=(const vec3D& pVec)
   return *this;
 }
 **/
+//===----------------------------------------------------------------------===//
+// Non-member functions
+//===----------------------------------------------------------------------===//
+bool luba::operator==(const Color& pX, const Color& pY)
+{
+  return (pX.m_N[0] == pY.m_N[0] &&
+          pX.m_N[1] == pY.m_N[1] &&
+          pX.m_N[2] == pY.m_N[2]);
+}
+
+bool luba::operator!=(const Color& pX, const Color& pY)
+{
+  return !(pX == pY);
+}
+

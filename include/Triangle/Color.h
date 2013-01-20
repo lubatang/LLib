@@ -38,7 +38,12 @@ public:
   Color& operator *=(double pC);
   Color& operator *=(const vec3& pCoeff);
 
+  friend bool operator==(const Color& pX, const Color& pY);
+  friend bool operator!=(const Color& pX, const Color& pY);
 };
+
+bool operator==(const Color& pX, const Color& pY);
+bool operator!=(const Color& pX, const Color& pY);
 
 } // namespace of luba
 #endif
