@@ -28,10 +28,10 @@ SRC =	${TOOLDIR}/main.cpp \
 	${INCDIR}/framework.h \
 	${LIBDIR}/framework.cpp \
 	${INCDIR}/GLM/glm.h \
-	${LIBDIR}/glm.cpp \
+	${LIBDIR}/GLM/glm.cpp \
 	${INCDIR}/GLM/texture.h \
-	${LIBDIR}/texture.cpp \
-	${LIBDIR}/glmimg.cpp \
+	${LIBDIR}/GLM/texture.cpp \
+	${LIBDIR}/GLM/glmimg.cpp \
 	${INCDIR}/LLib.h \
 	${INCDIR}/LGlobal/LGlobal.h \
 	${INCDIR}/LTranslateMatrix/LTranslateMatrix.h \
