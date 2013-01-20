@@ -7,6 +7,7 @@
 #define LUBA_IMAGE_H
 
 #include <Triangle/Color.h>
+#include <Triangle/Texture.h>
 #include <vector>
 #include <string>
 
@@ -21,8 +22,6 @@ public:
   };
 
 public:
-  Image();
-
   ~Image();
 
   //read the image and store it at the data
@@ -44,14 +43,13 @@ public:
   static bool isClamp()  { return (Clamp == g_Wrap); }
 
 private:
-  typedef Color* ColorList;
+  typedef std::vector<Texture*> MipMap;
 
 private:
   unsigned int m_Width;
   unsigned int m_Height;
   std::string m_Name;
-
-  ColorList m_Data;
+  MipMap m_MipMap;
 
   static Wrap g_Wrap;
 };

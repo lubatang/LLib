@@ -16,6 +16,9 @@ using namespace std;
 
 Image::Wrap Image::g_Wrap = Image::Repeat;
 
+//===----------------------------------------------------------------------===//
+// Helper Functions
+//===----------------------------------------------------------------------===//
 void Image::setWrap(Wrap pWrap)
 {
   g_Wrap = pWrap;
@@ -24,14 +27,11 @@ void Image::setWrap(Wrap pWrap)
 //===----------------------------------------------------------------------===//
 // Image
 //===----------------------------------------------------------------------===//
-Image::Image()
-  : m_Data(NULL) {
-}
-
 Image::~Image()
 {
-  if (NULL != m_Data) {
-    free(m_Data);
+  MipMap::iterator map, mEnd = m_MipMap.end();
+  for (map = m_MipMap.begin(); map != mEnd; ++map) {
+    delete *map;
   }
 }
 
@@ -50,16 +50,17 @@ bool Image::read(const std::string& pFileName)
   fscanf(file, "%*s");
   fscanf(file, "%d %d", &m_Width, &m_Height);
   fscanf(file, "%*d");
-
-  m_Data = (Color*)malloc(sizeof(Color)*m_Width*m_Height);
+  Texture* origin = new Texture();
+  m_MipMap.push_back(origin);
+  origin->resize(m_Width, m_Height);
 
   for(int i = m_Height-1; i >= 0; --i ) {
     for(unsigned int j = 0; j < m_Width; ++j ) {
-      Color* color = new (&m_Data[ i*m_Width + j]) Color();
+      Color& color = origin->at(j, i);
       for(unsigned int k = 0; k < 3; ++k ) {
         int tmp;
         fscanf(file, "%d", &tmp );
-        (*color)[k] = (double)tmp/255.0f;
+        color[k] = (double)tmp/255.0f;
       }
     }
   }
@@ -111,7 +112,7 @@ const Color& Image::getColor(double pU, double pV) const
   unsigned int x = getX(pU);
   unsigned int y = getY(pV);
   assert((y*m_Width+ x) <= (m_Height*m_Width));
-  return m_Data[y*m_Width+ x];
+  return m_MipMap[0]->at(x, y);
 }
 
 Color& Image::getColor(double pU, double pV)
@@ -119,5 +120,5 @@ Color& Image::getColor(double pU, double pV)
   unsigned int x = getX(pU);
   unsigned int y = getY(pV);
   assert((y*m_Width+ x) <= (m_Height*m_Width));
-  return m_Data[ y*m_Width+ x];
+  return m_MipMap[0]->at(x, y);
 }
