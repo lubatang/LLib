@@ -16,7 +16,6 @@ static InitFuncType initFunc = NULL;
 /// global variables
 FrameBuffer *colorBuff = NULL;
 unsigned int texID = 0;
-RENDER_MODE renderMode = WIRE;
 static ManagedStatic<Light> g_Light;
 
 bool g_isOutputPPM = false;
@@ -95,7 +94,7 @@ void drawFunc()
              LViewer::viewMatrix.getUpDir3v());
 
   if(renderFunc && colorBuff) {
-    (*renderFunc)(cam, *g_Light, colorBuff, renderMode);
+    (*renderFunc)(cam, *g_Light, colorBuff);
 
     updateTex();
     LLib::Viewer::renderTextureOnScreenTop(texID, 0, 1, 0, 1);

@@ -60,7 +60,7 @@ int unit_test( int argc, char* argv[] )
 // render
 //  This is the rendering function
 //////////////////////////////////////////////////////////////////////////
-void render(const Camera& pCam, const Light& pLight, FrameBuffer* pFB, RENDER_MODE pRenderMode)
+void render(const Camera& pCam, const Light& pLight, FrameBuffer* pFB)
 {  
   // Connects MVC pattern
   //   Model   : Model
@@ -69,13 +69,7 @@ void render(const Camera& pCam, const Light& pLight, FrameBuffer* pFB, RENDER_MO
   Space space(800, 800, 800);
   space.setOrigin(100, 100, 100);
   Painter painter(*pFB, pCam, pLight);
-  bool solid = (pRenderMode == SOLID);
-  static bool prev_solid = true;
-  if (prev_solid != solid) {
-    prev_solid = solid;
-    pFB->clear();
-  }
-  if (!painter.draw(space, Model::self(), solid)) {
+  if (!painter.draw(space, Model::self())) {
     error("cannot draw the model");
   }
 }

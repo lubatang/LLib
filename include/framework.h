@@ -11,14 +11,7 @@
 
 using namespace luba;
 
-enum RENDER_MODE
-{
-  WIRE = 0,
-  SOLID= 1,
-  NUM
-};
-
-typedef void (*RenderFuncType)(const Camera&, const Light& pLight, FrameBuffer* , RENDER_MODE);
+typedef void (*RenderFuncType)(const Camera&, const Light& pLight, FrameBuffer*);
 typedef void (*InitFuncType)();
 
 int initAndRunLViewer(unsigned int pWinW, unsigned int pWinH, RenderFuncType, InitFuncType);

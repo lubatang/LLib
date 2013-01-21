@@ -18,6 +18,7 @@
 #include <Triangle/Transformation.h>
 #include <Triangle/Projection.h>
 #include <Triangle/Image.h>
+#include <Triangle/RenderEvents.h>
 #include <Support/ManagedStatic.h>
 
 #include <cmath>
@@ -31,6 +32,7 @@ using namespace luba;
 
 static ManagedStatic<Transformation> g_Trans;
 static ManagedStatic<Projection> g_Proj;
+static ManagedStatic<RenderEvents> g_Render;
 
 //===----------------------------------------------------------------------===//
 // Painter
@@ -286,7 +288,7 @@ static inline void print_triangle(int i, const Vertex& pV1, const Vertex& pV2, c
 /**
  *  Draw a model 
  */
-bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
+bool Painter::draw(const Space& pSpace, Model& pModel) const
 {
   if (!Model::self().isValid())
     return false;
@@ -405,7 +407,7 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       draw(l2, material);
       draw(l3, material);
 
-      if (pSolid) {
+      if (RenderEvents::None != g_Render->state()) {
         draw(tri, material);
       }
     }
