@@ -52,9 +52,9 @@ TEST_F(ImageTest, map_test)
   ASSERT_EQ(512, image.width());
   ASSERT_EQ(512, image.height());
 
-  Color color1 = image.getColor(1.0, 1.0);
+  Color color1 = image.getColor<Image::Nearest>(1.0, 1.0);
   ASSERT_EQ(0.0, color1.b());
-  Color color2 = image.getColor(0.0, 0.0);
+  Color color2 = image.getColor<Image::Nearest>(0.0, 0.0);
   ASSERT_EQ(0.0, color2.b());
 }
 

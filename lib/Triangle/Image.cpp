@@ -8,6 +8,7 @@
 
 #include <cstdlib>
 #include <cassert>
+#include <cmath>
 
 using namespace luba;
 
@@ -35,7 +36,7 @@ Image::~Image()
   }
 }
 
-bool Image::read(const std::string& pFileName)
+bool Image::read(const std::string& pFileName, bool pUseMipMap)
 {
   if (pFileName.empty())
     return false;
@@ -66,6 +67,23 @@ bool Image::read(const std::string& pFileName)
   }
 
   fclose(file);
+
+  if (pUseMipMap) {
+    Texture* current = origin;
+    assert(NULL != current);
+
+    while (current->height() > 0 && current->width() > 0) {
+      Texture* smaller = new Texture();
+      smaller->shrink<Texture::Boxfilter>(*current);
+      if (0 == smaller->height() || 0 == smaller->width()) {
+        delete smaller;
+        break;
+      }
+      m_MipMap.push_back(smaller);
+      current = smaller;
+    }
+  }
+
   return true;
 }
 
@@ -85,7 +103,7 @@ unsigned int Image::getX(double pU) const
   }
 
   assert(pU >= 0.0 && pU <= 1.0 && "pU is out of range");
-  return (unsigned int)(pU*(double)(m_Width - 1));
+  return (unsigned int)(pU*(double)(m_MipMap[lod()]->width() - 1));
 }
 
 unsigned int Image::getY(double pV) const
@@ -104,21 +122,48 @@ unsigned int Image::getY(double pV) const
   }
 
   assert(pV >= 0.0 && pV <= 1.0 && "pV is out of range");
-  return (unsigned int)(pV*(double)(m_Height - 1));
+  return (unsigned int)(pV*(double)(m_MipMap[lod()]->height() - 1));
 }
 
-const Color& Image::getColor(double pU, double pV) const
+unsigned int Image::lod() const
+{
+  double result = log2((double)(m_Height*m_Width*m_TextureSize) / m_PolySize);
+
+  if (result < 0) {
+    // magnificant
+    return 0;
+  }
+
+  // minificant
+  if (0 == result)
+    return 0;
+
+  if (result > m_MipMap.size())
+    return (m_MipMap.size() - 1);
+
+  return result;
+}
+
+template<> Color Image::getColor<Image::Nearest>(double pU, double pV) const
 {
   unsigned int x = getX(pU);
   unsigned int y = getY(pV);
   assert((y*m_Width+ x) <= (m_Height*m_Width));
-  return m_MipMap[0]->at(x, y);
+
+  return m_MipMap[lod()]->at(x, y);
 }
 
-Color& Image::getColor(double pU, double pV)
+template<> Color Image::getColor<Image::Linear>(double pU, double pV) const
 {
   unsigned int x = getX(pU);
   unsigned int y = getY(pV);
   assert((y*m_Width+ x) <= (m_Height*m_Width));
-  return m_MipMap[0]->at(x, y);
+
+  Color c1(m_MipMap[lod()]->at(x, y) +
+           m_MipMap[lod()]->at(x + 1, y) +
+           m_MipMap[lod()]->at(x, y + 1) +
+           m_MipMap[lod()]->at(x + 1, y + 1));
+  c1 /= 4;
+  return c1;
 }
+

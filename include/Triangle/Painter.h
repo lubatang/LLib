@@ -35,6 +35,8 @@ private:
   bool drawHorizon(const Vertex& pLeft, const Vertex& pRight,
                    const Material& pMaterial) const;
 
+  void CalculateLOD(const Triangle& pTriangle, Material& pMaterial) const;
+
 private:
   FrameBuffer& m_FB;
   const Camera& m_Camera;

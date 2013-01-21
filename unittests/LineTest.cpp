@@ -148,7 +148,7 @@ TEST_F(LineTest, draw_affine_texture)
   for (pixel = line.begin(); pixel != pEnd; pixel.next()) {
     cerr << pixel->coord();
     cerr << "\tCoord: " << image.getX(pixel->texture().x()) << ", " << image.getY(pixel->texture().y());
-    cerr << "\tcolor=" << image.getColor(pixel->texture().x(), pixel->texture().y()) << endl;
+    cerr << "\tcolor=" << image.getColor<Image::Nearest>(pixel->texture().x(), pixel->texture().y()) << endl;
   }
 }
 

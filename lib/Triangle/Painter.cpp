@@ -39,6 +39,9 @@ Painter::Painter(FrameBuffer& pFB, const Camera& pCamera, const Light& pLight)
   : m_FB(pFB), m_Camera(pCamera), m_Light(pLight) {
 }
 
+/**
+ *  Draw a vertex
+ */
 bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
 {
   if (pVertex.x() > m_FB.getWidth() || pVertex.y() > m_FB.getHeight())
@@ -47,11 +50,12 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
   if (pVertex.x() < 0 || pVertex.y() < 0)
     return true;
 
-  /// Affine textire
+  /// Texture mapping
   /// @{
   Color color;
-  if (pMaterial.hasImage())
-    color = pMaterial.image()->getColor(pVertex.texture().x(), pVertex.texture().y());
+  if (pMaterial.hasImage()) {
+    color = pMaterial.image()->getColor<Image::Nearest>(pVertex.texture().x(), pVertex.texture().y());
+  }
   /// @}
 
   /// Lighting
@@ -111,6 +115,9 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
   return true;
 }
 
+/**
+ *  draw a line
+ */
 bool Painter::draw(const Line& pLine, const Material& pMaterial) const
 {
   DrawLine drawer(pLine.front(), pLine.rear());
@@ -126,17 +133,19 @@ bool Painter::draw(const Line& pLine, const Material& pMaterial) const
   return true;
 }
 
+/**
+ *  draw a horizontal line
+ */
 bool Painter::drawHorizon(const Vertex& pLeft, const Vertex& pRight, const Material& pMaterial) const
 {
   assert(pLeft.y() == pRight.y());
-  DrawLine drawer(pLeft, pRight);
-  DrawLine::const_iterator pixel, pEnd = drawer.end();
-  for (pixel = drawer.begin(); pixel != pEnd; pixel.next()) {
-    draw(*pixel, pMaterial);
-  }
-  return true;
+  Line horizon(pLeft, pRight);
+  return draw(horizon, pMaterial);
 }
 
+/**
+ *  Draw a triangle
+ */
 bool Painter::draw(const Triangle& pTriangle, const Material& pMaterial) const
 {
   const Vertex& v1 = pTriangle.v1();
@@ -274,6 +283,9 @@ static inline void print_triangle(int i, const Vertex& pV1, const Vertex& pV2, c
 #endif
 }
 
+/**
+ *  Draw a model 
+ */
 bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
 {
   if (!Model::self().isValid())
@@ -383,6 +395,8 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
       Triangle tri(v1, v2, v3);
       print_triangle(i, tri.v1(), tri.v2(), tri.v3());
 
+      CalculateLOD(tri, material);
+
       Line l1(tri.v3(), tri.v2());
       Line l2(tri.v3(), tri.v1());
       Line l3(tri.v2(), tri.v1());
@@ -399,5 +413,57 @@ bool Painter::draw(const Space& pSpace, Model& pModel, bool pSolid) const
   }
   end_model();
   return true;
+}
+
+void Painter::CalculateLOD(const Triangle& pTriangle, Material& pMaterial) const
+{
+  if (!pMaterial.hasImage())
+    return;
+
+  const Vertex& v1 = pTriangle.v1();
+  const Vertex& v2 = pTriangle.v2();
+  const Vertex& v3 = pTriangle.v3();
+  double maxX = v1.x();
+  if (maxX < v2.x()) maxX = v2.x();
+  if (maxX < v3.x()) maxX = v3.x();
+
+  double minX = v1.x();
+  if (minX > v2.x()) minX = v2.x();
+  if (minX > v3.x()) minX = v3.x();
+
+  double maxY = v1.y();
+  if (maxY < v2.y()) maxY = v2.y();
+  if (maxY < v3.y()) maxY = v3.y();
+
+  double minY = v1.y();
+  if (minY > v2.y()) minY = v2.y();
+  if (minY > v3.y()) minY = v3.y();
+
+  double dX = ::fabs(maxX - minX);
+  double dY = ::fabs(maxY - minY);
+
+  double polygon = dX*dY;
+  pMaterial.image()->setPolygonSize(polygon);
+
+  double maxU = v1.u();
+  if (maxU < v2.u()) maxU = v2.u();
+  if (maxU < v3.u()) maxU = v3.u();
+
+  double minU = v1.u();
+  if (minU > v2.u()) minU = v2.u();
+  if (minU > v3.u()) minU = v3.u();
+
+  double maxV = v1.v();
+  if (maxV < v2.v()) maxV = v2.v();
+  if (maxV < v3.v()) maxV = v3.v();
+
+  double minV = v1.v();
+  if (minV > v2.v()) minV = v2.v();
+  if (minV > v3.v()) minV = v3.v();
+
+  double dU = ::fabs(maxU - minU);
+  double dV = ::fabs(maxV - minV);
+  double texture = dU*dV;
+  pMaterial.image()->setTextureSize(texture);
 }
 

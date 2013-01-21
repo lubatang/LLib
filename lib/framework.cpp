@@ -30,7 +30,7 @@ void showHelp()
   printf("\tV/v: set mouse to control the eye position\n");
   printf("\tL/l: set mouse to control the light position\n");
   printf("\tT/t: set mouse to control the model position\n");
-  printf("\tM/m: switch rendering mode.\n");
+  printf("\tM/m: switch rendering mode. (Nearest, Linear for solid sampling and Wire)\n");
   printf("\tP/p: switch projection mode.\n");
   printf("\tS/s: moving speed changing.\n");
   printf("\tO/o: Output current framebuffer.\n");
@@ -132,13 +132,6 @@ void idle()
     LViewer::flag['T' - 'A'] ^= 1;
     printf("Controlling Model.\n");
     LViewer::setCurrentControlMatrix(& LViewer::nullMatrix);
-  }
-
-  if(!LViewer::flag['M'-'A'])
-  {
-    LViewer::flag['M'-'A'] ^=1;
-    renderMode = (RENDER_MODE)((renderMode +1) % NUM);
-    printf("Current render Mode is %s\n", (renderMode==0)? "WIRE":"SOLID");
   }
 
   if(!LViewer::flag['O'-'A'])
