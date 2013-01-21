@@ -89,14 +89,18 @@ luba::Texture::const_iterator luba::Texture::end() const
 luba::Color& luba::Texture::at(unsigned int pX, unsigned int pY)
 {
   assert(NULL != m_Data);
-  assert(pX < m_Width && pY < m_Height);
+  // For a single texture, we should clamp the coordinate.
+  if (pX >= m_Width) pX = m_Width - 1;
+  if (pY >= m_Height) pY = m_Height - 1;
   return m_Data[pY*m_Width + pX];
 }
 
 const luba::Color& luba::Texture::at(unsigned int pX, unsigned int pY) const
 {
   assert(NULL != m_Data);
-  assert(pX < m_Width && pY < m_Height);
+  // For a single texture, we should clamp the coordinate.
+  if (pX >= m_Width) pX = m_Width - 1;
+  if (pY >= m_Height) pY = m_Height - 1;
   return m_Data[pY*m_Width + pX];
 }
 

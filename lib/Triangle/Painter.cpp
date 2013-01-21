@@ -56,7 +56,18 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
   /// @{
   Color color;
   if (pMaterial.hasImage()) {
-    color = pMaterial.image()->getColor<Image::Nearest>(pVertex.texture().x(), pVertex.texture().y());
+    switch (g_Render->filter()) {
+      case Image::Nearest:
+        color = pMaterial.image()->getColor<Image::Nearest>(
+                             pVertex.texture().x(),
+                             pVertex.texture().y());
+        break;
+      case Image::Linear:
+        color = pMaterial.image()->getColor<Image::Linear>(
+                             pVertex.texture().x(),
+                             pVertex.texture().y());
+        break;
+    }
   }
   /// @}
 
