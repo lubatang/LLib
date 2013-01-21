@@ -60,6 +60,7 @@ luba::Texture::shrink<luba::Texture::Boxfilter>(const luba::Texture& pOther)
                                           pOther.at(i*2 + 1, j*2) + 
                                           pOther.at(i*2, j*2 + 1) + 
                                           pOther.at(i*2 + 1, j*2 + 1));
+      *color /= 4;
     }
   }
   return *this;
