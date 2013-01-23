@@ -143,6 +143,7 @@ TEST_F(LineTest, draw_affine_texture)
   Image image;
   ASSERT_TRUE(image.read(path));
 
+/**
   DrawLine line(b, a);
   DrawLine::const_iterator pixel, pEnd = line.end();
   for (pixel = line.begin(); pixel != pEnd; pixel.next()) {
@@ -150,5 +151,6 @@ TEST_F(LineTest, draw_affine_texture)
     cerr << "\tCoord: " << image.getX(pixel->texture().x()) << ", " << image.getY(pixel->texture().y());
     cerr << "\tcolor=" << image.getColor<Image::Nearest>(pixel->texture().x(), pixel->texture().y()) << endl;
   }
+**/
 }
 
