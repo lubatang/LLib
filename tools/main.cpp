@@ -40,7 +40,7 @@ using namespace luba;
 static void help()
 {
   std::cout << "Usage:\n"
-            << "  lviewer -f [input object file]\n";
+            << "  lviewer -f [input object file]\n\tor\n  lviewer -f [input object file] -b [bump map file]\n";
 }
 
 static void error(const std::string& pMesg)
@@ -119,8 +119,10 @@ int main(int argc, char ** argv)
     }
   }
 
-  if (file.empty())
+  if (file.empty()) {
+    help();
     error("no inputs.");
+  }
 
   // initialize Model.
   Model::Initialize(argc, argv, file, bump_map);

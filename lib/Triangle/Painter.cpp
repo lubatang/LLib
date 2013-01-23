@@ -74,8 +74,11 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
 
   /// Bump mapping
   /// @{
-  BumpMap::Norm norm = Model::self().bumpMap().getNorm(pVertex.texture().x(),
-                                                       pVertex.texture().y());
+  BumpMap::Norm norm;
+  if (Model::self().bumpMap().isOpened()) {
+    norm = Model::self().bumpMap().getNorm(pVertex.texture().x(),
+                                           pVertex.texture().y());
+  }
   /// @}
 
   /// Lighting
