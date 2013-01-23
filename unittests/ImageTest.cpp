@@ -8,6 +8,7 @@
 //===----------------------------------------------------------------------===//
 #include "ImageTest.h"
 #include <Triangle/Image.h>
+#include <Triangle/BumpMap.h>
 
 #include <string>
 
@@ -47,7 +48,7 @@ TEST_F(ImageTest, map_test)
   path += "/data/ppm/duckCM.ppm";
 
   Image image;
-  ASSERT_TRUE(image.read(path));
+  ASSERT_TRUE(image.read(path, false));
 
   ASSERT_EQ(512, image.width());
   ASSERT_EQ(512, image.height());
@@ -56,5 +57,21 @@ TEST_F(ImageTest, map_test)
   ASSERT_EQ(0.0, color1.b());
   Color color2 = image.getColor<Image::Nearest>(0.0, 0.0);
   ASSERT_EQ(0.0, color2.b());
+}
+
+TEST_F(ImageTest, bump_test)
+{
+  std::string path(TOPDIR);
+  path += "/data/ppm/duckCM.ppm";
+  BumpMap image;
+  ASSERT_TRUE(image.read(path));
+
+  ASSERT_EQ(512, image.width());
+  ASSERT_EQ(512, image.height());
+
+  vec3 color1 = image.getNorm(1.0, 1.0);
+  ASSERT_EQ(0.0, color1[2]);
+  vec3 color2 = image.getNorm(0.0, 0.0);
+  ASSERT_EQ(0.0, color2[2]);
 }
 
