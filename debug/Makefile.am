@@ -82,6 +82,8 @@ SRC =	${TOOLDIR}/main.cpp \
 	${LIBDIR}/Triangle/Image.cpp \
 	${INCDIR}/Triangle/RenderEvents.h \
 	${LIBDIR}/Triangle/RenderEvents.cpp \
+	${INCDIR}/Triangle/BumpMap.h \
+	${LIBDIR}/Triangle/BumpMap.cpp \
 	${INCDIR}/Events/Stage.h \
 	${LIBDIR}/Events/Stage.cpp \
 	${INCDIR}/Events/Event.h \

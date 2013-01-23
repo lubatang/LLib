@@ -9,9 +9,13 @@
 #include <Triangle/Line.h>
 #include <Triangle/Image.h>
 
+#include <iostream>
+
 using namespace luba;
+using namespace std;
 
 std::string Model::m_File;
+std::string Model::m_BumpMapPath;
 
 //===----------------------------------------------------------------------===//
 // Model
@@ -30,9 +34,12 @@ Model::~Model()
   }
 }
 
-void Model::Initialize(int pArgc, char* pArgv[], const std::string& pFile)
+void Model::Initialize(int pArgc, char* pArgv[],
+                       const std::string& pFile,
+                       const std::string& pBumpMapPath)
 {
   m_File = pFile;
+  m_BumpMapPath = pBumpMapPath;
   glutInit(&pArgc, pArgv);
 }
 
@@ -47,6 +54,7 @@ void Model::LazyInitializeObject()
     if (!m_File.empty()) {
       m_pObject = glmReadOBJ(m_File.c_str());
       InitializeTextureBuffer();
+      InitializeBumpMap();
     }
   }
 }
@@ -79,6 +87,17 @@ void Model::InitializeTextureBuffer()
       m_pObject->materials[i].textureID = m_ImageList.size();
       m_ImageList.push_back(image);
     }
+  }
+}
+
+void Model::InitializeBumpMap()
+{
+  if (m_BumpMapPath.empty())
+    return;
+
+  if (!m_BumpMap.read(m_BumpMapPath)) {
+    cerr << "Error: cannot read bump map `" << m_BumpMapPath << "'." << endl;
+    exit(1);
   }
 }
 

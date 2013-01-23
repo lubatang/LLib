@@ -93,11 +93,16 @@ void init()
 int main(int argc, char ** argv)
 {
   std::string file;
+  std::string bump_map;
   int option;
-  while ((option = getopt(argc, argv, "f:t?h")) != -1) {
+  while ((option = getopt(argc, argv, "f:b:t?h")) != -1) {
     switch (option) {
       case 'f': {
         file = std::string(optarg);
+        break;
+      }
+      case 'b': {
+        bump_map = std::string(optarg);
         break;
       }
       case 't': {
@@ -118,7 +123,7 @@ int main(int argc, char ** argv)
     error("no inputs.");
 
   // initialize Model.
-  Model::Initialize(argc, argv, file);
+  Model::Initialize(argc, argv, file, bump_map);
 
   //get into a rendering loop
   initAndRunLViewer(1000, 1000, render, init);
