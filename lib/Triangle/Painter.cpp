@@ -19,6 +19,7 @@
 #include <Triangle/Projection.h>
 #include <Triangle/Image.h>
 #include <Triangle/RenderEvents.h>
+#include <Triangle/BumpMap.h>
 #include <Support/ManagedStatic.h>
 
 #include <cmath>
@@ -71,6 +72,12 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
   }
   /// @}
 
+  /// Bump mapping
+  /// @{
+  BumpMap::Norm norm = Model::self().bumpMap().getNorm(pVertex.texture().x(),
+                                                       pVertex.texture().y());
+  /// @}
+
   /// Lighting
   /// @{
   if (m_Light.isTurnOn()) {
@@ -91,7 +98,7 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
     vec3D ambient(CoefProd(pMaterial.ambient(), m_Light.ambient()));
     ambient *= (1.0 + (att * spot));
   
-    vec3 N(pVertex.norm());
+    vec3 N(pVertex.norm() + norm);
     N.normalize();
   
     double diffuse_coef = L * N;
