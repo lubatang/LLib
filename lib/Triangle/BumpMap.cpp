@@ -59,7 +59,31 @@ bool BumpMap::read(const std::string& pFileName)
 
   fclose(file);
 
-  
+  /// Calculate normals
+  /// @{
+  if (m_Width > 2 && m_Height > 2) { // border is 0 and (max -1)
+    Norm* average = (Norm*)malloc(sizeof(Norm)*m_Width*m_Height);
+    unsigned w, wEnd = m_Width - 1;
+    unsigned h, hEnd = m_Height - 1;
+    for (h = 1; h < hEnd; ++h) {
+      for (w = 1; w < wEnd; ++w) {
+        average[h*m_Width + w] = m_NormList[m_Width*h + w] +
+                                 m_NormList[m_Width*(h + 1) + w] +
+                                 m_NormList[m_Width*h + w + 1] +
+                                 m_NormList[m_Width*(h + 1) + w + 1];
+        average[h*m_Width + w] /= 4;
+      }
+    }
+
+    for (h = 1; h < hEnd; ++h) {
+      for (w = 1; w < wEnd; ++w) {
+        m_NormList[m_Width*h + w] = average[h*m_Width + w];
+      }
+    }
+
+    free(average);
+  }
+  /// @}
 
   return true;
 }
