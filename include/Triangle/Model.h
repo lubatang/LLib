@@ -7,6 +7,7 @@
 #define LUBA_MODEL_H
 #include <Triangle/Image.h>
 #include <Triangle/BumpMap.h>
+#include <Triangle/SkyCube.h>
 #include <Support/FileHandle.h>
 
 #include <GLM/glm.h>
@@ -32,7 +33,8 @@ public:
 
   static void Initialize(int pArgc, char* pArgv[],
                          const std::string& pFilename,
-                         const std::string& pBumpMapPath);
+                         const std::string& pBumpMapPath,
+                         const std::string& pSkyCubePath);
 
   bool isValid() const;
 
@@ -48,6 +50,7 @@ private:
   void LazyInitializeObject();
   void InitializeTextureBuffer();
   void InitializeBumpMap();
+  void InitializeSkyCube();
 
 private:
   Model();
@@ -58,9 +61,11 @@ private:
 private:
   static std::string m_File;
   static std::string m_BumpMapPath;
+  static std::string m_SkyCubePath;
   Object* m_pObject;
   ImageList m_ImageList;
   BumpMap m_BumpMap;
+  SkyCube m_SkyCube;
 };
 
 } // namespace of luba

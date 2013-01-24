@@ -10,12 +10,14 @@
 #include <Triangle/Image.h>
 
 #include <iostream>
+#include <cstdlib>
 
 using namespace luba;
 using namespace std;
 
 std::string Model::m_File;
 std::string Model::m_BumpMapPath;
+std::string Model::m_SkyCubePath;
 
 //===----------------------------------------------------------------------===//
 // Model
@@ -36,10 +38,12 @@ Model::~Model()
 
 void Model::Initialize(int pArgc, char* pArgv[],
                        const std::string& pFile,
-                       const std::string& pBumpMapPath)
+                       const std::string& pBumpMapPath,
+                       const std::string& pSkyCubePath)
 {
   m_File = pFile;
   m_BumpMapPath = pBumpMapPath;
+  m_SkyCubePath = pSkyCubePath;
   glutInit(&pArgc, pArgv);
 }
 
@@ -97,6 +101,17 @@ void Model::InitializeBumpMap()
 
   if (!m_BumpMap.read(m_BumpMapPath)) {
     cerr << "Error: cannot read bump map `" << m_BumpMapPath << "'." << endl;
+    exit(1);
+  }
+}
+
+void Model::InitializeSkyCube()
+{
+  if (m_SkyCubePath.empty())
+    return;
+
+  if (!m_SkyCube.read(m_SkyCubePath)) {
+    cerr << "Error: cannot read sky cube`" << m_SkyCubePath << "'." << endl;
     exit(1);
   }
 }
