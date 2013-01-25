@@ -78,6 +78,7 @@ bool Painter::draw(const Vertex& pVertex, const Material& pMaterial) const
   if (Model::self().bumpMap().isOpened()) {
     norm = Model::self().bumpMap().getNorm(pVertex.texture().x(),
                                            pVertex.texture().y());
+//    norm.normalize();
   }
   /// @}
 
